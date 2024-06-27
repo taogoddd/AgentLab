@@ -1,0 +1,11 @@
+joblib>=1.2.0
+openai<2,>=1.7
+langchain<1,>=0.1
+langchain_openai
+langchain_community
+tiktoken
+huggingface_hub
+contexttimer
+ipython
+pyyaml>=6
+pandas

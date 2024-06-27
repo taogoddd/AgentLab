@@ -11,7 +11,7 @@ from functools import cache
 import numpy as np
 import tiktoken
 import yaml
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, AzureChatOpenAI
 
 from langchain.schema import SystemMessage, HumanMessage
 from openai import BadRequestError
@@ -37,7 +37,7 @@ class RetryError(ValueError):
 
 
 def retry(
-    chat: ChatOpenAI,
+    chat: ChatOpenAI | AzureChatOpenAI,
     messages,
     n_retry,
     parser,
@@ -107,7 +107,7 @@ def retry(
 
 
 def retry_and_fit(
-    chat: ChatOpenAI,
+    chat: ChatOpenAI | AzureChatOpenAI,
     main_prompt,
     system_prompt: str,
     n_retry,
@@ -200,7 +200,7 @@ def retry_and_fit(
     raise RetryError(f"Could not parse a valid value after {n_retry} retries.")
 
 
-def retry_parallel(chat: ChatOpenAI, messages, n_retry, parser):
+def retry_parallel(chat: ChatOpenAI | AzureChatOpenAI, messages, n_retry, parser):
     """Retry querying the chat models with the response from the parser until it returns a valid value.
 
     It will stop after `n_retry`. It assuemes that chat will generate n_parallel answers for each message.
@@ -276,7 +276,7 @@ def get_tokenizer(model_name="openai/gpt-4"):
     logging.debug(f"Loading tokenizer for model {model_name}")
     if model_name == "cheat_miniwob_click_test":
         return tiktoken.encoding_for_model("gpt-4")
-    if model_name.startswith("openai"):
+    if model_name.startswith("openai") or model_name.startswith("azureopenai"):
         return tiktoken.encoding_for_model(model_name.split("/")[-1])
     if model_name.startswith("reka"):
         logging.warning(

@@ -16,6 +16,7 @@ from agentlab.agents.generic_agent.configs import (
     AGENT_4o,
     AGENT_4o_VISION,
     AGENT_CHEAT_MINIWOB,
+    AGENT_azure_4o,
 )
 
 
@@ -234,6 +235,9 @@ def final_run(benchmark: str = "miniwob", model_name: str = "gpt-3.5"):
         agent = AGENT_3_5
     elif model_name.lower() in ["gpt-4o"]:
         agent = AGENT_4o
+    # support azure openai api
+    elif model_name.lower() in ["azure-gpt-4o"]:
+        agent = AGENT_azure_4o
     elif model_name.lower() in ["gpt-4o-vision"]:
         agent = AGENT_4o_VISION
     elif model_name.lower() in ["cheat"]:

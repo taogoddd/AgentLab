@@ -1,6 +1,6 @@
-browsergym-core
-browsergym-workarena
-browsergym-miniwob
+# browsergym-core
+# browsergym-workarena
+# browsergym-miniwob
 joblib>=1.2.0
 openai>=1.7,<2
 langchain>=0.1,<1
@@ -12,3 +12,12 @@ contexttimer
 ipython
 pyyaml>=6
 pandas
+
+# requirements for browsergym
+playwright
+gymnasium
+pillow
+pyparsing
+bs4
+transformers
+lxml

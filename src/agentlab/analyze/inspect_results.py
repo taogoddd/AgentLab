@@ -20,7 +20,7 @@ from agentlab.experiments.exp_utils import RESULTS_DIR
 
 from IPython.display import display
 from agentlab.utils.bootstrap import bootstrap_matrix, convert_df_to_array
-from browsergym.workarena import TASK_CATEGORY_MAP
+from agentlab.analyze.ICML_2024_results import TASK_CATEGORY_MAP
 
 warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
@@ -745,7 +745,7 @@ def split_by_key(df: pd.DataFrame, key, force_at_leaste_one_variable=True):
     return df_dict
 
 
-def set_task_category_as_index(result_df, task_category_map=TASK_CATEGORY_MAP):
+def set_task_category_as_index(result_df, task_category_map):
     """Create task_category index from task_name if needed and re-assign index
     from variables using task_category."""
     # rested index task_name (level 0)

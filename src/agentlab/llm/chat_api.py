@@ -6,7 +6,7 @@ import re
 from langchain.schema import AIMessage
 import logging
 
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from dataclasses import dataclass
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -94,6 +94,24 @@ class OpenAIChatModelArgs(ChatModelArgs):
     def make_chat_model(self):
         model_name = self.model_name.split("/")[-1]
         return ChatOpenAI(
+            model_name=model_name,
+            temperature=self.temperature,
+            max_tokens=self.max_new_tokens,
+        )
+
+    def prepare_server(self, registry):
+        pass
+
+    def close_server(self):
+        pass
+
+@dataclass
+class AzureOpenAIChatModelArgs(ChatModelArgs):
+    vision_support: bool = False
+
+    def make_chat_model(self):
+        model_name = self.model_name.split("/")[-1]
+        return AzureChatOpenAI(
             model_name=model_name,
             temperature=self.temperature,
             max_tokens=self.max_new_tokens,

@@ -99,6 +99,10 @@ AGENT_4o = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
     flags=FLAGS_GPT_4o,
 )
+AGENT_azure_4o = GenericAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["azureopenai/gpt-4o-2024-05-13"],
+    flags=FLAGS_GPT_4o,
+)
 
 # GPT-4o vision default config
 FLAGS_GPT_4o_VISION = FLAGS_GPT_4o.copy()

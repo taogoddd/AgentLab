@@ -1,4 +1,4 @@
-from agentlab.llm.chat_api import OpenAIChatModelArgs
+from agentlab.llm.chat_api import OpenAIChatModelArgs, AzureOpenAIChatModelArgs
 
 CLOSED_SOURCE_APIS = [
     "openai",
@@ -38,5 +38,12 @@ CHAT_MODEL_ARGS_DICT = {
         max_total_tokens=16_384,
         max_input_tokens=15_000,
         max_new_tokens=1_000,
+    ),
+    "azureopenai/gpt-4o-2024-05-13": AzureOpenAIChatModelArgs(
+        model_name="azureopenai/gpt-4o-2024-05-13",
+        max_total_tokens=128_000,
+        max_input_tokens=40_000,  # make sure we don't bust budget
+        max_new_tokens=4000,  # I think this model has very small default value if we don't set max_new_tokens
+        vision_support=True,
     ),
 }

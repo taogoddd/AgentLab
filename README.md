@@ -53,6 +53,17 @@ ensure the process keeps running even if you disconnect.
 ```
 
 ## Visualize results
+Firstly install jupyter notebook if you haven't already:
+
+```bash
+    conda install jupyter
+```
+
+Then launch jupyter notebook:
+```bash
+    jupyter notebook
+```
+
 Open `agentlab/experiments/inspect_results.ipynb` in jupyter notebook.
 
 Set your `result_dir` to the right value and run the notebook.

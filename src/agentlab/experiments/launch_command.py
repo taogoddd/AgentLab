@@ -46,7 +46,8 @@ relaunch_mode = None
 
 main(
     exp_root=RESULTS_DIR,
-    exp_group_name=exp_group_name,
+    benchmark='webarena',
+    model_name='azure-gpt-4o',
     exp_args_list=exp_args_list,
     n_jobs=5,  # 1 for debugging, -1 for all cores except 2
     relaunch_mode=relaunch_mode,  # choices = [None, 'incomplete_only', 'all_errors', 'server_errors']. if not None, make sure you're pointing to an existing experiment directory
