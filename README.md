@@ -107,3 +107,6 @@ pip install hf-transfer
 pip install torch
 export HF_HUB_ENABLE_HF_TRANSFER=1
 ```
+
+# Notes
+browsergym and webarena are moved inside AgentLab codes for easier development; Due to space limitation of Github, browsergym/workarena/data_files are gitignored. Please get it from the original package if needed
