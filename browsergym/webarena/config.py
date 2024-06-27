@@ -1,1 +1,1 @@
-TASK_IDS = range(10)
+TASK_IDS = [11]

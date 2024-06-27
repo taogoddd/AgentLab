@@ -177,6 +177,9 @@ class ExpArgs:
                 action = step_info.from_action(agent)
                 logger.debug(f"Agent chose action:\n {action}")
 
+                step_info.save_step_chat_messages(self.exp_dir)
+                logger.debug(f"Chat messages saved.")
+
                 step_info.save_step_info(self.exp_dir)
                 logger.debug(f"Step info saved.")
 
@@ -377,7 +380,35 @@ class StepInfo:
         if save_json:
             with open(exp_dir / "steps_info.json", "w") as f:
                 json.dump(self, f, indent=4, cls=DataclassJSONEncoder)
+    
+    def save_step_chat_messages(self, exp_dir: Path):
+        """
+        Save the chat messages locally in a file.
+        """
+        if "chat_messages" in self.agent_info:
+            chat_messages = self.agent_info["chat_messages"]
+            chat_messages_path = exp_dir / f"chat_messages_step_{self.step}.txt"
+            
+            chat_message_str = ""
 
+            round = 0
+            for message in chat_messages:
+                if message.type == "system":
+                    chat_message_str += "[SYSTEM]\n" + message.content + "\n"
+                elif message.type == "human":
+                    # check whether message.content is a list of messages
+                    content = message.content
+                    if isinstance(content, list):
+                        content = message.content[0].get("text", "") # only take the text part
+                    chat_message_str += "-----------------------------------\n"
+                    chat_message_str += "Round " + str(round) + "\n"
+                    chat_message_str += "[USER]\n" + content + "\n"
+                elif message.type == "ai":
+                    chat_message_str += "[ASSISTANT]\n" + message.content + "\n"
+                round += 1
+            
+            with open(chat_messages_path, "w") as f:
+                f.write(chat_message_str)
 
 def _extract_err_msg(episode_info: list[StepInfo]):
     """Extract the last error message from the episode info."""

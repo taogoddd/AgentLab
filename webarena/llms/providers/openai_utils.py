@@ -12,7 +12,7 @@ import aiolimiter
 import openai
 from tqdm.asyncio import tqdm_asyncio
 
-_client: openai.OpenAI = None
+_client: openai.OpenAI | openai.AzureOpenAI = None
 def get_openai_client():
     global _client
     if "OPENAI_API_KEY" not in os.environ and "AZURE_OPENAI_API_KEY" not in os.environ:
@@ -43,7 +43,7 @@ def retry_with_exponential_backoff(  # type: ignore
     exponential_base: float = 2,
     jitter: bool = True,
     max_retries: int = 3,
-    errors: tuple[Any] = (openai.RateLimitError,),
+    errors: tuple[Any] = (openai.RateLimitError, openai.NotFoundError),
 ):
     """Retry a function with exponential backoff."""
 

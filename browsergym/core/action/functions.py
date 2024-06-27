@@ -13,6 +13,7 @@ from .utils import (
 page: playwright.sync_api.Page = None
 send_message_to_user: callable = None
 report_infeasible_instructions: callable = None
+stop_and_output: callable = None
 demo_mode: Literal["off", "default", "all_blue", "only_visible_elements"] = None
 
 """IMPORTANT
@@ -20,6 +21,27 @@ The following primitives are meant to be included in the browsergym action using
 inspect.getsource().
 """
 
+# augmented actions here:
+
+# hack: go to the page directly
+def go_to_reviews_page():
+    """
+    [AUGMENTED] Navigate to the reviews page.
+
+    Examples:
+        go_to_reviews_page()
+    """
+    page.goto("http://localhost:7780/admin/review/product/index/")
+
+# this action is for running experiments on WebArena only
+def stop(answer: str):
+    """
+    Call this function when you believe the task is complete. If the objective is to find a text-based answer, provide the answer in the bracket. If you believe the task is impossible to complete, provide the answer as "N/A" in the bracket.
+
+    Examples:
+        stop("1751")
+    """
+    stop_and_output(answer)
 
 def send_msg_to_user(text: str):
     """

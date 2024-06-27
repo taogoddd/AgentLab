@@ -310,6 +310,10 @@ document.addEventListener("visibilitychange", () => {
         info["action_exec_start"] = time.time()
         info["action_exec_timeout"] = 0
 
+        # for webarena only
+        def stop_and_output(answer: str):
+            self.chat.add_message(role="assistant", msg=answer)
+
         def send_message_to_user(text: str):
             self.chat.add_message(role="assistant", msg=text)
 

@@ -500,18 +500,15 @@ class Hints(PromptElement):
     """Not super useful and stale."""
 
     # NOTE: are these hints still relevant?
+
+    # MOD: Delete unrelevant hints for WebArena tasks
     _prompt = """\
 Note:
-* Some tasks may be game like and may require to interact with the mouse position
-in x, y coordinates.
-* Some text field might have auto completion. To see it, you have to type a few
-characters and wait until next step.
-* If you have to cut and paste, don't forget to select the text first.
-* Coordinate inside an SVG are relative to it's top left corner.
 * Make sure to use bid to identify elements when using commands.
 * Interacting with combobox, dropdowns and auto-complete fields can be tricky,
 sometimes you need to use select_option, while other times you need to use fill
 or click and wait for the reaction of the page.
+* 
 """
 
 

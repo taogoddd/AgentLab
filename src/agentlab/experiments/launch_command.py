@@ -19,7 +19,7 @@ exp_args_list = None
 
 ## select your experiment group here from exp_configs.py
 # exp_group_name = "generic_agent_test"  ## this will make a very quick test
-exp_group_name = "generic_agent_eval_llm"
+# exp_group_name = "generic_agent_eval_llm"
 # exp_group_name = "random_search"
 # exp_group_name = "ablation_study_GPT_3_5"
 
@@ -36,8 +36,10 @@ exp_group_name = "generic_agent_eval_llm"
 # MiniWob Ablation Study for ICML
 # exp_group_name = "2024-02-01_03-24-01_ablation_study_browsergym_miniwob"
 
-
 # exp_group_name = get_most_recent_folder(RESULTS_DIR).name
+
+# WebArena ACI Study
+exp_group_name = "aci_study"
 
 # relaunch_mode = "incomplete_only"
 # relaunch_mode = "all_errors"
@@ -46,10 +48,11 @@ relaunch_mode = None
 
 main(
     exp_root=RESULTS_DIR,
-    benchmark='webarena',
+    benchmark='webarena', # this will be ignored if you specify the exp_group_name
+    exp_group_name=exp_group_name,
     model_name='azure-gpt-4o',
     exp_args_list=exp_args_list,
-    n_jobs=5,  # 1 for debugging, -1 for all cores except 2
+    n_jobs=3,  # 1 for debugging, -1 for all cores except 2
     relaunch_mode=relaunch_mode,  # choices = [None, 'incomplete_only', 'all_errors', 'server_errors']. if not None, make sure you're pointing to an existing experiment directory
     auto_accept=True,  # skip the prompt to accept the experiment
 )

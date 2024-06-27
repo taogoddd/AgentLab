@@ -53,6 +53,7 @@ def main(
             )
         extra_kwargs = {}
 
+    # final run if no group name and benchmark and model are specified
     elif benchmark and model_name:
         logging.info(f"Launching benchmark: {benchmark} with model: {model_name}")
         exp_group_name = "final_run"
@@ -129,6 +130,7 @@ def _validate_launch_mode(
                 exp_args.agent_args.chat_model_args.model_name
             ].model_url
 
+    # read: not relaunch mode here
     else:
         if exp_args_list is None:
             from agentlab.experiments import exp_configs

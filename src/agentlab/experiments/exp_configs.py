@@ -119,6 +119,67 @@ model_name_list = [
     "openai/gpt-4o-2024-05-13",
 ]
 
+# agent args here
+
+# test augmentation of action space
+def aci_study(benchmark="webarena"):
+    # modify the flags here
+    flags = GenericPromptFlags(
+        obs=dp.ObsFlags(
+            use_html=False,
+            use_ax_tree=True,
+            use_focused_element=True,
+            use_error_logs=True,
+            use_history=True,
+            use_past_error_logs=False,
+            use_action_history=True,
+            use_think_history=False,
+            use_diff=False,
+            html_type="pruned_html",
+            use_screenshot=False,
+            use_som=False,
+            extract_visible_tag=True,
+            extract_clickable_tag=True,
+            extract_coords="False",
+            filter_visible_elements_only=False,
+        ),
+        action=dp.ActionFlags(
+            multi_actions=False,
+            action_set="bid+shopping",
+            long_description=True,
+            individual_examples=True,
+        ),
+        use_plan=False,
+        use_criticise=False,
+        use_thinking=True,
+        use_memory=False,
+        use_concrete_example=True,
+        use_abstract_example=True,
+        use_hints=True,
+        enable_chat=False,
+        max_prompt_tokens=None,
+        be_cautious=True,
+        extra_instructions=None,
+    )
+
+    # modify chat model config here if needed, currently it is azure openai gpt-4o
+    agent_args = GenericAgentArgs(
+        chat_model_args=CHAT_MODEL_ARGS_DICT["azureopenai/gpt-4o-2024-05-13"],
+        flags=flags,
+    )
+
+    # modify max_steps here if needed
+    env_args_list = tasks.get_benchmark_env_args(benchmark, max_steps=30)
+
+    # if you do not want it to log debug infos, you may change logging level here
+    return args.expand_cross_product(
+        ExpArgs(
+            agent_args=agent_args,
+            env_args=args.CrossProd(env_args_list),
+            enable_debug=False,
+            logging_level=logging.DEBUG,
+        )
+    )
 
 # test GenericAgent with different LLMs
 def generic_agent_eval_llm(benchmark="workarena.l1.sort"):
@@ -126,6 +187,7 @@ def generic_agent_eval_llm(benchmark="workarena.l1.sort"):
     flags = ADVANCED_FLAGS.copy()
     flags.obs.extract_visible_tag = True
     flags.obs.extract_clickable_tag = False
+    # MOD: set use_think_history to True on WebArena
     flags.obs.use_think_history = False
     flags.obs.use_screenshot = False
     flags.obs.use_focused_element = True
@@ -247,6 +309,7 @@ def final_run(benchmark: str = "miniwob", model_name: str = "gpt-3.5"):
 
     env_args_list = tasks.get_benchmark_env_args(benchmark, max_steps=None, n_repeat=None)
 
+    # read: args here
     return args.expand_cross_product(
         ExpArgs(
             agent_args=agent,

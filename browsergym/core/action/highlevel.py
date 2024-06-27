@@ -7,6 +7,8 @@ from typing import Literal, Optional
 from . import utils
 from .base import AbstractActionSet
 from .functions import (
+    go_to_reviews_page,
+
     noop,
     send_msg_to_user,
     report_infeasible,
@@ -48,6 +50,8 @@ from .parsers import highlevel_action_parser, action_docstring_parser
 CHAT_ACTIONS = [send_msg_to_user]
 
 INFEAS_ACTIONS = [report_infeasible]
+
+SHOPPING_ADMIN_EXTRA_ACTIONS = [go_to_reviews_page]
 
 BID_ACTIONS = [
     scroll,
@@ -144,6 +148,8 @@ class HighLevelActionSet(AbstractActionSet):
                         allowed_actions.extend(NAV_ACTIONS)
                     case "tab":
                         allowed_actions.extend(TAB_ACTIONS)
+                    case "shopping":
+                        allowed_actions.extend(SHOPPING_ADMIN_EXTRA_ACTIONS)
                     case "custom":
                         if not custom_actions:
                             raise ValueError(
@@ -255,11 +261,23 @@ One single action to be executed. You can only use one action at a time."""
         """
         Returns a textual description of this action space.
         """
+        # MOD: divide actions into 2 groups: "WEBSITE SPECIFIC" in description or not
+        augmented_actions = [
+            action
+            for action in self.action_set.values()
+            if "augmented" in action.description.lower()
+        ]
+        other_actions = [
+            action
+            for action in self.action_set.values()
+            if action not in augmented_actions
+        ]
         description = f"""
 {len(self.action_set)} different types of actions are available.
 
 """
-        for _, action in self.action_set.items():
+        # prompt for other_actions
+        for action in other_actions:
             description += f"""\
 {action.signature}
 """
@@ -277,6 +295,29 @@ One single action to be executed. You can only use one action at a time."""
         {example}
 
 """
+        description += f"""\
+{len(augmented_actions)} augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+"""
+        
+        # prompt for augmented_actions
+        for action in augmented_actions:
+            description += f"""\
+{action.signature}
+"""
+            if with_long_description:
+                description += f"""\
+    Description: {action.description}
+"""
+            if with_examples and action.examples:
+                description += f"""\
+    Examples:
+"""
+                for example in action.examples:
+                    description += f"""\
+        {example}
+
+"""
+        
 
         if self.multiaction:
             description += f"""\
