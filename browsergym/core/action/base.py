@@ -34,8 +34,7 @@ class AbstractActionSet(ABC):
 def execute_python_code(
     code: str,
     page: playwright.sync_api.Page,
-    send_message_to_user: callable,
-    report_infeasible_instructions: callable,
+    custom_functions: dict[callable] = {}
 ):
     """
     Executes Python code in a new context, except for a playwright `page` object and a `send_message_to_user` function.
@@ -52,8 +51,7 @@ def execute_python_code(
 
     globals = {
         "page": page,
-        "send_message_to_user": send_message_to_user,
-        "report_infeasible_instructions": report_infeasible_instructions,
+        **custom_functions,
     }
 
     exec(code, globals)

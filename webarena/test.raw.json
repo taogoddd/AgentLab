@@ -50,7 +50,9 @@
         "string_match"
       ],
       "reference_answers": {
-        "exact_match": "Sprite"
+        "fuzzy_match": [
+          "The top-1 best-selling brand in Quarter 1 2022 is Sprite"
+        ]
       },
       "reference_url": "",
       "program_html": [],

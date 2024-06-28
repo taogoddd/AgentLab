@@ -96,6 +96,7 @@ class GenericWebArenaTask(AbstractBrowserTask):
             json.dump(self.config, f)
             f.flush()
             self.config_file = f.name
+            print(f"config file: {self.config_file}")
 
         # build the evaluator
         self.evaluator = evaluator_router(self.config_file)

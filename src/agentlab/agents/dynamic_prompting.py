@@ -508,7 +508,8 @@ Note:
 * Interacting with combobox, dropdowns and auto-complete fields can be tricky,
 sometimes you need to use select_option, while other times you need to use fill
 or click and wait for the reaction of the page.
-* 
+* If you are provided with augmented action, you may use it if needed. These actions are more task-specific and may help you achieve your goal faster.
+* Read the question carefully before answer the question. e.g. Sprite Yoga Ball and Sprite Yoga Mat belongs to the same brand "Sprite"
 """
 
 

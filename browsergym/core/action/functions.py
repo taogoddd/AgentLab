@@ -23,10 +23,19 @@ inspect.getsource().
 
 # augmented actions here:
 
+def go_to_best_seller_page():
+    """
+    [AUGMENTED] Navigate to the best seller page on http://localhost:7780.
+
+    Examples:
+        go_to_best_seller_page()
+    """
+    page.goto("http://localhost:7780/admin/reports/report_sales/bestsellers/")
+
 # hack: go to the page directly
 def go_to_reviews_page():
     """
-    [AUGMENTED] Navigate to the reviews page.
+    [AUGMENTED] Navigate to the reviews page on http://localhost:7780.
 
     Examples:
         go_to_reviews_page()

@@ -8,6 +8,7 @@ from . import utils
 from .base import AbstractActionSet
 from .functions import (
     go_to_reviews_page,
+    go_to_best_seller_page,
 
     noop,
     send_msg_to_user,
@@ -51,7 +52,7 @@ CHAT_ACTIONS = [send_msg_to_user]
 
 INFEAS_ACTIONS = [report_infeasible]
 
-SHOPPING_ADMIN_EXTRA_ACTIONS = [go_to_reviews_page]
+SHOPPING_ADMIN_EXTRA_ACTIONS = [go_to_reviews_page, go_to_best_seller_page]
 
 BID_ACTIONS = [
     scroll,
@@ -148,7 +149,7 @@ class HighLevelActionSet(AbstractActionSet):
                         allowed_actions.extend(NAV_ACTIONS)
                     case "tab":
                         allowed_actions.extend(TAB_ACTIONS)
-                    case "shopping":
+                    case "shopping_admin":
                         allowed_actions.extend(SHOPPING_ADMIN_EXTRA_ACTIONS)
                     case "custom":
                         if not custom_actions:

@@ -8,6 +8,7 @@ import time
 import urllib
 from pathlib import Path
 from typing import Any, Tuple, Union
+import unicodedata
 
 from beartype import beartype
 from nltk.tokenize import word_tokenize  # type: ignore
@@ -77,20 +78,31 @@ class StringEvaluator(Evaluator):
 
     @staticmethod
     @beartype
+    def normalize_string(s) -> str:
+        # Normalize the string to NFC (Normalization Form C)
+        return unicodedata.normalize('NFC', s)
+
+    @staticmethod
+    @beartype
+    def are_equivalent(str1, str2):
+        return StringEvaluator.normalize_string(str1) == StringEvaluator.normalize_string(str2)
+
+    @staticmethod
+    @beartype
     def clean_answer(answer: str) -> str:
         answer = answer.strip()
         if answer.startswith("'") and answer.endswith("'"):
             answer = answer[1:-1]
         elif answer.startswith('"') and answer.endswith('"'):
             answer = answer[1:-1]
+        
         return answer.lower()
 
     @staticmethod
     @beartype
     def exact_match(ref: str, pred: str) -> float:
         return float(
-            StringEvaluator.clean_answer(pred)
-            == StringEvaluator.clean_answer(ref)
+            StringEvaluator.are_equivalent(StringEvaluator.clean_answer(ref), StringEvaluator.clean_answer(pred))
         )
 
     @staticmethod
@@ -100,6 +112,7 @@ class StringEvaluator(Evaluator):
         clean_pred = StringEvaluator.clean_answer(pred)
         # tokenize the answer if the ref is a single word
         # prevent false positive (e.g, 0)
+        # TODO: deal with unicode cases
         if (
             tokenize
             and len(clean_ref) == 1

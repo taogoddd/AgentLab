@@ -331,8 +331,11 @@ document.addEventListener("visibilitychange", () => {
             execute_python_code(
                 code,
                 self.page,
-                send_message_to_user=send_message_to_user,
-                report_infeasible_instructions=report_infeasible_instructions,
+                custom_functions={
+                    "send_message_to_user": send_message_to_user,
+                    "report_infeasible_instructions": report_infeasible_instructions,
+                    "stop_and_output": stop_and_output,
+                },
             )
             self.last_action_error = ""
         except Exception as e:

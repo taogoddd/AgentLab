@@ -145,7 +145,8 @@ def aci_study(benchmark="webarena"):
         ),
         action=dp.ActionFlags(
             multi_actions=False,
-            action_set="bid+shopping",
+            # change action space here
+            action_set="bid+shopping_admin",
             long_description=True,
             individual_examples=True,
         ),
