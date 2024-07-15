@@ -16,6 +16,9 @@ report_infeasible_instructions: callable = None
 stop_and_output: callable = None
 demo_mode: Literal["off", "default", "all_blue", "only_visible_elements"] = None
 
+search: callable = None
+filter_reviews: callable = None
+
 """IMPORTANT
 The following primitives are meant to be included in the browsergym action using
 inspect.getsource().
@@ -23,9 +26,45 @@ inspect.getsource().
 
 # augmented actions here:
 
+def go_to_search_terms_page():
+    """
+    [AUGMENTED] Navigate to the search terms page.
+
+    Examples:
+        go_to_search_terms_page()
+    """
+    page.goto("http://localhost:7780/admin/search/term/report/")
+
+def go_to_forum(forum_name: str):
+    """
+    [AUGMENTED] Navigate to the forum page with the given forum name.
+
+    Examples:
+        go_to_forum("")
+    """
+    page.goto(f"http://localhost:9999/f/{forum_name}")
+
+def filter_reviews_by_keyword(keyword: str):
+    """
+    [AUGMENTED] This function will filter the reviews by the keyword provided.
+
+    Examples:
+        filter_reviews_by_keyword("good")
+    """
+    filter_reviews(keyword)
+
+def search_keyword(keyword: str):
+    """
+    [AUGMENTED] This function will search for the keyword on the a11y tree of the page and it will return the list of a11y tree codes that wrap around the keyword. If you find no search results, you may consider use more elementary keyword or search multiple times to ensure get results
+
+    Examples:
+        search_keyword("good")
+    """
+    search(keyword)
+
 def go_to_best_seller_page():
     """
-    [AUGMENTED] Navigate to the best seller page on http://localhost:7780.
+    [AUGMENTED] Navigate to the best seller page.
 
     Examples:
         go_to_best_seller_page()
@@ -35,7 +74,7 @@ def go_to_best_seller_page():
 # hack: go to the page directly
 def go_to_reviews_page():
     """
-    [AUGMENTED] Navigate to the reviews page on http://localhost:7780.
+    [AUGMENTED] Navigate to the reviews page.
 
     Examples:
         go_to_reviews_page()

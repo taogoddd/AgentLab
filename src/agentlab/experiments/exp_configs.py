@@ -2,6 +2,7 @@ import logging
 import random
 from browsergym.experiments.loop import EnvArgs, ExpArgs
 from agentlab.agents.generic_agent.generic_agent import GenericAgentArgs
+from agentlab.agents.annotator.human_annotator import HumanAnnotatorArgs
 from agentlab.agents import dynamic_prompting as dp
 from agentlab.experiments import args
 from agentlab.experiments import task_collections as tasks
@@ -133,7 +134,7 @@ def aci_study(benchmark="webarena"):
             use_history=True,
             use_past_error_logs=False,
             use_action_history=True,
-            use_think_history=False,
+            use_think_history=True,
             use_diff=False,
             html_type="pruned_html",
             use_screenshot=False,
@@ -146,11 +147,11 @@ def aci_study(benchmark="webarena"):
         action=dp.ActionFlags(
             multi_actions=False,
             # change action space here
-            action_set="bid+shopping_admin",
+            action_set="wa_bid+reddit",
             long_description=True,
             individual_examples=True,
         ),
-        use_plan=False,
+        use_plan=True,
         use_criticise=False,
         use_thinking=True,
         use_memory=False,
@@ -165,6 +166,65 @@ def aci_study(benchmark="webarena"):
 
     # modify chat model config here if needed, currently it is azure openai gpt-4o
     agent_args = GenericAgentArgs(
+        chat_model_args=CHAT_MODEL_ARGS_DICT["azureopenai/gpt-4o-2024-05-13"],
+        flags=flags,
+    )
+
+    # modify max_steps here if needed
+    env_args_list = tasks.get_benchmark_env_args(benchmark, max_steps=30)
+
+    # if you do not want it to log debug infos, you may change logging level here
+    return args.expand_cross_product(
+        ExpArgs(
+            agent_args=agent_args,
+            env_args=args.CrossProd(env_args_list),
+            enable_debug=False,
+            logging_level=logging.DEBUG,
+        )
+    )
+def annotate(benchmark="webarena"):
+    # modify the flags here
+    flags = GenericPromptFlags(
+        obs=dp.ObsFlags(
+            use_html=False,
+            use_ax_tree=True,
+            use_focused_element=True,
+            use_error_logs=True,
+            use_history=True,
+            use_past_error_logs=False,
+            use_action_history=True,
+            use_think_history=True,
+            use_diff=False,
+            html_type="pruned_html",
+            use_screenshot=True,
+            use_som=False,
+            extract_visible_tag=True,
+            extract_clickable_tag=True,
+            extract_coords="False",
+            filter_visible_elements_only=False,
+        ),
+        action=dp.ActionFlags(
+            multi_actions=False,
+            # change action space here
+            action_set="wa_bid+reddit",
+            long_description=True,
+            individual_examples=True,
+        ),
+        use_plan=True,
+        use_criticise=False,
+        use_thinking=True,
+        use_memory=False,
+        use_concrete_example=True,
+        use_abstract_example=True,
+        use_hints=True,
+        enable_chat=False,
+        max_prompt_tokens=None,
+        be_cautious=True,
+        extra_instructions=None,
+    )
+
+    # modify chat model config here if needed, currently it is azure openai gpt-4o
+    agent_args = HumanAnnotatorArgs(
         chat_model_args=CHAT_MODEL_ARGS_DICT["azureopenai/gpt-4o-2024-05-13"],
         flags=flags,
     )

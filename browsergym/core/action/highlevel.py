@@ -9,6 +9,10 @@ from .base import AbstractActionSet
 from .functions import (
     go_to_reviews_page,
     go_to_best_seller_page,
+    search_keyword,
+    filter_reviews_by_keyword,
+    go_to_forum,
+    go_to_search_terms_page,
 
     noop,
     send_msg_to_user,
@@ -52,7 +56,11 @@ CHAT_ACTIONS = [send_msg_to_user]
 
 INFEAS_ACTIONS = [report_infeasible]
 
-SHOPPING_ADMIN_EXTRA_ACTIONS = [go_to_reviews_page, go_to_best_seller_page]
+SHOPPING_ADMIN_EXTRA_ACTIONS = [go_to_reviews_page, go_to_best_seller_page, filter_reviews_by_keyword, go_to_search_terms_page]
+
+SHOPPING_EXTRA_ACTIONS = [search_keyword]
+
+REDDIT_EXTRA_ACTIONS = [go_to_forum]
 
 BID_ACTIONS = [
     scroll,
@@ -69,6 +77,14 @@ BID_ACTIONS = [
     clear,
     drag_and_drop,
     upload_file,
+]
+
+WA_BID_ACTIONS = [
+    # scroll,
+    fill,
+    select_option,
+    click,
+    clear
 ]
 
 COORD_ACTIONS = [
@@ -141,6 +157,9 @@ class HighLevelActionSet(AbstractActionSet):
                         allowed_actions.extend(CHAT_ACTIONS)
                     case "infeas":
                         allowed_actions.extend(INFEAS_ACTIONS)
+                    # bid actions for webarena, delete the unnecessary actions
+                    case "wa_bid":
+                        allowed_actions.extend(WA_BID_ACTIONS)
                     case "bid":
                         allowed_actions.extend(BID_ACTIONS)
                     case "coord":
@@ -151,6 +170,10 @@ class HighLevelActionSet(AbstractActionSet):
                         allowed_actions.extend(TAB_ACTIONS)
                     case "shopping_admin":
                         allowed_actions.extend(SHOPPING_ADMIN_EXTRA_ACTIONS)
+                    case "shopping":
+                        allowed_actions.extend(SHOPPING_EXTRA_ACTIONS)
+                    case "reddit":
+                        allowed_actions.extend(REDDIT_EXTRA_ACTIONS)
                     case "custom":
                         if not custom_actions:
                             raise ValueError(

@@ -12,7 +12,7 @@ from dataclasses import dataclass, field, asdict, is_dataclass
 from datetime import datetime
 from pathlib import Path
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Any
 
 import gymnasium as gym
 import numpy as np
@@ -74,7 +74,7 @@ class AbstractAgentArgs(ABC):
         return self.__class__.__name__
 
     @abstractmethod
-    def make_agent(self) -> Agent:
+    def make_agent(self, **kwargs: Any) -> Agent:
         """Comply the experiments.loop API for instantiating the agent."""
 
 
@@ -159,7 +159,7 @@ class ExpArgs:
         episode_info = []
         try:
             logger.info(f"Running experiment {self.exp_name} in:\n  {self.exp_dir}")
-            agent = self.agent_args.make_agent()
+            agent = self.agent_args.make_agent(exp_dir = self.exp_dir)
             logger.debug(f"Agent created.")
             env = self.env_args.make_env(
                 action_mapping=agent.action_set.to_python_code, exp_dir=self.exp_dir

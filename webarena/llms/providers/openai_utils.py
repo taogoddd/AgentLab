@@ -258,6 +258,9 @@ def generate_from_openai_chat_completion(
     stop_token: str | None = None,
 ) -> str:
     client = get_openai_client()
+    # this is for Azure OpenAI API
+    if "gpt-4o" in model:
+        model = "gpt-4o-2024-05-13"
     response = client.chat.completions.create(# type: ignore
         model=model,
         messages=messages,

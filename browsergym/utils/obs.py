@@ -545,3 +545,52 @@ def prune_html(html):
     html = soup.prettify()
 
     return html
+
+def search_keyword_from_tree_str(tree_str, keyword, context_len=500, highlight_keyword=True):
+    lines = tree_str.split('\n')
+    results = []
+    
+    # Find all lines containing the keyword
+    keyword_lines = [i for i, line in enumerate(lines) if keyword in line]
+    
+    for keyword_pos in keyword_lines:
+        total_length = sum(len(lines[i]) + 1 for i in range(keyword_pos))  # +1 for the newline character
+
+        # Calculate the character positions for the context
+        start_char = max(0, total_length - context_len)
+        end_char = min(len(tree_str), total_length + len(lines[keyword_pos]) + context_len)
+        
+        # Find the line indices for the context
+        start_line = 0
+        end_line = len(lines) - 1
+        char_count = 0
+        for i, line in enumerate(lines):
+            if char_count <= start_char < char_count + len(line) + 1:
+                start_line = i
+            if char_count <= end_char < char_count + len(line) + 1:
+                end_line = i
+                break
+            char_count += len(line) + 1  # +1 for the newline character
+        
+        # Calculate number of lines before and after the result
+        lines_before = start_line
+        lines_after = len(lines) - end_line - 1
+        
+        # Extract the context with whole lines
+        context = '\n'.join(lines[start_line:end_line + 1])
+        
+        # Format the result with number of lines before and after
+        result = f"[{lines_before} lines before]\n{context}\n[{lines_after} lines after]"
+        results.append(result)
+    
+    if highlight_keyword:
+        # Highlight the keyword in the results
+        for i, result in enumerate(results):
+            results[i] = result.replace(keyword, f"[{keyword.upper()}]")
+    
+    return results
+
+def format_function_call_str(function_name: str, params: dict) -> str:
+    """Formats a function call with parameters into a string"""
+    params_str = ", ".join(f"{k}={v}" for k, v in params.items())
+    return f"{function_name}({params_str})"

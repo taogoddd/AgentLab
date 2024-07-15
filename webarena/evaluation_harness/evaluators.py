@@ -176,10 +176,17 @@ class StringEvaluator(Evaluator):
                             )
                     else:
                         assert isinstance(value, list)
-                        for reference in value:
-                            score *= self.fuzzy_match(
-                                ref=reference, pred=pred, intent=intent
-                            )
+
+                        # for reference in value:
+                        #     score *= self.fuzzy_match(
+                        #         ref=reference, pred=pred, intent=intent
+                        #     )
+
+                        # the way to evaluate changed from webarena source codes
+                        # concatenate all reference answers and evaluate the model answer
+                        score *= self.fuzzy_match(
+                            ref="; ".join(value), pred=pred, intent=intent
+                        )
         return score
 
 

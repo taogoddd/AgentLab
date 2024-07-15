@@ -29,6 +29,11 @@ from .action.highlevel import HighLevelActionSet
 from .action.base import execute_python_code
 from . import _get_global_playwright
 
+from browsergym.utils.obs import (
+    flatten_axtree_to_str,
+    search_keyword_from_tree_str,
+    format_function_call_str,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +138,7 @@ class BrowserEnv(gym.Env, ABC):
                 "focused_element_bid": Unicode(min_length=0, max_length=TEXT_MAX_LENGTH),
                 "last_action": Unicode(min_length=0, max_length=TEXT_MAX_LENGTH),
                 "last_action_error": Unicode(min_length=0, max_length=TEXT_MAX_LENGTH),
+                "last_action_result": Unicode(min_length=0, max_length=TEXT_MAX_LENGTH),
                 "elapsed_time": gym.spaces.Box(low=0, high=np.inf, dtype=float),
             }
         )
@@ -280,6 +286,7 @@ document.addEventListener("visibilitychange", () => {
         # no action yet
         self.last_action = ""
         self.last_action_error = ""
+        self.last_action_result = ""
         self.infeasible_message_received = False
 
         # if asked, wait for user message
@@ -321,6 +328,58 @@ document.addEventListener("visibilitychange", () => {
             self.chat.add_message(role="infeasible", msg=reason)
             self.infeasible_message_received = True
 
+        # hack: use url to directly finish this action; should be replaced by a seq of actions
+        def filter_reviews_by_keyword(keyword: str):
+            page = self.page
+            if keyword == "disappointed":
+                page.goto("http://localhost:7780/admin/review/product/index/filter/Y3JlYXRlZF9hdCU1QmxvY2FsZSU1RD1lbl9VUyZkZXRhaWw9ZGlzYXBwb2ludGVk/internal_reviews//form_key/mSfXgxHdha42VOd2/")
+            elif keyword == "satisfied":
+                page.goto("http://localhost:7780/admin/review/product/index/filter/Y3JlYXRlZF9hdCU1QmxvY2FsZSU1RD1lbl9VUyZkZXRhaWw9c2F0aXNmaWVk/internal_reviews//form_key/AS9yw7kELOYn30q8/")
+            elif keyword == "decent":
+                page.goto("http://localhost:7780/admin/review/product/index/filter/Y3JlYXRlZF9hdCU1QmxvY2FsZSU1RD1lbl9VUyZkZXRhaWw9ZGVjZW50/internal_reviews//form_key/AS9yw7kELOYn30q8/")
+            elif keyword == "not useful":
+                page.goto("http://localhost:7780/admin/review/product/index/filter/Y3JlYXRlZF9hdCU1QmxvY2FsZSU1RD1lbl9VUyZkZXRhaWw9bm90K3VzZWZ1bA==/internal_reviews//form_key/AS9yw7kELOYn30q8/")
+            elif keyword == "best":
+                page.goto("http://localhost:7780/admin/review/product/index/filter/Y3JlYXRlZF9hdCU1QmxvY2FsZSU1RD1lbl9VUyZkZXRhaWw9YmVzdA==/internal_reviews//form_key/AS9yw7kELOYn30q8/")
+
+        # hack: context length is not passed by agent rather it is hardcoded here
+        def search_keyword(keyword: str):
+            """
+            Search the keyword in the ax tree of the page and return the left and right {context_len} characters of the line
+            """
+            page = self.page
+            # get the obs of the page
+            obs = self._get_obs()
+            # get the ax tree of the page
+            axtree = obs["axtree_object"]
+            # flatten the ax tree to string
+            # hack: flags are fixed. Need to be passed from outside to make it consistent with the args
+            tree_str = flatten_axtree_to_str(
+                AX_tree=axtree,
+                extra_properties=obs["extra_element_properties"],
+                with_visible=True,
+                with_center_coords=False,
+                with_bounding_box_coords=False,
+                filter_visible_only=False,
+            )
+
+            # stringfy the function call
+            params = {
+                "keyword": keyword,
+            }
+            fc_str = format_function_call_str("search_keyword", params)
+
+            results = search_keyword_from_tree_str(tree_str, keyword, context_len=300)
+
+            results_str = ""
+
+            for i, result in enumerate(results):
+                results_str += f"Searching result {i+1}:\n{result}\n\n"
+
+            last_action_result_str = f"Last action: {fc_str}\nSearching results:\nNOTE: The keyword in the results is highlight like: [{keyword.upper()}]\n{results_str}"
+
+            self.last_action_result = last_action_result_str
+
         # try to execute the action
         logger.debug(f"Executing action")
         try:
@@ -335,6 +394,8 @@ document.addEventListener("visibilitychange", () => {
                     "send_message_to_user": send_message_to_user,
                     "report_infeasible_instructions": report_infeasible_instructions,
                     "stop_and_output": stop_and_output,
+                    "search": search_keyword,
+                    "filter_reviews": filter_reviews_by_keyword,
                 },
             )
             self.last_action_error = ""
@@ -517,6 +578,7 @@ document.addEventListener("visibilitychange", () => {
             "focused_element_bid": focused_element_bid,
             "last_action": self.last_action,
             "last_action_error": self.last_action_error,
+            "last_action_result": self.last_action_result,
             "elapsed_time": np.asarray([time.time() - self.start_time]),
         }
 

@@ -2,7 +2,9 @@ import traceback
 from dataclasses import asdict, dataclass
 from warnings import warn
 from functools import partial
-
+from PIL import Image
+from io import BytesIO
+import base64
 from browsergym.experiments.loop import AbstractAgentArgs
 from langchain.schema import HumanMessage, SystemMessage
 
@@ -12,44 +14,82 @@ from agentlab.agents import dynamic_prompting as dp
 from agentlab.agents.utils import openai_monitored_agent
 from agentlab.llm.chat_api import ChatModelArgs
 from agentlab.llm.llm_utils import ParseError, RetryError, retry_and_fit, retry
-from .generic_agent_prompt import GenericPromptFlags, MainPrompt
-
+from .prompt import GenericPromptFlags, MainPrompt
 
 @dataclass
-class GenericAgentArgs(AbstractAgentArgs):
-    agent_name: str = "GenericAgent"
+class HumanAnnotatorArgs(AbstractAgentArgs):
     chat_model_args: ChatModelArgs = None
+    agent_name: str = "HumanAnnotator"
     flags: GenericPromptFlags = None
-    max_retry: int = 4
 
     def make_agent(self, **kwargs):
-        return GenericAgent(
-            chat_model_args=self.chat_model_args, flags=self.flags, max_retry=self.max_retry
+        exp_dir = kwargs.get("exp_dir", None)
+        return HumanAnnotator(
+            chat_model_args=self.chat_model_args, flags=self.flags, exp_dir=exp_dir
         )
 
-
-class GenericAgent(Agent):
+class HumanAnnotator(Agent):
 
     def __init__(
         self,
         chat_model_args: ChatModelArgs,
         flags: GenericPromptFlags,
-        max_retry: int = 4,
+        exp_dir: str = None,
     ):
 
-        self.chat_llm = chat_model_args.make_chat_model()
         self.chat_model_args = chat_model_args
-        self.max_retry = max_retry
 
         self.flags = flags
         self.action_set = dp.make_action_set(self.flags.action)
         self._obs_preprocessor = dp.make_obs_preprocessor(flags.obs)
+
+        self.exp_dir = exp_dir
 
         self._check_flag_constancy()
         self.reset(seed=None)
 
     def obs_preprocessor(self, obs: dict) -> dict:
         return self._obs_preprocessor(obs)
+
+    def save_annotation_info(self, chat_messages: list):
+        '''
+        return the readable string of the chat messages
+        '''
+        text_info_path = self.exp_dir / "annotation_text_info.txt"
+        image_info_path = self.exp_dir / "annotation_image_info.jpg"
+
+        chat_message_str = ""
+        for message in chat_messages:
+            if message.type == "system":
+                chat_message_str += "[SYSTEM]\n" + message.content + "\n"
+            elif message.type == "human":
+                # check whether message.content is a list of messages
+                content = message.content
+                if isinstance(content, list):
+                    content = message.content[0].get("text", "") # only take the text part
+                    base64_url = message.content[1]["image_url"]["url"]
+                chat_message_str += "-----------------------------------\n"
+                chat_message_str += "[USER]\n" + content + "\n"
+        
+        # save the chat message to the file (overwrite)
+        with open(text_info_path, "w") as f:
+            f.write(chat_message_str)
+        
+        # save the base64 string to an jpg image
+        
+        # remove the base64 header
+        base64_string = base64_url.split(",")[-1]
+
+        # Decode the base64 string
+        image_data = base64.b64decode(base64_string)
+
+        # Create an image from the decoded bytes
+        image = Image.open(BytesIO(image_data))
+
+        # Save the image to a file
+        image.save(image_info_path)
+
+        return text_info_path, image_info_path
 
     @openai_monitored_agent
     def get_action(self, obs):
@@ -85,30 +125,15 @@ class GenericAgent(Agent):
             return ans_dict, True, ""
 
         try:
-            # TODO, we would need to further shrink the prompt if the retry
-            # cause it to be too long
-            if self.flags.use_retry_and_fit:
-                ans_dict = retry_and_fit(
-                    self.chat_llm,
-                    main_prompt=main_prompt,
-                    system_prompt=dp.SystemPrompt().prompt,
-                    n_retry=self.max_retry,
-                    parser=parser,
-                    fit_function=fit_function,
-                    add_missparsed_messages=self.flags.add_missparsed_messages,
-                )
-            else:  # classic retry
-                prompt = fit_function(shrinkable=main_prompt)
+            prompt = fit_function(shrinkable=main_prompt)
 
-                chat_messages = [
-                    SystemMessage(content=dp.SystemPrompt().prompt),
-                    HumanMessage(content=prompt),
-                ]
-                ans_dict = retry(
-                    self.chat_llm, chat_messages, n_retry=self.max_retry, parser=parser
-                )
-                # inferring the number of retries, TODO: make this less hacky
-                ans_dict["n_retry"] = (len(chat_messages) - 3) / 2
+            chat_messages = [
+                SystemMessage(content=dp.SystemPrompt().prompt),
+                HumanMessage(content=prompt),
+            ]
+            human_prompt = "*"*50 + "\n"
+            human_prompt += f"Text info path: {self.save_annotation_info(chat_messages)[0]}\nImage info path: {self.save_annotation_info(chat_messages)[1]}\nEnter your action based on the given info: "
+            ans_dict = {"action": input(human_prompt)}
         except RetryError as e:
             # Likely due to maximum retry. We catch it here to be able to return
             # the list of messages for further analysis

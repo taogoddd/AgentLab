@@ -8,6 +8,7 @@ from dataclasses import asdict, dataclass
 from textwrap import dedent
 from typing import Literal
 from warnings import warn
+import os
 
 from browsergym.core.action.base import AbstractActionSet
 from browsergym.core.action.highlevel import HighLevelActionSet
@@ -340,7 +341,43 @@ class Error(PromptElement):
         super().__init__(visible=visible)
         self._prompt = f"\n{prefix}Error from previous action:\n{error}\n"
 
+class Result(PromptElement):
+    def __init__(self, result: str, visible: bool = True, prefix="") -> None:
 
+        super().__init__(visible=visible)
+        self._prompt = f"\n{prefix}Result from previous action:\n{result}\n"
+
+class URL(PromptElement):
+    def __init__(self, url, visible: bool = True, prefix="") -> None:
+        super().__init__(visible=visible)
+        URLS = {
+            "reddit": os.getenv("REDDIT"),
+            "shopping": os.getenv("SHOPPING"),
+            "shopping_admin": os.getenv("SHOPPING_ADMIN"),
+            "gitlab": os.getenv("GITLAB"),
+            "wikipedia": os.getenv("WIKIPEDIA"),
+            "map": os.getenv("MAP"),
+        }
+
+        web_str = ""
+        # check whether the current url is one of the predefined urls
+        for key, value in URLS.items():
+            # strip url and value to avoid partial matches
+            url = url.strip()
+            value = value.strip()
+            # remove the / at the end of the url
+            if url[-1] == "/":
+                url = url[:-1]
+            if value[-1] == "/":
+                value = value[:-1]
+            if value in url:
+                if value == url:
+                    web_str = f"Note: This is the main page of {key} website."
+                else:
+                    web_str = f"Note: This is the subpage '{url.replace(value, "")}' of {key} website."
+                break
+
+        self._prompt = f"\n{prefix}URL of the page:\n{url}\n{web_str}\n"
 class FocusedElement(PromptElement):
     def __init__(self, bid, visible: bool = True, prefix="") -> None:
         super().__init__(visible=visible)
@@ -386,11 +423,17 @@ class Observation(Shrinkable):
             visible=lambda: flags.use_error_logs and obs["last_action_error"],
             prefix="## ",
         )
+        self.result = Result(
+            obs["last_action_result"],
+            visible=lambda: flags.use_error_logs and obs["last_action_result"],
+            prefix="## ",
+        )
         self.focused_element = FocusedElement(
             obs["focused_element_bid"],
             visible=flags.use_focused_element,
             prefix="## ",
         )
+        self.url = URL(obs["url"], visible=True, prefix="## ")
 
     def shrink(self):
         self.ax_tree.shrink()
@@ -400,7 +443,7 @@ class Observation(Shrinkable):
     def _prompt(self) -> str:
         return f"""
 # Observation of current step:
-{self.html.prompt}{self.ax_tree.prompt}{self.focused_element.prompt}{self.error.prompt}
+{self.url.prompt}{self.html.prompt}{self.ax_tree.prompt}{self.focused_element.prompt}{self.error.prompt}{self.result.prompt}
 
 """
 
@@ -505,11 +548,8 @@ class Hints(PromptElement):
     _prompt = """\
 Note:
 * Make sure to use bid to identify elements when using commands.
-* Interacting with combobox, dropdowns and auto-complete fields can be tricky,
-sometimes you need to use select_option, while other times you need to use fill
-or click and wait for the reaction of the page.
 * If you are provided with augmented action, you may use it if needed. These actions are more task-specific and may help you achieve your goal faster.
-* Read the question carefully before answer the question. e.g. Sprite Yoga Ball and Sprite Yoga Mat belongs to the same brand "Sprite"
+* If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
 """
 
 
@@ -747,8 +787,14 @@ class HistoryStep(Shrinkable):
 
 class History(Shrinkable):
     def __init__(
-        self, history_obs, actions, memories, thoughts, flags: ObsFlags, shrink_speed=1
+        self, history_obs, actions, memories, thoughts, flags: ObsFlags, shrink_speed=1, window_size=5
     ) -> None:
+        """
+        Parameters
+        ----------
+        ...
+        window_size : the number of steps to keep in the history
+        """
         if memories is None:
             memories = [None] * len(actions)
         super().__init__(visible=lambda: flags.use_history)
@@ -757,8 +803,9 @@ class History(Shrinkable):
 
         self.shrink_speed = shrink_speed
         self.history_steps: list[HistoryStep] = []
+        self.window_size = window_size
 
-        for i in range(1, len(history_obs)):
+        for i in range(max(len(history_obs)-window_size, 1), len(history_obs)):
             self.history_steps.append(
                 HistoryStep(
                     history_obs[i - 1],
@@ -779,7 +826,7 @@ class History(Shrinkable):
 
     @property
     def _prompt(self):
-        prompts = ["# History of interaction with the task:\n"]
+        prompts = [f"# History of last {self.window_size} interaction with the task:\n"]
         for i, step in enumerate(self.history_steps):
             prompts.append(f"## step {i}")
             prompts.append(step.prompt)
