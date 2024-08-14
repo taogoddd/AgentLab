@@ -1,0 +1,2513 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Review the current state of the page and all other information to find the best
+possible next action to accomplish your goal. Your answer will be interpreted
+and executed by a program, make sure to follow the formatting instructions.
+# Observation of current step:
+
+## URL of the page:
+http://localhost:7780/admin/catalog/product
+Note: This is the subpage '/catalog/product' of shopping_admin website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Products / Inventory / Catalog / Magento Admin', focused
+	[174] link 'Magento Admin Panel', clickable, visible
+		[175] image 'Magento Admin Panel', visible
+	[176] navigation '', visible
+		[177] menubar '', visible, orientation='horizontal'
+			[179] link '\ue604 DASHBOARD', clickable, visible
+			[182] link '\ue60b SALES', clickable, visible
+			[215] link '\ue608 CATALOG', clickable, visible
+			[233] link '\ue603 CUSTOMERS', clickable, visible
+			[252] link '\ue609 MARKETING', clickable, visible
+			[319] link '\ue602 CONTENT', clickable, visible
+			[365] link '\ue60a REPORTS', clickable, visible
+			[490] link '\ue60d STORES', clickable, visible
+			[566] link '\ue610 SYSTEM', clickable, visible
+			[649] link '\ue612 FIND PARTNERS & EXTENSIONS', clickable, visible
+	[679] banner '', visible
+		[682] heading 'Products', visible
+		[685] link '\ue600 admin', clickable, visible
+		[697] link '\ue607', clickable, visible
+		[699] Section '', visible
+			[701] LabelText '', clickable, visible
+				StaticText '\ue60c'
+			[705] textbox '\ue60c', clickable, visible
+	[711] main ''
+		[718] button 'Add Product', visible
+		[720] button 'Add product of type', clickable, visible
+		[753] button '\ue60fDefault View', clickable, visible
+		[767] button '\ue610 Columns', clickable, visible
+		[890] button '\ue605Filters', clickable, visible
+		[1380] textbox 'Search by keyword' value='New Product Name', clickable, visible, focused
+		[1381] button 'Search', clickable, visible
+			StaticText '\ue60c'
+		[1386] button 'Actions', clickable, visible
+		StaticText '2041'
+		StaticText 'records found'
+		[1416] textbox 'per page' value='200', clickable, visible
+		[1417] button 'per page Select', clickable, visible
+		[1443] LabelText '', clickable, visible
+		[1445] button '\ue629', visible, disabled=True
+		[1446] spinbutton 'of 11' value=1, clickable, visible, valuemin=0, valuemax=0, valuetext=''
+		[1447] LabelText '', clickable, visible
+		[1448] button '\ue62a', clickable, visible
+		[1719] table ''
+			[1720] rowgroup '', visible
+				[1721] row '', visible
+					[1722] columnheader 'Options', visible
+						[1724] checkbox '', clickable, visible, checked='false'
+						[1725] LabelText '', clickable, visible
+						[1726] button 'Options', clickable, visible
+					[1737] columnheader 'ID', clickable, visible
+					[1739] columnheader 'Thumbnail', clickable, visible
+					[1741] columnheader 'Name', clickable, visible
+					[1743] columnheader 'Type', clickable, visible
+					[1745] columnheader 'Attribute Set', clickable, visible
+					[1747] columnheader 'SKU', clickable, visible
+					[1749] columnheader 'Price', clickable, visible
+					[1751] columnheader '↓ Quantity', clickable, visible
+					[1753] columnheader 'Salable Quantity', clickable, visible
+					[1755] columnheader 'Visibility', clickable, visible
+					[1757] columnheader 'Status', clickable, visible
+					[1759] columnheader 'Websites', clickable, visible
+					[1761] columnheader 'Last Updated At', clickable, visible
+					[1763] columnheader 'Action', clickable, visible
+			[1765] rowgroup ''
+				[1766] row '', visible
+					[1767] gridcell '', clickable, visible
+						[5306] LabelText '', clickable, visible
+							[5307] checkbox '', clickable, visible, checked='false'
+							[5308] LabelText '', clickable, visible
+					[1768] gridcell '898', clickable, visible
+					[1769] gridcell 'Apollo Running Short', clickable, visible
+						[5312] image 'Apollo Running Short', visible
+					[1770] gridcell 'Apollo Running Short', clickable, visible
+					[1771] gridcell 'Configurable Product', clickable, visible
+					[1772] gridcell 'Bottom', clickable, visible
+					[1773] gridcell 'MSH02', clickable, visible
+					[1774] gridcell '$32.50', clickable, visible
+					[1775] gridcell '0.0000', clickable, visible
+					[1776] gridcell '', clickable, visible
+						[5320] list '', visible
+					[1777] gridcell 'Catalog, Search', clickable, visible
+					[1778] gridcell 'Enabled', clickable, visible
+					[1779] gridcell 'Main Website', clickable, visible
+					[1780] gridcell 'Apr 19, 2023 12:13:37 PM', clickable, visible
+					[1781] gridcell 'Edit Apollo Running Short', clickable, visible
+						[5325] link 'Edit Apollo Running Short', clickable, visible
+				[1782] row '', visible
+					[1783] gridcell '', clickable, visible
+						[5326] LabelText '', clickable, visible
+							[5327] checkbox '', clickable, visible, checked='false'
+							[5328] LabelText '', clickable, visible
+					[1784] gridcell '1114', clickable, visible
+					[1785] gridcell 'Daphne Full-Zip Hoodie', clickable, visible
+						[5332] image 'Daphne Full-Zip Hoodie', visible
+					[1786] gridcell 'Daphne Full-Zip Hoodie', clickable, visible
+					[1787] gridcell 'Configurable Product', clickable, visible
+					[1788] gridcell 'Top', clickable, visible
+					[1789] gridcell 'WH06', clickable, visible
+					[1790] gridcell '$59.00', clickable, visible
+					[1791] gridcell '0.0000', clickable, visible
+					[1792] gridcell '', clickable, visible
+						[5340] list '', visible
+					[1793] gridcell 'Catalog, Search', clickable, visible
+					[1794] gridcell 'Enabled', clickable, visible
+					[1795] gridcell 'Main Website', clickable, visible
+					[1796] gridcell 'Apr 19, 2023 12:13:41 PM', clickable, visible
+					[1797] gridcell 'Edit Daphne Full-Zip Hoodie', clickable, visible
+						[5345] link 'Edit Daphne Full-Zip Hoodie', clickable, visible
+				[1798] row '', visible
+					[1799] gridcell '', clickable, visible
+						[5346] LabelText '', clickable, visible
+							[5347] checkbox '', clickable, visible, checked='false'
+							[5348] LabelText '', clickable, visible
+					[1800] gridcell '1130', clickable, visible
+					[1801] gridcell 'Phoebe Zipper Sweatshirt', clickable, visible
+						[5352] image 'Phoebe Zipper Sweatshirt', visible
+					[1802] gridcell 'Phoebe Zipper Sweatshirt', clickable, visible
+					[1803] gridcell 'Configurable Product', clickable, visible
+					[1804] gridcell 'Top', clickable, visible
+					[1805] gridcell 'WH07', clickable, visible
+					[1806] gridcell '$59.00', clickable, visible
+					[1807] gridcell '0.0000', clickable, visible
+					[1808] gridcell '', clickable, visible
+						[5360] list '', visible
+					[1809] gridcell 'Catalog, Search', clickable, visible
+					[1810] gridcell 'Enabled', clickable, visible
+					[1811] gridcell 'Main Website', clickable, visible
+					[1812] gridcell 'Apr 19, 2023 12:13:41 PM', clickable, visible
+					[1813] gridcell 'Edit Phoebe Zipper Sweatshirt', clickable
+						[5365] link 'Edit Phoebe Zipper Sweatshirt', clickable, visible
+				[1814] row ''
+					[1815] gridcell '', clickable
+						[5366] LabelText '', clickable
+							[5367] checkbox '', clickable, checked='false'
+							[5368] LabelText '', clickable
+					[1816] gridcell '1146', clickable
+					[1817] gridcell 'Cassia Funnel Sweatshirt', clickable
+						[5372] image 'Cassia Funnel Sweatshirt'
+					[1818] gridcell 'Cassia Funnel Sweatshirt', clickable
+					[1819] gridcell 'Configurable Product', clickable
+					[1820] gridcell 'Top', clickable
+					[1821] gridcell 'WH08', clickable
+					[1822] gridcell '$48.00', clickable
+					[1823] gridcell '0.0000', clickable
+					[1824] gridcell '', clickable
+						[5380] list ''
+					[1825] gridcell 'Catalog, Search', clickable
+					[1826] gridcell 'Enabled', clickable
+					[1827] gridcell 'Main Website', clickable
+					[1828] gridcell 'Apr 19, 2023 12:13:42 PM', clickable
+					[1829] gridcell 'Edit Cassia Funnel Sweatshirt', clickable
+						[5385] link 'Edit Cassia Funnel Sweatshirt', clickable
+				[1830] row ''
+					[1831] gridcell '', clickable
+						[5386] LabelText '', clickable
+							[5387] checkbox '', clickable, checked='false'
+							[5388] LabelText '', clickable
+					[1832] gridcell '950', clickable
+					[1833] gridcell 'Lono Yoga Short', clickable
+						[5392] image 'Lono Yoga Short'
+					[1834] gridcell 'Lono Yoga Short', clickable
+					[1835] gridcell 'Configurable Product', clickable
+					[1836] gridcell 'Bottom', clickable
+					[1837] gridcell 'MSH06', clickable
+					[1838] gridcell '$32.00', clickable
+					[1839] gridcell '0.0000', clickable
+					[1840] gridcell '', clickable
+						[5400] list ''
+					[1841] gridcell 'Catalog, Search', clickable
+					[1842] gridcell 'Enabled', clickable
+					[1843] gridcell 'Main Website', clickable
+					[1844] gridcell 'Apr 19, 2023 12:13:38 PM', clickable
+					[1845] gridcell 'Edit Lono Yoga Short', clickable
+						[5405] link 'Edit Lono Yoga Short', clickable
+				[1846] row ''
+					[1847] gridcell '', clickable
+						[5406] LabelText '', clickable
+							[5407] checkbox '', clickable, checked='false'
+							[5408] LabelText '', clickable
+					[1848] gridcell '1162', clickable
+					[1849] gridcell 'Ariel Roll Sleeve Sweatshirt', clickable
+						[5412] image 'Ariel Roll Sleeve Sweatshirt'
+					[1850] gridcell 'Ariel Roll Sleeve Sweatshirt', clickable
+					[1851] gridcell 'Configurable Product', clickable
+					[1852] gridcell 'Top', clickable
+					[1853] gridcell 'WH09', clickable
+					[1854] gridcell '$39.00', clickable
+					[1855] gridcell '0.0000', clickable
+					[1856] gridcell '', clickable
+						[5420] list ''
+					[1857] gridcell 'Catalog, Search', clickable
+					[1858] gridcell 'Enabled', clickable
+					[1859] gridcell 'Main Website', clickable
+					[1860] gridcell 'Apr 19, 2023 12:13:42 PM', clickable
+					[1861] gridcell 'Edit Ariel Roll Sleeve Sweatshirt', clickable
+						[5425] link 'Edit Ariel Roll Sleeve Sweatshirt', clickable
+				[1862] row ''
+					[1863] gridcell '', clickable
+						[5426] LabelText '', clickable
+							[5427] checkbox '', clickable, checked='false'
+							[5428] LabelText '', clickable
+					[1864] gridcell '1178', clickable
+					[1865] gridcell 'Helena Hooded Fleece', clickable
+						[5432] image 'Helena Hooded Fleece'
+					[1866] gridcell 'Helena Hooded Fleece', clickable
+					[1867] gridcell 'Configurable Product', clickable
+					[1868] gridcell 'Top', clickable
+					[1869] gridcell 'WH10', clickable
+					[1870] gridcell '$55.00', clickable
+					[1871] gridcell '0.0000', clickable
+					[1872] gridcell '', clickable
+						[5440] list ''
+					[1873] gridcell 'Catalog, Search', clickable
+					[1874] gridcell 'Enabled', clickable
+					[1875] gridcell 'Main Website', clickable
+					[1876] gridcell 'Apr 19, 2023 12:13:42 PM', clickable
+					[1877] gridcell 'Edit Helena Hooded Fleece', clickable
+						[5445] link 'Edit Helena Hooded Fleece', clickable
+				[1878] row ''
+					[1879] gridcell '', clickable
+						[5446] LabelText '', clickable
+							[5447] checkbox '', clickable, checked='false'
+							[5448] LabelText '', clickable
+					[1880] gridcell '1002', clickable
+					[1881] gridcell 'Sol Active Short', clickable
+						[5452] image 'Sol Active Short'
+					[1882] gridcell 'Sol Active Short', clickable
+					[1883] gridcell 'Configurable Product', clickable
+					[1884] gridcell 'Bottom', clickable
+					[1885] gridcell 'MSH10', clickable
+					[1886] gridcell '$32.00', clickable
+					[1887] gridcell '0.0000', clickable
+					[1888] gridcell '', clickable
+						[5460] list ''
+					[1889] gridcell 'Catalog, Search', clickable
+					[1890] gridcell 'Enabled', clickable
+					[1891] gridcell 'Main Website', clickable
+					[1892] gridcell 'Apr 19, 2023 12:13:39 PM', clickable
+					[1893] gridcell 'Edit Sol Active Short', clickable
+						[5465] link 'Edit Sol Active Short', clickable
+				[1894] row ''
+					[1895] gridcell '', clickable
+						[5466] LabelText '', clickable
+							[5467] checkbox '', clickable, checked='false'
+							[5468] LabelText '', clickable
+					[1896] gridcell '802', clickable
+					[1897] gridcell 'Mithra Warmup Pant', clickable
+						[5472] image 'Mithra Warmup Pant'
+					[1898] gridcell 'Mithra Warmup Pant', clickable
+					[1899] gridcell 'Configurable Product', clickable
+					[1900] gridcell 'Bottom', clickable
+					[1901] gridcell 'MP06', clickable
+					[1902] gridcell '$28.00', clickable
+					[1903] gridcell '0.0000', clickable
+					[1904] gridcell '', clickable
+						[5480] list ''
+					[1905] gridcell 'Catalog, Search', clickable
+					[1906] gridcell 'Enabled', clickable
+					[1907] gridcell 'Main Website', clickable
+					[1908] gridcell 'Apr 19, 2023 12:13:36 PM', clickable
+					[1909] gridcell 'Edit Mithra Warmup Pant', clickable
+						[5485] link 'Edit Mithra Warmup Pant', clickable
+				[1910] row ''
+					[1911] gridcell '', clickable
+						[5486] LabelText '', clickable
+							[5487] checkbox '', clickable, checked='false'
+							[5488] LabelText '', clickable
+					[1912] gridcell '854', clickable
+					[1913] gridcell 'Orestes Yoga Pant', clickable
+						[5492] image 'Orestes Yoga Pant'
+					[1914] gridcell 'Orestes Yoga Pant', clickable
+					[1915] gridcell 'Configurable Product', clickable
+					[1916] gridcell 'Bottom', clickable
+					[1917] gridcell 'MP10', clickable
+					[1918] gridcell '$66.00', clickable
+					[1919] gridcell '0.0000', clickable
+					[1920] gridcell '', clickable
+						[5500] list ''
+					[1921] gridcell 'Catalog, Search', clickable
+					[1922] gridcell 'Enabled', clickable
+					[1923] gridcell 'Main Website', clickable
+					[1924] gridcell 'Apr 19, 2023 12:13:37 PM', clickable
+					[1925] gridcell 'Edit Orestes Yoga Pant', clickable
+						[5505] link 'Edit Orestes Yoga Pant', clickable
+				[1926] row ''
+					[1927] gridcell '', clickable
+						[5506] LabelText '', clickable
+							[5507] checkbox '', clickable, checked='false'
+							[5508] LabelText '', clickable
+					[1928] gridcell '1684', clickable
+					[1929] gridcell 'Bella Tank', clickable
+						[5512] image 'Bella Tank'
+					[1930] gridcell 'Bella Tank', clickable
+					[1931] gridcell 'Configurable Product', clickable
+					[1932] gridcell 'Top', clickable
+					[1933] gridcell 'WT01', clickable
+					[1934] gridcell '$29.00', clickable
+					[1935] gridcell '0.0000', clickable
+					[1936] gridcell '', clickable
+						[5520] list ''
+					[1937] gridcell 'Catalog, Search', clickable
+					[1938] gridcell 'Enabled', clickable
+					[1939] gridcell 'Main Website', clickable
+					[1940] gridcell 'Apr 19, 2023 12:13:51 PM', clickable
+					[1941] gridcell 'Edit Bella Tank', clickable
+						[5525] link 'Edit Bella Tank', clickable
+				[1942] row ''
+					[1943] gridcell '', clickable
+						[5526] LabelText '', clickable
+							[5527] checkbox '', clickable, checked='false'
+							[5528] LabelText '', clickable
+					[1944] gridcell '1896', clickable
+					[1945] gridcell 'Deirdre Relaxed-Fit Capri', clickable
+						[5532] image 'Deirdre Relaxed-Fit Capri'
+					[1946] gridcell 'Deirdre Relaxed-Fit Capri', clickable
+					[1947] gridcell 'Configurable Product', clickable
+					[1948] gridcell 'Bottom', clickable
+					[1949] gridcell 'WP12', clickable
+					[1950] gridcell '$63.00', clickable
+					[1951] gridcell '0.0000', clickable
+					[1952] gridcell '', clickable
+						[5540] list ''
+					[1953] gridcell 'Catalog, Search', clickable
+					[1954] gridcell 'Enabled', clickable
+					[1955] gridcell 'Main Website', clickable
+					[1956] gridcell 'Apr 19, 2023 12:13:54 PM', clickable
+					[1957] gridcell 'Edit Deirdre Relaxed-Fit Capri', clickable
+						[5545] link 'Edit Deirdre Relaxed-Fit Capri', clickable
+				[1958] row ''
+					[1959] gridcell '', clickable
+						[5546] LabelText '', clickable
+							[5547] checkbox '', clickable, checked='false'
+							[5548] LabelText '', clickable
+					[1960] gridcell '1700', clickable
+					[1961] gridcell 'Zoe Tank', clickable
+						[5552] image 'Zoe Tank'
+					[1962] gridcell 'Zoe Tank', clickable
+					[1963] gridcell 'Configurable Product', clickable
+					[1964] gridcell 'Top', clickable
+					[1965] gridcell 'WT02', clickable
+					[1966] gridcell '$29.00', clickable
+					[1967] gridcell '0.0000', clickable
+					[1968] gridcell '', clickable
+						[5560] list ''
+					[1969] gridcell 'Catalog, Search', clickable
+					[1970] gridcell 'Enabled', clickable
+					[1971] gridcell 'Main Website', clickable
+					[1972] gridcell 'Apr 19, 2023 12:13:51 PM', clickable
+					[1973] gridcell 'Edit Zoe Tank', clickable
+						[5565] link 'Edit Zoe Tank', clickable
+				[1974] row ''
+					[1975] gridcell '', clickable
+						[5566] LabelText '', clickable
+							[5567] checkbox '', clickable, checked='false'
+							[5568] LabelText '', clickable
+					[1976] gridcell '1716', clickable
+					[1977] gridcell 'Nora Practice Tank', clickable
+						[5572] image 'Nora Practice Tank'
+					[1978] gridcell 'Nora Practice Tank', clickable
+					[1979] gridcell 'Configurable Product', clickable
+					[1980] gridcell 'Top', clickable
+					[1981] gridcell 'WT03', clickable
+					[1982] gridcell '$39.00', clickable
+					[1983] gridcell '0.0000', clickable
+					[1984] gridcell '', clickable
+						[5580] list ''
+					[1985] gridcell 'Catalog, Search', clickable
+					[1986] gridcell 'Enabled', clickable
+					[1987] gridcell 'Main Website', clickable
+					[1988] gridcell 'Apr 19, 2023 12:13:51 PM', clickable
+					[1989] gridcell 'Edit Nora Practice Tank', clickable
+						[5585] link 'Edit Nora Practice Tank', clickable
+				[1990] row ''
+					[1991] gridcell '', clickable
+						[5586] LabelText '', clickable
+							[5587] checkbox '', clickable, checked='false'
+							[5588] LabelText '', clickable
+					[1992] gridcell '1732', clickable
+					[1993] gridcell 'Nona Fitness Tank', clickable
+						[5592] image 'Nona Fitness Tank'
+					[1994] gridcell 'Nona Fitness Tank', clickable
+					[1995] gridcell 'Configurable Product', clickable
+					[1996] gridcell 'Top', clickable
+					[1997] gridcell 'WT04', clickable
+					[1998] gridcell '$39.00', clickable
+					[1999] gridcell '0.0000', clickable
+					[2000] gridcell '', clickable
+						[5600] list ''
+					[2001] gridcell 'Catalog, Search', clickable
+					[2002] gridcell 'Enabled', clickable
+					[2003] gridcell 'Main Website', clickable
+					[2004] gridcell 'Apr 19, 2023 12:13:51 PM', clickable
+					[2005] gridcell 'Edit Nona Fitness Tank', clickable
+						[5605] link 'Edit Nona Fitness Tank', clickable
+				[2006] row ''
+					[2007] gridcell '', clickable
+						[5606] LabelText '', clickable
+							[5607] checkbox '', clickable, checked='false'
+							[5608] LabelText '', clickable
+					[2008] gridcell '1748', clickable
+					[2009] gridcell 'Leah Yoga Top', clickable
+						[5612] image 'Leah Yoga Top'
+					[2010] gridcell 'Leah Yoga Top', clickable
+					[2011] gridcell 'Configurable Product', clickable
+					[2012] gridcell 'Top', clickable
+					[2013] gridcell 'WT05', clickable
+					[2014] gridcell '$39.00', clickable
+					[2015] gridcell '0.0000', clickable
+					[2016] gridcell '', clickable
+						[5620] list ''
+					[2017] gridcell 'Catalog, Search', clickable
+					[2018] gridcell 'Enabled', clickable
+					[2019] gridcell 'Main Website', clickable
+					[2020] gridcell 'Apr 19, 2023 12:13:52 PM', clickable
+					[2021] gridcell 'Edit Leah Yoga Top', clickable
+						[5625] link 'Edit Leah Yoga Top', clickable
+				[2022] row ''
+					[2023] gridcell '', clickable
+						[5626] LabelText '', clickable
+							[5627] checkbox '', clickable, checked='false'
+							[5628] LabelText '', clickable
+					[2024] gridcell '1764', clickable
+					[2025] gridcell 'Chloe Compete Tank', clickable
+						[5632] image 'Chloe Compete Tank'
+					[2026] gridcell 'Chloe Compete Tank', clickable
+					[2027] gridcell 'Configurable Product', clickable
+					[2028] gridcell 'Top', clickable
+					[2029] gridcell 'WT06', clickable
+					[2030] gridcell '$39.00', clickable
+					[2031] gridcell '0.0000', clickable
+					[2032] gridcell '', clickable
+						[5640] list ''
+					[2033] gridcell 'Catalog, Search', clickable
+					[2034] gridcell 'Enabled', clickable
+					[2035] gridcell 'Main Website', clickable
+					[2036] gridcell 'Apr 19, 2023 12:13:52 PM', clickable
+					[2037] gridcell 'Edit Chloe Compete Tank', clickable
+						[5645] link 'Edit Chloe Compete Tank', clickable
+				[2038] row ''
+					[2039] gridcell '', clickable
+						[5646] LabelText '', clickable
+							[5647] checkbox '', clickable, checked='false'
+							[5648] LabelText '', clickable
+					[2040] gridcell '1780', clickable
+					[2041] gridcell 'Maya Tunic', clickable
+						[5652] image 'Maya Tunic'
+					[2042] gridcell 'Maya Tunic', clickable
+					[2043] gridcell 'Configurable Product', clickable
+					[2044] gridcell 'Top', clickable
+					[2045] gridcell 'WT07', clickable
+					[2046] gridcell '$29.00', clickable
+					[2047] gridcell '0.0000', clickable
+					[2048] gridcell '', clickable
+						[5660] list ''
+					[2049] gridcell 'Catalog, Search', clickable
+					[2050] gridcell 'Enabled', clickable
+					[2051] gridcell 'Main Website', clickable
+					[2052] gridcell 'Apr 19, 2023 12:13:52 PM', clickable
+					[2053] gridcell 'Edit Maya Tunic', clickable
+						[5665] link 'Edit Maya Tunic', clickable
+				[2054] row ''
+					[2055] gridcell '', clickable
+						[5666] LabelText '', clickable
+							[5667] checkbox '', clickable, checked='false'
+							[5668] LabelText '', clickable
+					[2056] gridcell '1796', clickable
+					[2057] gridcell 'Antonia Racer Tank', clickable
+						[5672] image 'Antonia Racer Tank'
+					[2058] gridcell 'Antonia Racer Tank', clickable
+					[2059] gridcell 'Configurable Product', clickable
+					[2060] gridcell 'Top', clickable
+					[2061] gridcell 'WT08', clickable
+					[2062] gridcell '$34.00', clickable
+					[2063] gridcell '0.0000', clickable
+					[2064] gridcell '', clickable
+						[5680] list ''
+					[2065] gridcell 'Catalog, Search', clickable
+					[2066] gridcell 'Enabled', clickable
+					[2067] gridcell 'Main Website', clickable
+					[2068] gridcell 'Apr 19, 2023 12:13:52 PM', clickable
+					[2069] gridcell 'Edit Antonia Racer Tank', clickable
+						[5685] link 'Edit Antonia Racer Tank', clickable
+				[2070] row ''
+					[2071] gridcell '', clickable
+						[5686] LabelText '', clickable
+							[5687] checkbox '', clickable, checked='false'
+							[5688] LabelText '', clickable
+					[2072] gridcell '1604', clickable
+					[2073] gridcell 'Electra Bra Top', clickable
+						[5692] image 'Electra Bra Top'
+					[2074] gridcell 'Electra Bra Top', clickable
+					[2075] gridcell 'Configurable Product', clickable
+					[2076] gridcell 'Top', clickable
+					[2077] gridcell 'WB01', clickable
+					[2078] gridcell '$39.00', clickable
+					[2079] gridcell '0.0000', clickable
+					[2080] gridcell '', clickable
+						[5700] list ''
+					[2081] gridcell 'Catalog, Search', clickable
+					[2082] gridcell 'Enabled', clickable
+					[2083] gridcell 'Main Website', clickable
+					[2084] gridcell 'Apr 19, 2023 12:13:49 PM', clickable
+					[2085] gridcell 'Edit Electra Bra Top', clickable
+						[5705] link 'Edit Electra Bra Top', clickable
+				[2086] row ''
+					[2087] gridcell '', clickable
+						[5706] LabelText '', clickable
+							[5707] checkbox '', clickable, checked='false'
+							[5708] LabelText '', clickable
+					[2088] gridcell '1812', clickable
+					[2089] gridcell 'Breathe-Easy Tank', clickable
+						[5712] image 'Breathe-Easy Tank'
+					[2090] gridcell 'Breathe-Easy Tank', clickable
+					[2091] gridcell 'Configurable Product', clickable
+					[2092] gridcell 'Top', clickable
+					[2093] gridcell 'WT09', clickable
+					[2094] gridcell '$34.00', clickable
+					[2095] gridcell '0.0000', clickable
+					[2096] gridcell '', clickable
+						[5720] list ''
+					[2097] gridcell 'Catalog, Search', clickable
+					[2098] gridcell 'Enabled', clickable
+					[2099] gridcell 'Main Website', clickable
+					[2100] gridcell 'Apr 19, 2023 12:13:53 PM', clickable
+					[2101] gridcell 'Edit Breathe-Easy Tank', clickable
+						[5725] link 'Edit Breathe-Easy Tank', clickable
+				[2102] row ''
+					[2103] gridcell '', clickable
+						[5726] LabelText '', clickable
+							[5727] checkbox '', clickable, checked='false'
+							[5728] LabelText '', clickable
+					[2104] gridcell '1620', clickable
+					[2105] gridcell 'Erica Evercool Sports Bra', clickable
+						[5732] image 'Erica Evercool Sports Bra'
+					[2106] gridcell 'Erica Evercool Sports Bra', clickable
+					[2107] gridcell 'Configurable Product', clickable
+					[2108] gridcell 'Top', clickable
+					[2109] gridcell 'WB02', clickable
+					[2110] gridcell '$39.00', clickable
+					[2111] gridcell '0.0000', clickable
+					[2112] gridcell '', clickable
+						[5740] list ''
+					[2113] gridcell 'Catalog, Search', clickable
+					[2114] gridcell 'Enabled', clickable
+					[2115] gridcell 'Main Website', clickable
+					[2116] gridcell 'Apr 19, 2023 12:13:49 PM', clickable
+					[2117] gridcell 'Edit Erica Evercool Sports Bra', clickable
+						[5745] link 'Edit Erica Evercool Sports Bra', clickable
+				[2118] row ''
+					[2119] gridcell '', clickable
+						[5746] LabelText '', clickable
+							[5747] checkbox '', clickable, checked='false'
+							[5748] LabelText '', clickable
+					[2120] gridcell '45', clickable
+					[2121] gridcell 'Sprite Yoga Companion Kit', clickable
+						[5752] image 'Sprite Yoga Companion Kit'
+					[2122] gridcell 'Sprite Yoga Companion Kit', clickable
+					[2123] gridcell 'Bundle Product', clickable
+					[2124] gridcell 'Gear', clickable
+					[2125] gridcell '24-WG080', clickable
+					[2126] gridcell '', clickable
+					[2127] gridcell '0.0000', clickable
+					[2128] gridcell '', clickable
+						[5760] list ''
+					[2129] gridcell 'Catalog, Search', clickable
+					[2130] gridcell 'Enabled', clickable
+					[2131] gridcell 'Main Website', clickable
+					[2132] gridcell 'Apr 19, 2023 12:13:11 PM', clickable
+					[2133] gridcell 'Edit Sprite Yoga Companion Kit', clickable
+						[5765] link 'Edit Sprite Yoga Companion Kit', clickable
+				[2134] row ''
+					[2135] gridcell '', clickable
+						[5766] LabelText '', clickable
+							[5767] checkbox '', clickable, checked='false'
+							[5768] LabelText '', clickable
+					[2136] gridcell '1840', clickable
+					[2137] gridcell 'Cora Parachute Pant', clickable
+						[5772] image 'Cora Parachute Pant'
+					[2138] gridcell 'Cora Parachute Pant', clickable
+					[2139] gridcell 'Configurable Product', clickable
+					[2140] gridcell 'Bottom', clickable
+					[2141] gridcell 'WP04', clickable
+					[2142] gridcell '$75.00', clickable
+					[2143] gridcell '0.0000', clickable
+					[2144] gridcell '', clickable
+						[5780] list ''
+					[2145] gridcell 'Catalog, Search', clickable
+					[2146] gridcell 'Enabled', clickable
+					[2147] gridcell 'Main Website', clickable
+					[2148] gridcell 'Apr 19, 2023 12:13:53 PM', clickable
+					[2149] gridcell 'Edit Cora Parachute Pant', clickable
+						[5785] link 'Edit Cora Parachute Pant', clickable
+				[2150] row ''
+					[2151] gridcell '', clickable
+						[5786] LabelText '', clickable
+							[5787] checkbox '', clickable, checked='false'
+							[5788] LabelText '', clickable
+					[2152] gridcell '1636', clickable
+					[2153] gridcell 'Celeste Sports Bra', clickable
+						[5792] image 'Celeste Sports Bra'
+					[2154] gridcell 'Celeste Sports Bra', clickable
+					[2155] gridcell 'Configurable Product', clickable
+					[2156] gridcell 'Top', clickable
+					[2157] gridcell 'WB03', clickable
+					[2158] gridcell '$39.00', clickable
+					[2159] gridcell '0.0000', clickable
+					[2160] gridcell '', clickable
+						[5800] list ''
+					[2161] gridcell 'Catalog, Search', clickable
+					[2162] gridcell 'Enabled', clickable
+					[2163] gridcell 'Main Website', clickable
+					[2164] gridcell 'Apr 19, 2023 12:13:50 PM', clickable
+					[2165] gridcell 'Edit Celeste Sports Bra', clickable
+						[5805] link 'Edit Celeste Sports Bra', clickable
+				[2166] row ''
+					[2167] gridcell '', clickable
+						[5806] LabelText '', clickable
+							[5807] checkbox '', clickable, checked='false'
+							[5808] LabelText '', clickable
+					[2168] gridcell '1652', clickable
+					[2169] gridcell 'Prima Compete Bra Top', clickable
+						[5812] image 'Prima Compete Bra Top'
+					[2170] gridcell 'Prima Compete Bra Top', clickable
+					[2171] gridcell 'Configurable Product', clickable
+					[2172] gridcell 'Top', clickable
+					[2173] gridcell 'WB04', clickable
+					[2174] gridcell '$24.00', clickable
+					[2175] gridcell '0.0000', clickable
+					[2176] gridcell '', clickable
+						[5820] list ''
+					[2177] gridcell 'Catalog, Search', clickable
+					[2178] gridcell 'Enabled', clickable
+					[2179] gridcell 'Main Website', clickable
+					[2180] gridcell 'Apr 19, 2023 12:13:50 PM', clickable
+					[2181] gridcell 'Edit Prima Compete Bra Top', clickable
+						[5825] link 'Edit Prima Compete Bra Top', clickable
+				[2182] row ''
+					[2183] gridcell '', clickable
+						[5826] LabelText '', clickable
+							[5827] checkbox '', clickable, checked='false'
+							[5828] LabelText '', clickable
+					[2184] gridcell '1868', clickable
+					[2185] gridcell 'Bardot Capri', clickable
+						[5832] image 'Bardot Capri'
+					[2186] gridcell 'Bardot Capri', clickable
+					[2187] gridcell 'Configurable Product', clickable
+					[2188] gridcell 'Bottom', clickable
+					[2189] gridcell 'WP08', clickable
+					[2190] gridcell '$48.00', clickable
+					[2191] gridcell '0.0000', clickable
+					[2192] gridcell '', clickable
+						[5840] list ''
+					[2193] gridcell 'Catalog, Search', clickable
+					[2194] gridcell 'Enabled', clickable
+					[2195] gridcell 'Main Website', clickable
+					[2196] gridcell 'Apr 19, 2023 12:13:54 PM', clickable
+					[2197] gridcell 'Edit Bardot Capri', clickable
+						[5845] link 'Edit Bardot Capri', clickable
+				[2198] row ''
+					[2199] gridcell '', clickable
+						[5846] LabelText '', clickable
+							[5847] checkbox '', clickable, checked='false'
+							[5848] LabelText '', clickable
+					[2200] gridcell '1668', clickable
+					[2201] gridcell 'Lucia Cross-Fit Bra', clickable
+						[5852] image 'Lucia Cross-Fit Bra'
+					[2202] gridcell 'Lucia Cross-Fit Bra', clickable
+					[2203] gridcell 'Configurable Product', clickable
+					[2204] gridcell 'Top', clickable
+					[2205] gridcell 'WB05', clickable
+					[2206] gridcell '$39.00', clickable
+					[2207] gridcell '0.0000', clickable
+					[2208] gridcell '', clickable
+						[5860] list ''
+					[2209] gridcell 'Catalog, Search', clickable
+					[2210] gridcell 'Enabled', clickable
+					[2211] gridcell 'Main Website', clickable
+					[2212] gridcell 'Apr 19, 2023 12:13:50 PM', clickable
+					[2213] gridcell 'Edit Lucia Cross-Fit Bra', clickable
+						[5865] link 'Edit Lucia Cross-Fit Bra', clickable
+				[2214] row ''
+					[2215] gridcell '', clickable
+						[5866] LabelText '', clickable
+							[5867] checkbox '', clickable, checked='false'
+							[5868] LabelText '', clickable
+					[2216] gridcell '694', clickable
+					[2217] gridcell 'Argus All-Weather Tank', clickable
+						[5872] image 'Argus All-Weather Tank'
+					[2218] gridcell 'Argus All-Weather Tank', clickable
+					[2219] gridcell 'Configurable Product', clickable
+					[2220] gridcell 'Top', clickable
+					[2221] gridcell 'MT07', clickable
+					[2222] gridcell '$22.00', clickable
+					[2223] gridcell '0.0000', clickable
+					[2224] gridcell '', clickable
+						[5880] list ''
+					[2225] gridcell 'Catalog, Search', clickable
+					[2226] gridcell 'Enabled', clickable
+					[2227] gridcell 'Main Website', clickable
+					[2228] gridcell 'Apr 19, 2023 12:13:34 PM', clickable
+					[2229] gridcell 'Edit Argus All-Weather Tank', clickable
+						[5885] link 'Edit Argus All-Weather Tank', clickable
+				[2230] row ''
+					[2231] gridcell '', clickable
+						[5886] LabelText '', clickable
+							[5887] checkbox '', clickable, checked='false'
+							[5888] LabelText '', clickable
+					[2232] gridcell '494', clickable
+					[2233] gridcell 'Atomic Endurance Running Tee (V-neck)', clickable
+						[5892] image 'Atomic Endurance Running Tee (V-neck)'
+					[2234] gridcell 'Atomic Endurance Running Tee (V-neck)', clickable
+					[2235] gridcell 'Configurable Product', clickable
+					[2236] gridcell 'Top', clickable
+					[2237] gridcell 'MS11', clickable
+					[2238] gridcell '$28.00', clickable
+					[2239] gridcell '0.0000', clickable
+					[2240] gridcell '', clickable
+						[5900] list ''
+					[2241] gridcell 'Catalog, Search', clickable
+					[2242] gridcell 'Enabled', clickable
+					[2243] gridcell 'Main Website', clickable
+					[2244] gridcell 'Apr 19, 2023 12:13:31 PM', clickable
+					[2245] gridcell 'Edit Atomic Endurance Running Tee (V-neck)', clickable
+						[5905] link 'Edit Atomic Endurance Running Tee (V-neck)', clickable
+				[2246] row ''
+					[2247] gridcell '', clickable
+						[5906] LabelText '', clickable
+							[5907] checkbox '', clickable, checked='false'
+							[5908] LabelText '', clickable
+					[2248] gridcell '706', clickable
+					[2249] gridcell 'Sinbad Fitness Tank', clickable
+						[5912] image 'Sinbad Fitness Tank'
+					[2250] gridcell 'Sinbad Fitness Tank', clickable
+					[2251] gridcell 'Configurable Product', clickable
+					[2252] gridcell 'Top', clickable
+					[2253] gridcell 'MT09', clickable
+					[2254] gridcell '$29.00', clickable
+					[2255] gridcell '0.0000', clickable
+					[2256] gridcell '', clickable
+						[5920] list ''
+					[2257] gridcell 'Catalog, Search', clickable
+					[2258] gridcell 'Enabled', clickable
+					[2259] gridcell 'Main Website', clickable
+					[2260] gridcell 'Apr 19, 2023 12:13:34 PM', clickable
+					[2261] gridcell 'Edit Sinbad Fitness Tank', clickable
+						[5925] link 'Edit Sinbad Fitness Tank', clickable
+				[2262] row ''
+					[2263] gridcell '', clickable
+						[5926] LabelText '', clickable
+							[5927] checkbox '', clickable, checked='false'
+							[5928] LabelText '', clickable
+					[2264] gridcell '510', clickable
+					[2265] gridcell 'Atomic Endurance Running Tee (Crew-Neck)', clickable
+						[5932] image 'Atomic Endurance Running Tee (Crew-Neck)'
+					[2266] gridcell 'Atomic Endurance Running Tee (Crew-Neck)', clickable
+					[2267] gridcell 'Configurable Product', clickable
+					[2268] gridcell 'Top', clickable
+					[2269] gridcell 'MS12', clickable
+					[2270] gridcell '$29.00', clickable
+					[2271] gridcell '0.0000', clickable
+					[2272] gridcell '', clickable
+						[5940] list ''
+					[2273] gridcell 'Catalog, Search', clickable
+					[2274] gridcell 'Enabled', clickable
+					[2275] gridcell 'Main Website', clickable
+					[2276] gridcell 'Apr 19, 2023 12:13:31 PM', clickable
+					[2277] gridcell 'Edit Atomic Endurance Running Tee (Crew-Neck)', clickable
+						[5945] link 'Edit Atomic Endurance Running Tee (Crew-Neck)', clickable
+				[2278] row ''
+					[2279] gridcell '', clickable
+						[5946] LabelText '', clickable
+							[5947] checkbox '', clickable, checked='false'
+							[5948] LabelText '', clickable
+					[2280] gridcell '718', clickable
+					[2281] gridcell 'Atlas Fitness Tank', clickable
+						[5952] image 'Atlas Fitness Tank'
+					[2282] gridcell 'Atlas Fitness Tank', clickable
+					[2283] gridcell 'Configurable Product', clickable
+					[2284] gridcell 'Top', clickable
+					[2285] gridcell 'MT11', clickable
+					[2286] gridcell '$18.00', clickable
+					[2287] gridcell '0.0000', clickable
+					[2288] gridcell '', clickable
+						[5960] list ''
+					[2289] gridcell 'Catalog, Search', clickable
+					[2290] gridcell 'Enabled', clickable
+					[2291] gridcell 'Main Website', clickable
+					[2292] gridcell 'Apr 19, 2023 12:13:34 PM', clickable
+					[2293] gridcell 'Edit Atlas Fitness Tank', clickable
+						[5965] link 'Edit Atlas Fitness Tank', clickable
+				[2294] row ''
+					[2295] gridcell '', clickable
+						[5966] LabelText '', clickable
+							[5967] checkbox '', clickable, checked='false'
+							[5968] LabelText '', clickable
+					[2296] gridcell '526', clickable
+					[2297] gridcell 'Balboa Persistence Tee', clickable
+						[5972] image 'Balboa Persistence Tee'
+					[2298] gridcell 'Balboa Persistence Tee', clickable
+					[2299] gridcell 'Configurable Product', clickable
+					[2300] gridcell 'Top', clickable
+					[2301] gridcell 'MS03', clickable
+					[2302] gridcell '$29.00', clickable
+					[2303] gridcell '0.0000', clickable
+					[2304] gridcell '', clickable
+						[5980] list ''
+					[2305] gridcell 'Catalog, Search', clickable
+					[2306] gridcell 'Enabled', clickable
+					[2307] gridcell 'Main Website', clickable
+					[2308] gridcell 'Apr 19, 2023 12:13:31 PM', clickable
+					[2309] gridcell 'Edit Balboa Persistence Tee', clickable
+						[5985] link 'Edit Balboa Persistence Tee', clickable
+				[2310] row ''
+					[2311] gridcell '', clickable
+						[5986] LabelText '', clickable
+							[5987] checkbox '', clickable, checked='false'
+							[5988] LabelText '', clickable
+					[2312] gridcell '542', clickable
+					[2313] gridcell 'Zoltan Gym Tee', clickable
+						[5992] image 'Zoltan Gym Tee'
+					[2314] gridcell 'Zoltan Gym Tee', clickable
+					[2315] gridcell 'Configurable Product', clickable
+					[2316] gridcell 'Top', clickable
+					[2317] gridcell 'MS06', clickable
+					[2318] gridcell '$29.00', clickable
+					[2319] gridcell '0.0000', clickable
+					[2320] gridcell '', clickable
+						[6000] list ''
+					[2321] gridcell 'Catalog, Search', clickable
+					[2322] gridcell 'Enabled', clickable
+					[2323] gridcell 'Main Website', clickable
+					[2324] gridcell 'Apr 19, 2023 12:13:31 PM', clickable
+					[2325] gridcell 'Edit Zoltan Gym Tee', clickable
+						[6005] link 'Edit Zoltan Gym Tee', clickable
+				[2326] row ''
+					[2327] gridcell '', clickable
+						[6006] LabelText '', clickable
+							[6007] checkbox '', clickable, checked='false'
+							[6008] LabelText '', clickable
+					[2328] gridcell '750', clickable
+					[2329] gridcell 'Viktor LumaTech&amp;trade; Pant', clickable
+						[6012] image 'Viktor LumaTech&amp;trade; Pant'
+					[2330] gridcell 'Viktor LumaTech™ Pant', clickable
+					[2331] gridcell 'Configurable Product', clickable
+					[2332] gridcell 'Bottom', clickable
+					[2333] gridcell 'MP02', clickable
+					[2334] gridcell '$46.00', clickable
+					[2335] gridcell '0.0000', clickable
+					[2336] gridcell '', clickable
+						[6020] list ''
+					[2337] gridcell 'Catalog, Search', clickable
+					[2338] gridcell 'Enabled', clickable
+					[2339] gridcell 'Main Website', clickable
+					[2340] gridcell 'Apr 19, 2023 12:13:35 PM', clickable
+					[2341] gridcell 'Edit Viktor LumaTech&trade; Pant', clickable
+						[6025] link 'Edit Viktor LumaTech&trade; Pant', clickable
+				[2342] row ''
+					[2343] gridcell '', clickable
+						[6026] LabelText '', clickable
+							[6027] checkbox '', clickable, checked='false'
+							[6028] LabelText '', clickable
+					[2344] gridcell '558', clickable
+					[2345] gridcell 'Aero Daily Fitness Tee', clickable
+						[6032] image 'Aero Daily Fitness Tee'
+					[2346] gridcell 'Aero Daily Fitness Tee', clickable
+					[2347] gridcell 'Configurable Product', clickable
+					[2348] gridcell 'Top', clickable
+					[2349] gridcell 'MS01', clickable
+					[2350] gridcell '$24.00', clickable
+					[2351] gridcell '0.0000', clickable
+					[2352] gridcell '', clickable
+						[6040] list ''
+					[2353] gridcell 'Catalog, Search', clickable
+					[2354] gridcell 'Enabled', clickable
+					[2355] gridcell 'Main Website', clickable
+					[2356] gridcell 'Apr 19, 2023 12:13:32 PM', clickable
+					[2357] gridcell 'Edit Aero Daily Fitness Tee', clickable
+						[6045] link 'Edit Aero Daily Fitness Tee', clickable
+				[2358] row ''
+					[2359] gridcell '', clickable
+						[6046] LabelText '', clickable
+							[6047] checkbox '', clickable, checked='false'
+							[6048] LabelText '', clickable
+					[2360] gridcell '574', clickable
+					[2361] gridcell 'Ryker LumaTech&amp;trade; Tee (V-neck)', clickable
+						[6052] image 'Ryker LumaTech&amp;trade; Tee (V-neck)'
+					[2362] gridcell 'Ryker LumaTech™ Tee (V-neck)', clickable
+					[2363] gridcell 'Configurable Product', clickable
+					[2364] gridcell 'Top', clickable
+					[2365] gridcell 'MS02', clickable
+					[2366] gridcell '$28.00', clickable
+					[2367] gridcell '0.0000', clickable
+					[2368] gridcell '', clickable
+						[6060] list ''
+					[2369] gridcell 'Catalog, Search', clickable
+					[2370] gridcell 'Enabled', clickable
+					[2371] gridcell 'Main Website', clickable
+					[2372] gridcell 'Apr 19, 2023 12:13:32 PM', clickable
+					[2373] gridcell 'Edit Ryker LumaTech&trade; Tee (V-neck)', clickable
+						[6065] link 'Edit Ryker LumaTech&trade; Tee (V-neck)', clickable
+				[2374] row ''
+					[2375] gridcell '', clickable
+						[6066] LabelText '', clickable
+							[6067] checkbox '', clickable, checked='false'
+							[6068] LabelText '', clickable
+					[2376] gridcell '590', clickable
+					[2377] gridcell 'Logan HeatTec&amp;reg; Tee', clickable
+						[6072] image 'Logan HeatTec&amp;reg; Tee'
+					[2378] gridcell 'Logan HeatTec® Tee', clickable
+						StaticText 'Logan  HeatTec® Tee'
+					[2379] gridcell 'Configurable Product', clickable
+					[2380] gridcell 'Top', clickable
+					[2381] gridcell 'MS10', clickable
+					[2382] gridcell '$24.00', clickable
+					[2383] gridcell '0.0000', clickable
+					[2384] gridcell '', clickable
+						[6080] list ''
+					[2385] gridcell 'Catalog, Search', clickable
+					[2386] gridcell 'Enabled', clickable
+					[2387] gridcell 'Main Website', clickable
+					[2388] gridcell 'Apr 19, 2023 12:13:32 PM', clickable
+					[2389] gridcell 'Edit Logan HeatTec&reg; Tee', clickable
+						[6085] link 'Edit Logan HeatTec&reg; Tee', clickable
+				[2390] row ''
+					[2391] gridcell '', clickable
+						[6086] LabelText '', clickable
+							[6087] checkbox '', clickable, checked='false'
+							[6088] LabelText '', clickable
+					[2392] gridcell '398', clickable
+					[2393] gridcell 'Jupiter All-Weather Trainer', clickable
+						[6092] image 'Jupiter All-Weather Trainer'
+					[2394] gridcell 'Jupiter All-Weather Trainer', clickable
+					[2395] gridcell 'Configurable Product', clickable
+					[2396] gridcell 'Top', clickable
+					[2397] gridcell 'MJ06', clickable
+					[2398] gridcell '$56.99', clickable
+					[2399] gridcell '0.0000', clickable
+					[2400] gridcell '', clickable
+						[6100] list ''
+					[2401] gridcell 'Catalog, Search', clickable
+					[2402] gridcell 'Enabled', clickable
+					[2403] gridcell 'Main Website', clickable
+					[2404] gridcell 'Apr 19, 2023 12:13:29 PM', clickable
+					[2405] gridcell 'Edit Jupiter All-Weather Trainer', clickable
+						[6105] link 'Edit Jupiter All-Weather Trainer', clickable
+				[2406] row ''
+					[2407] gridcell '', clickable
+						[6106] LabelText '', clickable
+							[6107] checkbox '', clickable, checked='false'
+							[6108] LabelText '', clickable
+					[2408] gridcell '606', clickable
+					[2409] gridcell 'Deion Long-Sleeve EverCool&amp;trade; Tee', clickable
+						[6112] image 'Deion Long-Sleeve EverCool&amp;trade; Tee'
+					[2410] gridcell 'Deion Long-Sleeve EverCool™ Tee', clickable
+					[2411] gridcell 'Configurable Product', clickable
+					[2412] gridcell 'Top', clickable
+					[2413] gridcell 'MS07', clickable
+					[2414] gridcell '$39.00', clickable
+					[2415] gridcell '0.0000', clickable
+					[2416] gridcell '', clickable
+						[6120] list ''
+					[2417] gridcell 'Catalog, Search', clickable
+					[2418] gridcell 'Enabled', clickable
+					[2419] gridcell 'Main Website', clickable
+					[2420] gridcell 'Apr 19, 2023 12:13:33 PM', clickable
+					[2421] gridcell 'Edit Deion Long-Sleeve EverCool&trade; Tee', clickable
+						[6125] link 'Edit Deion Long-Sleeve EverCool&trade; Tee', clickable
+				[2422] row ''
+					[2423] gridcell '', clickable
+						[6126] LabelText '', clickable
+							[6127] checkbox '', clickable, checked='false'
+							[6128] LabelText '', clickable
+					[2424] gridcell '1997', clickable
+					[2425] gridcell 'Echo Fit Compression Short', clickable
+						[6132] image 'Echo Fit Compression Short'
+					[2426] gridcell 'Echo Fit Compression Short', clickable
+					[2427] gridcell 'Configurable Product', clickable
+					[2428] gridcell 'Bottom', clickable
+					[2429] gridcell 'WSH07', clickable
+					[2430] gridcell '$24.00', clickable
+					[2431] gridcell '0.0000', clickable
+					[2432] gridcell '', clickable
+						[6140] list ''
+					[2433] gridcell 'Catalog, Search', clickable
+					[2434] gridcell 'Enabled', clickable
+					[2435] gridcell 'Main Website', clickable
+					[2436] gridcell 'Apr 19, 2023 12:13:55 PM', clickable
+					[2437] gridcell 'Edit Echo Fit Compression Short', clickable
+						[6145] link 'Edit Echo Fit Compression Short', clickable
+				[2438] row ''
+					[2439] gridcell '', clickable
+						[6146] LabelText '', clickable
+							[6147] checkbox '', clickable, checked='false'
+							[6148] LabelText '', clickable
+					[2440] gridcell '414', clickable
+					[2441] gridcell 'Montana Wind Jacket', clickable
+						[6152] image 'Montana Wind Jacket'
+					[2442] gridcell 'Montana Wind Jacket', clickable
+					[2443] gridcell 'Configurable Product', clickable
+					[2444] gridcell 'Top', clickable
+					[2445] gridcell 'MJ03', clickable
+					[2446] gridcell '$49.00', clickable
+					[2447] gridcell '0.0000', clickable
+					[2448] gridcell '', clickable
+						[6160] list ''
+					[2449] gridcell 'Catalog, Search', clickable
+					[2450] gridcell 'Enabled', clickable
+					[2451] gridcell 'Main Website', clickable
+					[2452] gridcell 'Apr 19, 2023 12:13:29 PM', clickable
+					[2453] gridcell 'Edit Montana Wind Jacket', clickable
+						[6165] link 'Edit Montana Wind Jacket', clickable
+				[2454] row ''
+					[2455] gridcell '', clickable
+						[6166] LabelText '', clickable
+							[6167] checkbox '', clickable, checked='false'
+							[6168] LabelText '', clickable
+					[2456] gridcell '622', clickable
+					[2457] gridcell 'Strike Endurance Tee', clickable
+						[6172] image 'Strike Endurance Tee'
+					[2458] gridcell 'Strike Endurance Tee', clickable
+					[2459] gridcell 'Configurable Product', clickable
+					[2460] gridcell 'Top', clickable
+					[2461] gridcell 'MS08', clickable
+					[2462] gridcell '$39.00', clickable
+					[2463] gridcell '0.0000', clickable
+					[2464] gridcell '', clickable
+						[6180] list ''
+					[2465] gridcell 'Catalog, Search', clickable
+					[2466] gridcell 'Enabled', clickable
+					[2467] gridcell 'Main Website', clickable
+					[2468] gridcell 'Apr 19, 2023 12:13:33 PM', clickable
+					[2469] gridcell 'Edit Strike Endurance Tee', clickable
+						[6185] link 'Edit Strike Endurance Tee', clickable
+				[2470] row ''
+					[2471] gridcell '', clickable
+						[6186] LabelText '', clickable
+							[6187] checkbox '', clickable, checked='false'
+							[6188] LabelText '', clickable
+					[2472] gridcell '2017', clickable
+					[2473] gridcell 'Ana Running Short', clickable
+						[6192] image 'Ana Running Short'
+					[2474] gridcell 'Ana Running Short', clickable
+					[2475] gridcell 'Configurable Product', clickable
+					[2476] gridcell 'Bottom', clickable
+					[2477] gridcell 'WSH10', clickable
+					[2478] gridcell '$40.00', clickable
+					[2479] gridcell '0.0000', clickable
+					[2480] gridcell '', clickable
+						[6200] list ''
+					[2481] gridcell 'Catalog, Search', clickable
+					[2482] gridcell 'Enabled', clickable
+					[2483] gridcell 'Main Website', clickable
+					[2484] gridcell 'Apr 19, 2023 12:13:56 PM', clickable
+					[2485] gridcell 'Edit Ana Running Short', clickable
+						[6205] link 'Edit Ana Running Short', clickable
+				[2486] row ''
+					[2487] gridcell '', clickable
+						[6206] LabelText '', clickable
+							[6207] checkbox '', clickable, checked='false'
+							[6208] LabelText '', clickable
+					[2488] gridcell '430', clickable
+					[2489] gridcell 'Proteus Fitness Jackshirt', clickable
+						[6212] image 'Proteus Fitness Jackshirt'
+					[2490] gridcell 'Proteus Fitness Jackshirt', clickable
+					[2491] gridcell 'Configurable Product', clickable
+					[2492] gridcell 'Top', clickable
+					[2493] gridcell 'MJ12', clickable
+					[2494] gridcell '$45.00', clickable
+					[2495] gridcell '0.0000', clickable
+					[2496] gridcell '', clickable
+						[6220] list ''
+					[2497] gridcell 'Catalog, Search', clickable
+					[2498] gridcell 'Enabled', clickable
+					[2499] gridcell 'Main Website', clickable
+					[2500] gridcell 'Apr 19, 2023 12:13:30 PM', clickable
+					[2501] gridcell 'Edit Proteus Fitness Jackshirt', clickable
+						[6225] link 'Edit Proteus Fitness Jackshirt', clickable
+				[2502] row ''
+					[2503] gridcell '', clickable
+						[6226] LabelText '', clickable
+							[6227] checkbox '', clickable, checked='false'
+							[6228] LabelText '', clickable
+					[2504] gridcell '638', clickable
+					[2505] gridcell 'Erikssen CoolTech&amp;trade; Fitness Tank', clickable
+						[6232] image 'Erikssen CoolTech&amp;trade; Fitness Tank'
+					[2506] gridcell 'Erikssen CoolTech™ Fitness Tank', clickable
+					[2507] gridcell 'Configurable Product', clickable
+					[2508] gridcell 'Top', clickable
+					[2509] gridcell 'MT01', clickable
+					[2510] gridcell '$29.00', clickable
+					[2511] gridcell '0.0000', clickable
+					[2512] gridcell '', clickable
+						[6240] list ''
+					[2513] gridcell 'Catalog, Search', clickable
+					[2514] gridcell 'Enabled', clickable
+					[2515] gridcell 'Main Website', clickable
+					[2516] gridcell 'Apr 19, 2023 12:13:33 PM', clickable
+					[2517] gridcell 'Edit Erikssen CoolTech&trade; Fitness Tank', clickable
+						[6245] link 'Edit Erikssen CoolTech&trade; Fitness Tank', clickable
+				[2518] row ''
+					[2519] gridcell '', clickable
+						[6246] LabelText '', clickable
+							[6247] checkbox '', clickable, checked='false'
+							[6248] LabelText '', clickable
+					[2520] gridcell '446', clickable
+					[2521] gridcell 'Gobi HeatTec&amp;reg; Tee', clickable
+						[6252] image 'Gobi HeatTec&amp;reg; Tee'
+					[2522] gridcell 'Gobi HeatTec® Tee', clickable
+					[2523] gridcell 'Configurable Product', clickable
+					[2524] gridcell 'Top', clickable
+					[2525] gridcell 'MS04', clickable
+					[2526] gridcell '$29.00', clickable
+					[2527] gridcell '0.0000', clickable
+					[2528] gridcell '', clickable
+						[6260] list ''
+					[2529] gridcell 'Catalog, Search', clickable
+					[2530] gridcell 'Enabled', clickable
+					[2531] gridcell 'Main Website', clickable
+					[2532] gridcell 'Apr 19, 2023 12:13:30 PM', clickable
+					[2533] gridcell 'Edit Gobi HeatTec&reg; Tee', clickable
+						[6265] link 'Edit Gobi HeatTec&reg; Tee', clickable
+				[2534] row ''
+					[2535] gridcell '', clickable
+						[6266] LabelText '', clickable
+							[6267] checkbox '', clickable, checked='false'
+							[6268] LabelText '', clickable
+					[2536] gridcell '654', clickable
+					[2537] gridcell 'Tristan Endurance Tank', clickable
+						[6272] image 'Tristan Endurance Tank'
+					[2538] gridcell 'Tristan Endurance Tank', clickable
+					[2539] gridcell 'Configurable Product', clickable
+					[2540] gridcell 'Top', clickable
+					[2541] gridcell 'MT02', clickable
+					[2542] gridcell '$29.00', clickable
+					[2543] gridcell '0.0000', clickable
+					[2544] gridcell '', clickable
+						[6280] list ''
+					[2545] gridcell 'Catalog, Search', clickable
+					[2546] gridcell 'Enabled', clickable
+					[2547] gridcell 'Main Website', clickable
+					[2548] gridcell 'Apr 19, 2023 12:13:33 PM', clickable
+					[2549] gridcell 'Edit Tristan Endurance Tank', clickable
+						[6285] link 'Edit Tristan Endurance Tank', clickable
+				[2550] row ''
+					[2551] gridcell '', clickable
+						[6286] LabelText '', clickable
+							[6287] checkbox '', clickable, checked='false'
+							[6288] LabelText '', clickable
+					[2552] gridcell '2041', clickable
+					[2553] gridcell 'New Product Name', clickable
+						[6292] image 'New Product Name'
+					[2554] gridcell 'New Product Name', clickable
+					[2555] gridcell 'Simple Product', clickable
+					[2556] gridcell 'Default', clickable
+					[2557] gridcell 'New Product NameNEW-PRODUCT-SKU', clickable
+					[2558] gridcell '$100.00', clickable
+					[2559] gridcell '0.0000', clickable
+					[2560] gridcell 'Default Stock: 0', clickable
+						[6300] list ''
+							[6301] listitem ''
+								ListMarker '•'
+								[6302] strong ''
+									StaticText 'Default Stock'
+								StaticText ':'
+					[2561] gridcell 'Catalog, Search', clickable
+					[2562] gridcell 'Enabled', clickable
+					[2563] gridcell 'Main Website', clickable
+					[2564] gridcell 'Aug 11, 2024 11:11:18 AM', clickable
+					[2565] gridcell 'Edit New Product Name', clickable
+						[6308] link 'Edit New Product Name', clickable
+				[2566] row ''
+					[2567] gridcell '', clickable
+						[6309] LabelText '', clickable
+							[6310] checkbox '', clickable, checked='false'
+							[6311] LabelText '', clickable
+					[2568] gridcell '462', clickable
+					[2569] gridcell 'Helios EverCool&amp;trade; Tee', clickable
+						[6315] image 'Helios EverCool&amp;trade; Tee'
+					[2570] gridcell 'Helios EverCool™ Tee', clickable
+					[2571] gridcell 'Configurable Product', clickable
+					[2572] gridcell 'Top', clickable
+					[2573] gridcell 'MS05', clickable
+					[2574] gridcell '$24.00', clickable
+					[2575] gridcell '0.0000', clickable
+					[2576] gridcell '', clickable
+						[6323] list ''
+					[2577] gridcell 'Catalog, Search', clickable
+					[2578] gridcell 'Enabled', clickable
+					[2579] gridcell 'Main Website', clickable
+					[2580] gridcell 'Apr 19, 2023 12:13:30 PM', clickable
+					[2581] gridcell 'Edit Helios EverCool&trade; Tee', clickable
+						[6328] link 'Edit Helios EverCool&trade; Tee', clickable
+				[2582] row ''
+					[2583] gridcell '', clickable
+						[6329] LabelText '', clickable
+							[6330] checkbox '', clickable, checked='false'
+							[6331] LabelText '', clickable
+					[2584] gridcell '670', clickable
+					[2585] gridcell 'Primo Endurance Tank', clickable
+						[6335] image 'Primo Endurance Tank'
+					[2586] gridcell 'Primo Endurance Tank', clickable
+					[2587] gridcell 'Configurable Product', clickable
+					[2588] gridcell 'Top', clickable
+					[2589] gridcell 'MT03', clickable
+					[2590] gridcell '$29.00', clickable
+					[2591] gridcell '0.0000', clickable
+					[2592] gridcell '', clickable
+						[6343] list ''
+					[2593] gridcell 'Catalog, Search', clickable
+					[2594] gridcell 'Enabled', clickable
+					[2595] gridcell 'Main Website', clickable
+					[2596] gridcell 'Apr 19, 2023 12:13:34 PM', clickable
+					[2597] gridcell 'Edit Primo Endurance Tank', clickable
+						[6348] link 'Edit Primo Endurance Tank', clickable
+				[2598] row ''
+					[2599] gridcell '', clickable
+						[6349] LabelText '', clickable
+							[6350] checkbox '', clickable, checked='false'
+							[6351] LabelText '', clickable
+					[2600] gridcell '682', clickable
+					[2601] gridcell 'Rocco Gym Tank', clickable
+						[6355] image 'Rocco Gym Tank'
+					[2602] gridcell 'Rocco Gym Tank', clickable
+					[2603] gridcell 'Configurable Product', clickable
+					[2604] gridcell 'Top', clickable
+					[2605] gridcell 'MT05', clickable
+					[2606] gridcell '$24.00', clickable
+					[2607] gridcell '0.0000', clickable
+					[2608] gridcell '', clickable
+						[6363] list ''
+					[2609] gridcell 'Catalog, Search', clickable
+					[2610] gridcell 'Enabled', clickable
+					[2611] gridcell 'Main Website', clickable
+					[2612] gridcell 'Apr 19, 2023 12:13:34 PM', clickable
+					[2613] gridcell 'Edit Rocco Gym Tank', clickable
+						[6368] link 'Edit Rocco Gym Tank', clickable
+				[2614] row ''
+					[2615] gridcell '', clickable
+						[6369] LabelText '', clickable
+							[6370] checkbox '', clickable, checked='false'
+							[6371] LabelText '', clickable
+					[2616] gridcell '478', clickable
+					[2617] gridcell 'Ryker LumaTech&amp;trade; Tee (Crew-neck)', clickable
+						[6375] image 'Ryker LumaTech&amp;trade; Tee (Crew-neck)'
+					[2618] gridcell 'Ryker LumaTech™ Tee (Crew-neck)', clickable
+					[2619] gridcell 'Configurable Product', clickable
+					[2620] gridcell 'Top', clickable
+					[2621] gridcell 'MS09', clickable
+					[2622] gridcell '$32.00', clickable
+					[2623] gridcell '0.0000', clickable
+					[2624] gridcell '', clickable
+						[6383] list ''
+					[2625] gridcell 'Catalog, Search', clickable
+					[2626] gridcell 'Enabled', clickable
+					[2627] gridcell 'Main Website', clickable
+					[2628] gridcell 'Apr 19, 2023 12:13:30 PM', clickable
+					[2629] gridcell 'Edit Ryker LumaTech&trade; Tee (Crew-neck)', clickable
+						[6388] link 'Edit Ryker LumaTech&trade; Tee (Crew-neck)', clickable
+				[2630] row ''
+					[2631] gridcell '', clickable
+						[6389] LabelText '', clickable
+							[6390] checkbox '', clickable, checked='false'
+							[6391] LabelText '', clickable
+					[2632] gridcell '911', clickable
+					[2633] gridcell 'Meteor Workout Short', clickable
+						[6395] image 'Meteor Workout Short'
+					[2634] gridcell 'Meteor Workout Short', clickable
+					[2635] gridcell 'Configurable Product', clickable
+					[2636] gridcell 'Bottom', clickable
+					[2637] gridcell 'MSH03', clickable
+					[2638] gridcell '$32.50', clickable
+					[2639] gridcell '0.0000', clickable
+					[2640] gridcell '', clickable
+						[6403] list ''
+					[2641] gridcell 'Catalog, Search', clickable
+					[2642] gridcell 'Enabled', clickable
+					[2643] gridcell 'Main Website', clickable
+					[2644] gridcell 'Apr 19, 2023 12:13:38 PM', clickable
+					[2645] gridcell 'Edit Meteor Workout Short', clickable
+						[6408] link 'Edit Meteor Workout Short', clickable
+				[2646] row ''
+					[2647] gridcell '', clickable
+						[6409] LabelText '', clickable
+							[6410] checkbox '', clickable, checked='false'
+							[6411] LabelText '', clickable
+					[2648] gridcell '963', clickable
+					[2649] gridcell 'Rapha Sports Short', clickable
+						[6415] image 'Rapha Sports Short'
+					[2650] gridcell 'Rapha Sports Short', clickable
+						StaticText 'Rapha  Sports Short'
+					[2651] gridcell 'Configurable Product', clickable
+					[2652] gridcell 'Bottom', clickable
+					[2653] gridcell 'MSH07', clickable
+					[2654] gridcell '$35.00', clickable
+					[2655] gridcell '0.0000', clickable
+					[2656] gridcell '', clickable
+						[6423] list ''
+					[2657] gridcell 'Catalog, Search', clickable
+					[2658] gridcell 'Enabled', clickable
+					[2659] gridcell 'Main Website', clickable
+					[2660] gridcell 'Apr 19, 2023 12:13:39 PM', clickable
+					[2661] gridcell 'Edit Rapha Sports Short', clickable
+						[6428] link 'Edit Rapha Sports Short', clickable
+				[2662] row ''
+					[2663] gridcell '', clickable
+						[6429] LabelText '', clickable
+							[6430] checkbox '', clickable, checked='false'
+							[6431] LabelText '', clickable
+					[2664] gridcell '1015', clickable
+					[2665] gridcell 'Arcadio Gym Short', clickable
+						[6435] image 'Arcadio Gym Short'
+					[2666] gridcell 'Arcadio Gym Short', clickable
+					[2667] gridcell 'Configurable Product', clickable
+					[2668] gridcell 'Bottom', clickable
+					[2669] gridcell 'MSH11', clickable
+					[2670] gridcell '$20.00', clickable
+					[2671] gridcell '0.0000', clickable
+					[2672] gridcell '', clickable
+						[6443] list ''
+					[2673] gridcell 'Catalog, Search', clickable
+					[2674] gridcell 'Enabled', clickable
+					[2675] gridcell 'Main Website', clickable
+					[2676] gridcell 'Apr 19, 2023 12:13:39 PM', clickable
+					[2677] gridcell 'Edit Arcadio Gym Short', clickable
+						[6448] link 'Edit Arcadio Gym Short', clickable
+				[2678] row ''
+					[2679] gridcell '', clickable
+						[6449] LabelText '', clickable
+							[6450] checkbox '', clickable, checked='false'
+							[6451] LabelText '', clickable
+					[2680] gridcell '815', clickable
+					[2681] gridcell 'Thorpe Track Pant', clickable
+						[6455] image 'Thorpe Track Pant'
+					[2682] gridcell 'Thorpe Track Pant', clickable
+					[2683] gridcell 'Configurable Product', clickable
+					[2684] gridcell 'Bottom', clickable
+					[2685] gridcell 'MP07', clickable
+					[2686] gridcell '$68.00', clickable
+					[2687] gridcell '0.0000', clickable
+					[2688] gridcell '', clickable
+						[6463] list ''
+					[2689] gridcell 'Catalog, Search', clickable
+					[2690] gridcell 'Enabled', clickable
+					[2691] gridcell 'Main Website', clickable
+					[2692] gridcell 'Apr 19, 2023 12:13:36 PM', clickable
+					[2693] gridcell 'Edit Thorpe Track Pant', clickable
+						[6468] link 'Edit Thorpe Track Pant', clickable
+				[2694] row ''
+					[2695] gridcell '', clickable
+						[6469] LabelText '', clickable
+							[6470] checkbox '', clickable, checked='false'
+							[6471] LabelText '', clickable
+					[2696] gridcell '867', clickable
+					[2697] gridcell 'Aether Gym Pant', clickable
+						[6475] image 'Aether Gym Pant'
+					[2698] gridcell 'Aether Gym Pant', clickable
+					[2699] gridcell 'Configurable Product', clickable
+					[2700] gridcell 'Bottom', clickable
+					[2701] gridcell 'MP11', clickable
+					[2702] gridcell '$74.00', clickable
+					[2703] gridcell '0.0000', clickable
+					[2704] gridcell '', clickable
+						[6483] list ''
+					[2705] gridcell 'Catalog, Search', clickable
+					[2706] gridcell 'Enabled', clickable
+					[2707] gridcell 'Main Website', clickable
+					[2708] gridcell 'Apr 19, 2023 12:13:37 PM', clickable
+					[2709] gridcell 'Edit Aether Gym Pant', clickable
+						[6488] link 'Edit Aether Gym Pant', clickable
+				[2710] row ''
+					[2711] gridcell '', clickable
+						[6489] LabelText '', clickable
+							[6490] checkbox '', clickable, checked='false'
+							[6491] LabelText '', clickable
+					[2712] gridcell '1492', clickable
+					[2713] gridcell 'Minerva LumaTech&amp;trade; V-Tee', clickable
+						[6495] image 'Minerva LumaTech&amp;trade; V-Tee'
+					[2714] gridcell 'Minerva LumaTech™ V-Tee', clickable
+					[2715] gridcell 'Configurable Product', clickable
+					[2716] gridcell 'Top', clickable
+					[2717] gridcell 'WS08', clickable
+					[2718] gridcell '$32.00', clickable
+					[2719] gridcell '0.0000', clickable
+					[2720] gridcell '', clickable
+						[6503] list ''
+					[2721] gridcell 'Catalog, Search', clickable
+					[2722] gridcell 'Enabled', clickable
+					[2723] gridcell 'Main Website', clickable
+					[2724] gridcell 'Apr 19, 2023 12:13:47 PM', clickable
+					[2725] gridcell 'Edit Minerva LumaTech&trade; V-Tee', clickable
+						[6508] link 'Edit Minerva LumaTech&trade; V-Tee', clickable
+				[2726] row ''
+					[2727] gridcell '', clickable
+						[6509] LabelText '', clickable
+							[6510] checkbox '', clickable, checked='false'
+							[6511] LabelText '', clickable
+					[2728] gridcell '1300', clickable
+					[2729] gridcell 'Inez Full Zip Jacket', clickable
+						[6515] image 'Inez Full Zip Jacket'
+					[2730] gridcell 'Inez Full Zip Jacket', clickable
+					[2731] gridcell 'Configurable Product', clickable
+					[2732] gridcell 'Top', clickable
+					[2733] gridcell 'WJ07', clickable
+					[2734] gridcell '$59.00', clickable
+					[2735] gridcell '0.0000', clickable
+					[2736] gridcell '', clickable
+						[6523] list ''
+					[2737] gridcell 'Catalog, Search', clickable
+					[2738] gridcell 'Enabled', clickable
+					[2739] gridcell 'Main Website', clickable
+					[2740] gridcell 'Apr 19, 2023 12:15:26 PM', clickable
+					[2741] gridcell 'Edit Inez Full Zip Jacket', clickable
+						[6528] link 'Edit Inez Full Zip Jacket', clickable
+				[2742] row ''
+					[2743] gridcell '', clickable
+						[6529] LabelText '', clickable
+							[6530] checkbox '', clickable, checked='false'
+							[6531] LabelText '', clickable
+					[2744] gridcell '1508', clickable
+					[2745] gridcell 'Tiffany Fitness Tee', clickable
+						[6535] image 'Tiffany Fitness Tee'
+					[2746] gridcell 'Tiffany Fitness Tee', clickable
+					[2747] gridcell 'Configurable Product', clickable
+					[2748] gridcell 'Top', clickable
+					[2749] gridcell 'WS09', clickable
+					[2750] gridcell '$28.00', clickable
+					[2751] gridcell '0.0000', clickable
+					[2752] gridcell '', clickable
+						[6543] list ''
+					[2753] gridcell 'Catalog, Search', clickable
+					[2754] gridcell 'Enabled', clickable
+					[2755] gridcell 'Main Website', clickable
+					[2756] gridcell 'Apr 19, 2023 12:13:48 PM', clickable
+					[2757] gridcell 'Edit Tiffany Fitness Tee', clickable
+						[6548] link 'Edit Tiffany Fitness Tee', clickable
+				[2758] row ''
+					[2759] gridcell '', clickable
+						[6549] LabelText '', clickable
+							[6550] checkbox '', clickable, checked='false'
+							[6551] LabelText '', clickable
+					[2760] gridcell '1316', clickable
+					[2761] gridcell 'Adrienne Trek Jacket', clickable
+						[6555] image 'Adrienne Trek Jacket'
+					[2762] gridcell 'Adrienne Trek Jacket', clickable
+					[2763] gridcell 'Configurable Product', clickable
+					[2764] gridcell 'Top', clickable
+					[2765] gridcell 'WJ08', clickable
+					[2766] gridcell '$57.00', clickable
+					[2767] gridcell '0.0000', clickable
+					[2768] gridcell '', clickable
+						[6563] list ''
+					[2769] gridcell 'Catalog, Search', clickable
+					[2770] gridcell 'Enabled', clickable
+					[2771] gridcell 'Main Website', clickable
+					[2772] gridcell 'Apr 19, 2023 12:15:27 PM', clickable
+					[2773] gridcell 'Edit Adrienne Trek Jacket', clickable
+						[6568] link 'Edit Adrienne Trek Jacket', clickable
+				[2774] row ''
+					[2775] gridcell '', clickable
+						[6569] LabelText '', clickable
+							[6570] checkbox '', clickable, checked='false'
+							[6571] LabelText '', clickable
+					[2776] gridcell '1524', clickable
+					[2777] gridcell 'Karissa V-Neck Tee', clickable
+						[6575] image 'Karissa V-Neck Tee'
+					[2778] gridcell 'Karissa V-Neck Tee', clickable
+					[2779] gridcell 'Configurable Product', clickable
+					[2780] gridcell 'Top', clickable
+					[2781] gridcell 'WS10', clickable
+					[2782] gridcell '$32.00', clickable
+					[2783] gridcell '0.0000', clickable
+					[2784] gridcell '', clickable
+						[6583] list ''
+					[2785] gridcell 'Catalog, Search', clickable
+					[2786] gridcell 'Enabled', clickable
+					[2787] gridcell 'Main Website', clickable
+					[2788] gridcell 'Apr 19, 2023 12:13:48 PM', clickable
+					[2789] gridcell 'Edit Karissa V-Neck Tee', clickable
+						[6588] link 'Edit Karissa V-Neck Tee', clickable
+				[2790] row ''
+					[2791] gridcell '', clickable
+						[6589] LabelText '', clickable
+							[6590] checkbox '', clickable, checked='false'
+							[6591] LabelText '', clickable
+					[2792] gridcell '1332', clickable
+					[2793] gridcell 'Jade Yoga Jacket', clickable
+						[6595] image 'Jade Yoga Jacket'
+					[2794] gridcell 'Jade Yoga Jacket', clickable
+					[2795] gridcell 'Configurable Product', clickable
+					[2796] gridcell 'Top', clickable
+					[2797] gridcell 'WJ09', clickable
+					[2798] gridcell '$32.00', clickable
+					[2799] gridcell '0.0000', clickable
+					[2800] gridcell '', clickable
+						[6603] list ''
+					[2801] gridcell 'Catalog, Search', clickable
+					[2802] gridcell 'Enabled', clickable
+					[2803] gridcell 'Main Website', clickable
+					[2804] gridcell 'Apr 19, 2023 12:15:27 PM', clickable
+					[2805] gridcell 'Edit Jade Yoga Jacket', clickable
+						[6608] link 'Edit Jade Yoga Jacket', clickable
+				[2806] row ''
+					[2807] gridcell '', clickable
+						[6609] LabelText '', clickable
+							[6610] checkbox '', clickable, checked='false'
+							[6611] LabelText '', clickable
+					[2808] gridcell '1540', clickable
+					[2809] gridcell 'Diva Gym Tee', clickable
+						[6615] image 'Diva Gym Tee'
+					[2810] gridcell 'Diva Gym Tee', clickable
+					[2811] gridcell 'Configurable Product', clickable
+					[2812] gridcell 'Top', clickable
+					[2813] gridcell 'WS11', clickable
+					[2814] gridcell '$32.00', clickable
+					[2815] gridcell '0.0000', clickable
+					[2816] gridcell '', clickable
+						[6623] list ''
+					[2817] gridcell 'Catalog, Search', clickable
+					[2818] gridcell 'Enabled', clickable
+					[2819] gridcell 'Main Website', clickable
+					[2820] gridcell 'Apr 19, 2023 12:13:48 PM', clickable
+					[2821] gridcell 'Edit Diva Gym Tee', clickable
+						[6628] link 'Edit Diva Gym Tee', clickable
+				[2822] row ''
+					[2823] gridcell '', clickable
+						[6629] LabelText '', clickable
+							[6630] checkbox '', clickable, checked='false'
+							[6631] LabelText '', clickable
+					[2824] gridcell '1348', clickable
+					[2825] gridcell 'Nadia Elements Shell', clickable
+						[6635] image 'Nadia Elements Shell'
+					[2826] gridcell 'Nadia Elements Shell', clickable
+					[2827] gridcell 'Configurable Product', clickable
+					[2828] gridcell 'Top', clickable
+					[2829] gridcell 'WJ10', clickable
+					[2830] gridcell '$69.00', clickable
+					[2831] gridcell '0.0000', clickable
+					[2832] gridcell '', clickable
+						[6643] list ''
+					[2833] gridcell 'Catalog, Search', clickable
+					[2834] gridcell 'Enabled', clickable
+					[2835] gridcell 'Main Website', clickable
+					[2836] gridcell 'Apr 19, 2023 12:15:27 PM', clickable
+					[2837] gridcell 'Edit Nadia Elements Shell', clickable
+						[6648] link 'Edit Nadia Elements Shell', clickable
+				[2838] row ''
+					[2839] gridcell '', clickable
+						[6649] LabelText '', clickable
+							[6650] checkbox '', clickable, checked='false'
+							[6651] LabelText '', clickable
+					[2840] gridcell '1556', clickable
+					[2841] gridcell 'Radiant Tee', clickable
+						[6655] image 'Radiant Tee'
+					[2842] gridcell 'Radiant Tee', clickable
+					[2843] gridcell 'Configurable Product', clickable
+					[2844] gridcell 'Top', clickable
+					[2845] gridcell 'WS12', clickable
+					[2846] gridcell '$22.00', clickable
+					[2847] gridcell '0.0000', clickable
+					[2848] gridcell '', clickable
+						[6663] list ''
+					[2849] gridcell 'Catalog, Search', clickable
+					[2850] gridcell 'Enabled', clickable
+					[2851] gridcell 'Main Website', clickable
+					[2852] gridcell 'Apr 19, 2023 12:13:49 PM', clickable
+					[2853] gridcell 'Edit Radiant Tee', clickable
+						[6668] link 'Edit Radiant Tee', clickable
+				[2854] row ''
+					[2855] gridcell '', clickable
+						[6669] LabelText '', clickable
+							[6670] checkbox '', clickable, checked='false'
+							[6671] LabelText '', clickable
+					[2856] gridcell '1364', clickable
+					[2857] gridcell 'Neve Studio Dance Jacket', clickable
+						[6675] image 'Neve Studio Dance Jacket'
+					[2858] gridcell 'Neve Studio Dance Jacket', clickable
+					[2859] gridcell 'Configurable Product', clickable
+					[2860] gridcell 'Top', clickable
+					[2861] gridcell 'WJ11', clickable
+					[2862] gridcell '$69.00', clickable
+					[2863] gridcell '0.0000', clickable
+					[2864] gridcell '', clickable
+						[6683] list ''
+					[2865] gridcell 'Catalog, Search', clickable
+					[2866] gridcell 'Enabled', clickable
+					[2867] gridcell 'Main Website', clickable
+					[2868] gridcell 'Apr 19, 2023 12:15:28 PM', clickable
+					[2869] gridcell 'Edit Neve Studio Dance Jacket', clickable
+						[6688] link 'Edit Neve Studio Dance Jacket', clickable
+				[2870] row ''
+					[2871] gridcell '', clickable
+						[6689] LabelText '', clickable
+							[6690] checkbox '', clickable, checked='false'
+							[6691] LabelText '', clickable
+					[2872] gridcell '1572', clickable
+					[2873] gridcell 'Gwyn Endurance Tee', clickable
+						[6695] image 'Gwyn Endurance Tee'
+					[2874] gridcell 'Gwyn Endurance Tee', clickable
+					[2875] gridcell 'Configurable Product', clickable
+					[2876] gridcell 'Top', clickable
+					[2877] gridcell 'WS01', clickable
+					[2878] gridcell '$24.00', clickable
+					[2879] gridcell '0.0000', clickable
+					[2880] gridcell '', clickable
+						[6703] list ''
+					[2881] gridcell 'Catalog, Search', clickable
+					[2882] gridcell 'Enabled', clickable
+					[2883] gridcell 'Main Website', clickable
+					[2884] gridcell 'Apr 19, 2023 12:13:49 PM', clickable
+					[2885] gridcell 'Edit Gwyn Endurance Tee', clickable
+						[6708] link 'Edit Gwyn Endurance Tee', clickable
+				[2886] row ''
+					[2887] gridcell '', clickable
+						[6709] LabelText '', clickable
+							[6710] checkbox '', clickable, checked='false'
+							[6711] LabelText '', clickable
+					[2888] gridcell '1380', clickable
+					[2889] gridcell 'Juno Jacket', clickable
+						[6715] image 'Juno Jacket'
+					[2890] gridcell 'Juno Jacket', clickable
+					[2891] gridcell 'Configurable Product', clickable
+					[2892] gridcell 'Top', clickable
+					[2893] gridcell 'WJ06', clickable
+					[2894] gridcell '$77.00', clickable
+					[2895] gridcell '0.0000', clickable
+					[2896] gridcell '', clickable
+						[6723] list ''
+					[2897] gridcell 'Catalog, Search', clickable
+					[2898] gridcell 'Enabled', clickable
+					[2899] gridcell 'Main Website', clickable
+					[2900] gridcell 'Apr 19, 2023 12:15:26 PM', clickable
+					[2901] gridcell 'Edit Juno Jacket', clickable
+						[6728] link 'Edit Juno Jacket', clickable
+				[2902] row ''
+					[2903] gridcell '', clickable
+						[6729] LabelText '', clickable
+							[6730] checkbox '', clickable, checked='false'
+							[6731] LabelText '', clickable
+					[2904] gridcell '1588', clickable
+					[2905] gridcell 'Desiree Fitness Tee', clickable
+						[6735] image 'Desiree Fitness Tee'
+					[2906] gridcell 'Desiree Fitness Tee', clickable
+					[2907] gridcell 'Configurable Product', clickable
+					[2908] gridcell 'Top', clickable
+					[2909] gridcell 'WS05', clickable
+					[2910] gridcell '$24.00', clickable
+					[2911] gridcell '0.0000', clickable
+					[2912] gridcell '', clickable
+						[6743] list ''
+					[2913] gridcell 'Catalog, Search', clickable
+					[2914] gridcell 'Enabled', clickable
+					[2915] gridcell 'Main Website', clickable
+					[2916] gridcell 'Apr 19, 2023 12:13:49 PM', clickable
+					[2917] gridcell 'Edit Desiree Fitness Tee', clickable
+						[6748] link 'Edit Desiree Fitness Tee', clickable
+				[2918] row ''
+					[2919] gridcell '', clickable
+						[6749] LabelText '', clickable
+							[6750] checkbox '', clickable, checked='false'
+							[6751] LabelText '', clickable
+					[2920] gridcell '1396', clickable
+					[2921] gridcell 'Olivia 1/4 Zip Light Jacket', clickable
+						[6755] image 'Olivia 1/4 Zip Light Jacket'
+					[2922] gridcell 'Olivia 1/4 Zip Light Jacket', clickable
+					[2923] gridcell 'Configurable Product', clickable
+					[2924] gridcell 'Top', clickable
+					[2925] gridcell 'WJ12', clickable
+					[2926] gridcell '$77.00', clickable
+					[2927] gridcell '0.0000', clickable
+					[2928] gridcell '', clickable
+						[6763] list ''
+					[2929] gridcell 'Catalog, Search', clickable
+					[2930] gridcell 'Enabled', clickable
+					[2931] gridcell 'Main Website', clickable
+					[2932] gridcell 'Apr 19, 2023 12:15:28 PM', clickable
+					[2933] gridcell 'Edit Olivia 1/4 Zip Light Jacket', clickable
+						[6768] link 'Edit Olivia 1/4 Zip Light Jacket', clickable
+				[2934] row ''
+					[2935] gridcell '', clickable
+						[6769] LabelText '', clickable
+							[6770] checkbox '', clickable, checked='false'
+							[6771] LabelText '', clickable
+					[2936] gridcell '1412', clickable
+					[2937] gridcell 'Gabrielle Micro Sleeve Top', clickable
+						[6775] image 'Gabrielle Micro Sleeve Top'
+					[2938] gridcell 'Gabrielle Micro Sleeve Top', clickable
+					[2939] gridcell 'Configurable Product', clickable
+					[2940] gridcell 'Top', clickable
+					[2941] gridcell 'WS02', clickable
+					[2942] gridcell '$28.00', clickable
+					[2943] gridcell '0.0000', clickable
+					[2944] gridcell '', clickable
+						[6783] list ''
+					[2945] gridcell 'Catalog, Search', clickable
+					[2946] gridcell 'Enabled', clickable
+					[2947] gridcell 'Main Website', clickable
+					[2948] gridcell 'Apr 19, 2023 12:13:46 PM', clickable
+					[2949] gridcell 'Edit Gabrielle Micro Sleeve Top', clickable
+						[6788] link 'Edit Gabrielle Micro Sleeve Top', clickable
+				[2950] row ''
+					[2951] gridcell '', clickable
+						[6789] LabelText '', clickable
+							[6790] checkbox '', clickable, checked='false'
+							[6791] LabelText '', clickable
+					[2952] gridcell '1220', clickable
+					[2953] gridcell 'Stellar Solar Jacket', clickable
+						[6795] image 'Stellar Solar Jacket'
+					[2954] gridcell 'Stellar Solar Jacket', clickable
+					[2955] gridcell 'Configurable Product', clickable
+					[2956] gridcell 'Top', clickable
+					[2957] gridcell 'WJ01', clickable
+					[2958] gridcell '$75.00', clickable
+					[2959] gridcell '0.0000', clickable
+					[2960] gridcell '', clickable
+						[6803] list ''
+					[2961] gridcell 'Catalog, Search', clickable
+					[2962] gridcell 'Enabled', clickable
+					[2963] gridcell 'Main Website', clickable
+					[2964] gridcell 'Apr 19, 2023 12:15:24 PM', clickable
+					[2965] gridcell 'Edit Stellar Solar Jacket', clickable
+						[6808] link 'Edit Stellar Solar Jacket', clickable
+				[2966] row ''
+					[2967] gridcell '', clickable
+						[6809] LabelText '', clickable
+							[6810] checkbox '', clickable, checked='false'
+							[6811] LabelText '', clickable
+					[2968] gridcell '1428', clickable
+					[2969] gridcell 'Iris Workout Top', clickable
+						[6815] image 'Iris Workout Top'
+					[2970] gridcell 'Iris Workout Top', clickable
+					[2971] gridcell 'Configurable Product', clickable
+					[2972] gridcell 'Top', clickable
+					[2973] gridcell 'WS03', clickable
+					[2974] gridcell '$29.00', clickable
+					[2975] gridcell '0.0000', clickable
+					[2976] gridcell '', clickable
+						[6823] list ''
+					[2977] gridcell 'Catalog, Search', clickable
+					[2978] gridcell 'Enabled', clickable
+					[2979] gridcell 'Main Website', clickable
+					[2980] gridcell 'Apr 19, 2023 12:13:46 PM', clickable
+					[2981] gridcell 'Edit Iris Workout Top', clickable
+						[6828] link 'Edit Iris Workout Top', clickable
+				[2982] row ''
+					[2983] gridcell '', clickable
+						[6829] LabelText '', clickable
+							[6830] checkbox '', clickable, checked='false'
+							[6831] LabelText '', clickable
+					[2984] gridcell '1236', clickable
+					[2985] gridcell 'Josie Yoga Jacket', clickable
+						[6835] image 'Josie Yoga Jacket'
+					[2986] gridcell 'Josie Yoga Jacket', clickable
+					[2987] gridcell 'Configurable Product', clickable
+					[2988] gridcell 'Top', clickable
+					[2989] gridcell 'WJ02', clickable
+					[2990] gridcell '$56.25', clickable
+					[2991] gridcell '0.0000', clickable
+					[2992] gridcell '', clickable
+						[6843] list ''
+					[2993] gridcell 'Catalog, Search', clickable
+					[2994] gridcell 'Enabled', clickable
+					[2995] gridcell 'Main Website', clickable
+					[2996] gridcell 'Apr 19, 2023 12:15:25 PM', clickable
+					[2997] gridcell 'Edit Josie Yoga Jacket', clickable
+						[6848] link 'Edit Josie Yoga Jacket', clickable
+				[2998] row ''
+					[2999] gridcell '', clickable
+						[6849] LabelText '', clickable
+							[6850] checkbox '', clickable, checked='false'
+							[6851] LabelText '', clickable
+					[3000] gridcell '1444', clickable
+					[3001] gridcell 'Layla Tee', clickable
+						[6855] image 'Layla Tee'
+					[3002] gridcell 'Layla Tee', clickable
+					[3003] gridcell 'Configurable Product', clickable
+					[3004] gridcell 'Top', clickable
+					[3005] gridcell 'WS04', clickable
+					[3006] gridcell '$29.00', clickable
+					[3007] gridcell '0.0000', clickable
+					[3008] gridcell '', clickable
+						[6863] list ''
+					[3009] gridcell 'Catalog, Search', clickable
+					[3010] gridcell 'Enabled', clickable
+					[3011] gridcell 'Main Website', clickable
+					[3012] gridcell 'Apr 19, 2023 12:13:47 PM', clickable
+					[3013] gridcell 'Edit Layla Tee', clickable
+						[6868] link 'Edit Layla Tee', clickable
+				[3014] row ''
+					[3015] gridcell '', clickable
+						[6869] LabelText '', clickable
+							[6870] checkbox '', clickable, checked='false'
+							[6871] LabelText '', clickable
+					[3016] gridcell '1252', clickable
+					[3017] gridcell 'Augusta Pullover Jacket', clickable
+						[6875] image 'Augusta Pullover Jacket'
+					[3018] gridcell 'Augusta Pullover Jacket', clickable
+					[3019] gridcell 'Configurable Product', clickable
+					[3020] gridcell 'Top', clickable
+					[3021] gridcell 'WJ03', clickable
+					[3022] gridcell '$57.00', clickable
+					[3023] gridcell '0.0000', clickable
+					[3024] gridcell '', clickable
+						[6883] list ''
+					[3025] gridcell 'Catalog, Search', clickable
+					[3026] gridcell 'Enabled', clickable
+					[3027] gridcell 'Main Website', clickable
+					[3028] gridcell 'Apr 19, 2023 12:15:25 PM', clickable
+					[3029] gridcell 'Edit Augusta Pullover Jacket', clickable
+						[6888] link 'Edit Augusta Pullover Jacket', clickable
+				[3030] row ''
+					[3031] gridcell '', clickable
+						[6889] LabelText '', clickable
+							[6890] checkbox '', clickable, checked='false'
+							[6891] LabelText '', clickable
+					[3032] gridcell '1460', clickable
+					[3033] gridcell 'Elisa EverCool&amp;trade; Tee', clickable
+						[6895] image 'Elisa EverCool&amp;trade; Tee'
+					[3034] gridcell 'Elisa EverCool™ Tee', clickable
+					[3035] gridcell 'Configurable Product', clickable
+					[3036] gridcell 'Top', clickable
+					[3037] gridcell 'WS06', clickable
+					[3038] gridcell '$29.00', clickable
+					[3039] gridcell '0.0000', clickable
+					[3040] gridcell '', clickable
+						[6903] list ''
+					[3041] gridcell 'Catalog, Search', clickable
+					[3042] gridcell 'Enabled', clickable
+					[3043] gridcell 'Main Website', clickable
+					[3044] gridcell 'Apr 19, 2023 12:13:47 PM', clickable
+					[3045] gridcell 'Edit Elisa EverCool&trade; Tee', clickable
+						[6908] link 'Edit Elisa EverCool&trade; Tee', clickable
+				[3046] row ''
+					[3047] gridcell '', clickable
+						[6909] LabelText '', clickable
+							[6910] checkbox '', clickable, checked='false'
+							[6911] LabelText '', clickable
+					[3048] gridcell '1268', clickable
+					[3049] gridcell 'Ingrid Running Jacket', clickable
+						[6915] image 'Ingrid Running Jacket'
+					[3050] gridcell 'Ingrid Running Jacket', clickable
+					[3051] gridcell 'Configurable Product', clickable
+					[3052] gridcell 'Top', clickable
+					[3053] gridcell 'WJ04', clickable
+					[3054] gridcell '$84.00', clickable
+					[3055] gridcell '0.0000', clickable
+					[3056] gridcell '', clickable
+						[6923] list ''
+					[3057] gridcell 'Catalog, Search', clickable
+					[3058] gridcell 'Enabled', clickable
+					[3059] gridcell 'Main Website', clickable
+					[3060] gridcell 'Apr 19, 2023 12:15:26 PM', clickable
+					[3061] gridcell 'Edit Ingrid Running Jacket', clickable
+						[6928] link 'Edit Ingrid Running Jacket', clickable
+				[3062] row ''
+					[3063] gridcell '', clickable
+						[6929] LabelText '', clickable
+							[6930] checkbox '', clickable, checked='false'
+							[6931] LabelText '', clickable
+					[3064] gridcell '1476', clickable
+					[3065] gridcell 'Juliana Short-Sleeve Tee', clickable
+						[6935] image 'Juliana Short-Sleeve Tee'
+					[3066] gridcell 'Juliana Short-Sleeve Tee', clickable
+					[3067] gridcell 'Configurable Product', clickable
+					[3068] gridcell 'Top', clickable
+					[3069] gridcell 'WS07', clickable
+					[3070] gridcell '$42.00', clickable
+					[3071] gridcell '0.0000', clickable
+					[3072] gridcell '', clickable
+						[6943] list ''
+					[3073] gridcell 'Catalog, Search', clickable
+					[3074] gridcell 'Enabled', clickable
+					[3075] gridcell 'Main Website', clickable
+					[3076] gridcell 'Apr 19, 2023 12:13:47 PM', clickable
+					[3077] gridcell 'Edit Juliana Short-Sleeve Tee', clickable
+						[6948] link 'Edit Juliana Short-Sleeve Tee', clickable
+				[3078] row ''
+					[3079] gridcell '', clickable
+						[6949] LabelText '', clickable
+							[6950] checkbox '', clickable, checked='false'
+							[6951] LabelText '', clickable
+					[3080] gridcell '1284', clickable
+					[3081] gridcell 'Riona Full Zip Jacket', clickable
+						[6955] image 'Riona Full Zip Jacket'
+					[3082] gridcell 'Riona Full Zip Jacket', clickable
+					[3083] gridcell 'Configurable Product', clickable
+					[3084] gridcell 'Top', clickable
+					[3085] gridcell 'WJ05', clickable
+					[3086] gridcell '$60.00', clickable
+					[3087] gridcell '0.0000', clickable
+					[3088] gridcell '', clickable
+						[6963] list ''
+					[3089] gridcell 'Catalog, Search', clickable
+					[3090] gridcell 'Enabled', clickable
+					[3091] gridcell 'Main Website', clickable
+					[3092] gridcell 'Apr 19, 2023 12:15:26 PM', clickable
+					[3093] gridcell 'Edit Riona Full Zip Jacket', clickable
+						[6968] link 'Edit Riona Full Zip Jacket', clickable
+				[3094] row ''
+					[3095] gridcell '', clickable
+						[6969] LabelText '', clickable
+							[6970] checkbox '', clickable, checked='false'
+							[6971] LabelText '', clickable
+					[3096] gridcell '1889', clickable
+					[3097] gridcell 'Sylvia Capri', clickable
+						[6975] image 'Sylvia Capri'
+					[3098] gridcell 'Sylvia Capri', clickable
+					[3099] gridcell 'Configurable Product', clickable
+					[3100] gridcell 'Bottom', clickable
+					[3101] gridcell 'WP11', clickable
+					[3102] gridcell '$42.00', clickable
+					[3103] gridcell '0.0000', clickable
+					[3104] gridcell '', clickable
+						[6983] list ''
+					[3105] gridcell 'Catalog, Search', clickable
+					[3106] gridcell 'Enabled', clickable
+					[3107] gridcell 'Main Website', clickable
+					[3108] gridcell 'Apr 19, 2023 12:13:54 PM', clickable
+					[3109] gridcell 'Edit Sylvia Capri', clickable
+						[6988] link 'Edit Sylvia Capri', clickable
+				[3110] row ''
+					[3111] gridcell '', clickable
+						[6989] LabelText '', clickable
+							[6990] checkbox '', clickable, checked='false'
+							[6991] LabelText '', clickable
+					[3112] gridcell '302', clickable
+					[3113] gridcell 'Kenobi Trail Jacket', clickable
+						[6995] image 'Kenobi Trail Jacket'
+					[3114] gridcell 'Kenobi Trail Jacket', clickable
+					[3115] gridcell 'Configurable Product', clickable
+					[3116] gridcell 'Top', clickable
+					[3117] gridcell 'MJ04', clickable
+					[3118] gridcell '$47.00', clickable
+					[3119] gridcell '0.0000', clickable
+					[3120] gridcell '', clickable
+						[7003] list ''
+					[3121] gridcell 'Catalog, Search', clickable
+					[3122] gridcell 'Enabled', clickable
+					[3123] gridcell 'Main Website', clickable
+					[3124] gridcell 'Apr 19, 2023 12:13:28 PM', clickable
+					[3125] gridcell 'Edit Kenobi Trail Jacket', clickable
+						[7008] link 'Edit Kenobi Trail Jacket', clickable
+				[3126] row ''
+					[3127] gridcell '', clickable
+						[7009] LabelText '', clickable
+							[7010] checkbox '', clickable, checked='false'
+							[7011] LabelText '', clickable
+					[3128] gridcell '110', clickable
+					[3129] gridcell 'Frankie Sweatshirt', clickable
+						[7015] image 'Frankie Sweatshirt'
+					[3130] gridcell 'Frankie Sweatshirt', clickable
+						StaticText 'Frankie  Sweatshirt'
+					[3131] gridcell 'Configurable Product', clickable
+					[3132] gridcell 'Top', clickable
+					[3133] gridcell 'MH04', clickable
+					[3134] gridcell '$60.00', clickable
+					[3135] gridcell '0.0000', clickable
+					[3136] gridcell '', clickable
+						[7023] list ''
+					[3137] gridcell 'Catalog, Search', clickable
+					[3138] gridcell 'Enabled', clickable
+					[3139] gridcell 'Main Website', clickable
+					[3140] gridcell 'Apr 19, 2023 12:13:24 PM', clickable
+					[3141] gridcell 'Edit Frankie Sweatshirt', clickable
+						[7028] link 'Edit Frankie Sweatshirt', clickable
+				[3142] row ''
+					[3143] gridcell '', clickable
+						[7029] LabelText '', clickable
+							[7030] checkbox '', clickable, checked='false'
+							[7031] LabelText '', clickable
+					[3144] gridcell '318', clickable
+					[3145] gridcell 'Orion Two-Tone Fitted Jacket', clickable
+						[7035] image 'Orion Two-Tone Fitted Jacket'
+					[3146] gridcell 'Orion Two-Tone Fitted Jacket', clickable
+					[3147] gridcell 'Configurable Product', clickable
+					[3148] gridcell 'Top', clickable
+					[3149] gridcell 'MJ07', clickable
+					[3150] gridcell '$72.00', clickable
+					[3151] gridcell '0.0000', clickable
+					[3152] gridcell '', clickable
+						[7043] list ''
+					[3153] gridcell 'Catalog, Search', clickable
+					[3154] gridcell 'Enabled', clickable
+					[3155] gridcell 'Main Website', clickable
+					[3156] gridcell 'Apr 19, 2023 12:13:28 PM', clickable
+					[3157] gridcell 'Edit Orion Two-Tone Fitted Jacket', clickable
+						[7048] link 'Edit Orion Two-Tone Fitted Jacket', clickable
+				[3158] row ''
+					[3159] gridcell '', clickable
+						[7049] LabelText '', clickable
+							[7050] checkbox '', clickable, checked='false'
+							[7051] LabelText '', clickable
+					[3160] gridcell '126', clickable
+					[3161] gridcell 'Hollister Backyard Sweatshirt', clickable
+						[7055] image 'Hollister Backyard Sweatshirt'
+					[3162] gridcell 'Hollister Backyard Sweatshirt', clickable
+					[3163] gridcell 'Configurable Product', clickable
+					[3164] gridcell 'Top', clickable
+					[3165] gridcell 'MH05', clickable
+					[3166] gridcell '', clickable
+					[3167] gridcell '0.0000', clickable
+					[3168] gridcell '', clickable
+						[7063] list ''
+					[3169] gridcell 'Catalog, Search', clickable
+					[3170] gridcell 'Enabled', clickable
+					[3171] gridcell 'Main Website', clickable
+					[3172] gridcell 'Jun 15, 2023 11:44:41 PM', clickable
+					[3173] gridcell 'Edit Hollister Backyard Sweatshirt', clickable
+						[7068] link 'Edit Hollister Backyard Sweatshirt', clickable
+				[3174] row ''
+					[3175] gridcell '', clickable
+						[7069] LabelText '', clickable
+							[7070] checkbox '', clickable, checked='false'
+							[7071] LabelText '', clickable
+					[3176] gridcell '334', clickable
+					[3177] gridcell 'Lando Gym Jacket', clickable
+						[7075] image 'Lando Gym Jacket'
+					[3178] gridcell 'Lando Gym Jacket', clickable
+					[3179] gridcell 'Configurable Product', clickable
+					[3180] gridcell 'Top', clickable
+					[3181] gridcell 'MJ08', clickable
+					[3182] gridcell '$99.00', clickable
+					[3183] gridcell '0.0000', clickable
+					[3184] gridcell '', clickable
+						[7083] list ''
+					[3185] gridcell 'Catalog, Search', clickable
+					[3186] gridcell 'Enabled', clickable
+					[3187] gridcell 'Main Website', clickable
+					[3188] gridcell 'Apr 19, 2023 12:13:28 PM', clickable
+					[3189] gridcell 'Edit Lando Gym Jacket', clickable
+						[7088] link 'Edit Lando Gym Jacket', clickable
+				[3190] row ''
+					[3191] gridcell '', clickable
+						[7089] LabelText '', clickable
+							[7090] checkbox '', clickable, checked='false'
+							[7091] LabelText '', clickable
+					[3192] gridcell '142', clickable
+					[3193] gridcell 'Stark Fundamental Hoodie', clickable
+						[7095] image 'Stark Fundamental Hoodie'
+					[3194] gridcell 'Stark Fundamental Hoodie', clickable
+					[3195] gridcell 'Configurable Product', clickable
+					[3196] gridcell 'Top', clickable
+					[3197] gridcell 'MH06', clickable
+					[3198] gridcell '$42.00', clickable
+					[3199] gridcell '0.0000', clickable
+					[3200] gridcell '', clickable
+						[7103] list ''
+					[3201] gridcell 'Catalog, Search', clickable
+					[3202] gridcell 'Enabled', clickable
+					[3203] gridcell 'Main Website', clickable
+					[3204] gridcell 'Apr 19, 2023 12:13:25 PM', clickable
+					[3205] gridcell 'Edit Stark Fundamental Hoodie', clickable
+						[7108] link 'Edit Stark Fundamental Hoodie', clickable
+				[3206] row ''
+					[3207] gridcell '', clickable
+						[7109] LabelText '', clickable
+							[7110] checkbox '', clickable, checked='false'
+							[7111] LabelText '', clickable
+					[3208] gridcell '350', clickable
+					[3209] gridcell 'Taurus Elements Shell', clickable
+						[7115] image 'Taurus Elements Shell'
+					[3210] gridcell 'Taurus Elements Shell', clickable
+					[3211] gridcell 'Configurable Product', clickable
+					[3212] gridcell 'Top', clickable
+					[3213] gridcell 'MJ09', clickable
+					[3214] gridcell '$65.00', clickable
+					[3215] gridcell '0.0000', clickable
+					[3216] gridcell '', clickable
+						[7123] list ''
+					[3217] gridcell 'Catalog, Search', clickable
+					[3218] gridcell 'Enabled', clickable
+					[3219] gridcell 'Main Website', clickable
+					[3220] gridcell 'Apr 19, 2023 12:13:29 PM', clickable
+					[3221] gridcell 'Edit Taurus Elements Shell', clickable
+						[7128] link 'Edit Taurus Elements Shell', clickable
+				[3222] row ''
+					[3223] gridcell '', clickable
+						[7129] LabelText '', clickable
+							[7130] checkbox '', clickable, checked='false'
+							[7131] LabelText '', clickable
+					[3224] gridcell '158', clickable
+					[3225] gridcell 'Hero Hoodie', clickable
+						[7135] image 'Hero Hoodie'
+					[3226] gridcell 'Hero Hoodie', clickable
+					[3227] gridcell 'Configurable Product', clickable
+					[3228] gridcell 'Top', clickable
+					[3229] gridcell 'MH07', clickable
+					[3230] gridcell '$54.00', clickable
+					[3231] gridcell '0.0000', clickable
+					[3232] gridcell '', clickable
+						[7143] list ''
+					[3233] gridcell 'Catalog, Search', clickable
+					[3234] gridcell 'Enabled', clickable
+					[3235] gridcell 'Main Website', clickable
+					[3236] gridcell 'Apr 19, 2023 12:13:25 PM', clickable
+					[3237] gridcell 'Edit Hero Hoodie', clickable
+						[7148] link 'Edit Hero Hoodie', clickable
+				[3238] row ''
+					[3239] gridcell '', clickable
+						[7149] LabelText '', clickable
+							[7150] checkbox '', clickable, checked='false'
+							[7151] LabelText '', clickable
+					[3240] gridcell '366', clickable
+					[3241] gridcell 'Mars HeatTech&amp;trade; Pullover', clickable
+						[7155] image 'Mars HeatTech&amp;trade; Pullover'
+					[3242] gridcell 'Mars HeatTech™ Pullover', clickable
+					[3243] gridcell 'Configurable Product', clickable
+					[3244] gridcell 'Top', clickable
+					[3245] gridcell 'MJ10', clickable
+					[3246] gridcell '$66.00', clickable
+					[3247] gridcell '0.0000', clickable
+					[3248] gridcell '', clickable
+						[7163] list ''
+					[3249] gridcell 'Catalog, Search', clickable
+					[3250] gridcell 'Enabled', clickable
+					[3251] gridcell 'Main Website', clickable
+					[3252] gridcell 'Apr 19, 2023 12:13:29 PM', clickable
+					[3253] gridcell 'Edit Mars HeatTech&trade; Pullover', clickable
+						[7168] link 'Edit Mars HeatTech&trade; Pullover', clickable
+				[3254] row ''
+					[3255] gridcell '', clickable
+						[7169] LabelText '', clickable
+							[7170] checkbox '', clickable, checked='false'
+							[7171] LabelText '', clickable
+					[3256] gridcell '174', clickable
+					[3257] gridcell 'Oslo Trek Hoodie', clickable
+						[7175] image 'Oslo Trek Hoodie'
+					[3258] gridcell 'Oslo Trek Hoodie', clickable
+					[3259] gridcell 'Configurable Product', clickable
+					[3260] gridcell 'Top', clickable
+					[3261] gridcell 'MH08', clickable
+					[3262] gridcell '$42.00', clickable
+					[3263] gridcell '0.0000', clickable
+					[3264] gridcell '', clickable
+						[7183] list ''
+					[3265] gridcell 'Catalog, Search', clickable
+					[3266] gridcell 'Enabled', clickable
+					[3267] gridcell 'Main Website', clickable
+					[3268] gridcell 'Apr 19, 2023 12:13:25 PM', clickable
+					[3269] gridcell 'Edit Oslo Trek Hoodie', clickable
+						[7188] link 'Edit Oslo Trek Hoodie', clickable
+				[3270] row ''
+					[3271] gridcell '', clickable
+						[7189] LabelText '', clickable
+							[7190] checkbox '', clickable, checked='false'
+							[7191] LabelText '', clickable
+					[3272] gridcell '382', clickable
+					[3273] gridcell 'Typhon Performance Fleece-lined Jacket', clickable
+						[7195] image 'Typhon Performance Fleece-lined Jacket'
+					[3274] gridcell 'Typhon Performance Fleece-lined Jacket', clickable
+					[3275] gridcell 'Configurable Product', clickable
+					[3276] gridcell 'Top', clickable
+					[3277] gridcell 'MJ11', clickable
+					[3278] gridcell '$60.00', clickable
+					[3279] gridcell '0.0000', clickable
+					[3280] gridcell '', clickable
+						[7203] list ''
+					[3281] gridcell 'Catalog, Search', clickable
+					[3282] gridcell 'Enabled', clickable
+					[3283] gridcell 'Main Website', clickable
+					[3284] gridcell 'Apr 19, 2023 12:13:29 PM', clickable
+					[3285] gridcell 'Edit Typhon Performance Fleece-lined Jacket', clickable
+						[7208] link 'Edit Typhon Performance Fleece-lined Jacket', clickable
+				[3286] row ''
+					[3287] gridcell '', clickable
+						[7209] LabelText '', clickable
+							[7210] checkbox '', clickable, checked='false'
+							[7211] LabelText '', clickable
+					[3288] gridcell '190', clickable
+					[3289] gridcell 'Abominable Hoodie', clickable
+						[7215] image 'Abominable Hoodie'
+					[3290] gridcell 'Abominable Hoodie', clickable
+					[3291] gridcell 'Configurable Product', clickable
+					[3292] gridcell 'Top', clickable
+					[3293] gridcell 'MH09', clickable
+					[3294] gridcell '$69.00', clickable
+					[3295] gridcell '0.0000', clickable
+					[3296] gridcell '', clickable
+						[7223] list ''
+					[3297] gridcell 'Catalog, Search', clickable
+					[3298] gridcell 'Enabled', clickable
+					[3299] gridcell 'Main Website', clickable
+					[3300] gridcell 'Apr 19, 2023 12:13:26 PM', clickable
+					[3301] gridcell 'Edit Abominable Hoodie', clickable
+						[7228] link 'Edit Abominable Hoodie', clickable
+				[3302] row ''
+					[3303] gridcell '', clickable
+						[7229] LabelText '', clickable
+							[7230] checkbox '', clickable, checked='false'
+							[7231] LabelText '', clickable
+					[3304] gridcell '206', clickable
+					[3305] gridcell 'Mach Street Sweatshirt', clickable
+						[7235] image 'Mach Street Sweatshirt'
+					[3306] gridcell 'Mach Street Sweatshirt', clickable
+					[3307] gridcell 'Configurable Product', clickable
+					[3308] gridcell 'Top', clickable
+					[3309] gridcell 'MH10', clickable
+					[3310] gridcell '$62.00', clickable
+					[3311] gridcell '0.0000', clickable
+					[3312] gridcell '', clickable
+						[7243] list ''
+					[3313] gridcell 'Catalog, Search', clickable
+					[3314] gridcell 'Enabled', clickable
+					[3315] gridcell 'Main Website', clickable
+					[3316] gridcell 'Apr 19, 2023 12:13:26 PM', clickable
+					[3317] gridcell 'Edit Mach Street Sweatshirt', clickable
+						[7248] link 'Edit Mach Street Sweatshirt', clickable
+				[3318] row ''
+					[3319] gridcell '', clickable
+						[7249] LabelText '', clickable
+							[7250] checkbox '', clickable, checked='false'
+							[7251] LabelText '', clickable
+					[3320] gridcell '222', clickable
+					[3321] gridcell 'Grayson Crewneck Sweatshirt', clickable
+						[7255] image 'Grayson Crewneck Sweatshirt'
+					[3322] gridcell 'Grayson Crewneck Sweatshirt', clickable
+					[3323] gridcell 'Configurable Product', clickable
+					[3324] gridcell 'Top', clickable
+					[3325] gridcell 'MH11', clickable
+					[3326] gridcell '$64.00', clickable
+					[3327] gridcell '0.0000', clickable
+					[3328] gridcell '', clickable
+						[7263] list ''
+					[3329] gridcell 'Catalog, Search', clickable
+					[3330] gridcell 'Enabled', clickable
+					[3331] gridcell 'Main Website', clickable
+					[3332] gridcell 'Apr 19, 2023 12:13:26 PM', clickable
+					[3333] gridcell 'Edit Grayson Crewneck Sweatshirt', clickable
+						[7268] link 'Edit Grayson Crewneck Sweatshirt', clickable
+				[3334] row ''
+					[3335] gridcell '', clickable
+						[7269] LabelText '', clickable
+							[7270] checkbox '', clickable, checked='false'
+							[7271] LabelText '', clickable
+					[3336] gridcell '238', clickable
+					[3337] gridcell 'Ajax Full-Zip Sweatshirt', clickable
+						[7275] image 'Ajax Full-Zip Sweatshirt'
+					[3338] gridcell 'Ajax Full-Zip Sweatshirt', clickable
+					[3339] gridcell 'Configurable Product', clickable
+					[3340] gridcell 'Top', clickable
+					[3341] gridcell 'MH12', clickable
+					[3342] gridcell '$69.00', clickable
+					[3343] gridcell '0.0000', clickable
+					[3344] gridcell '', clickable
+						[7283] list ''
+					[3345] gridcell 'Catalog, Search', clickable
+					[3346] gridcell 'Enabled', clickable
+					[3347] gridcell 'Main Website', clickable
+					[3348] gridcell 'Apr 19, 2023 12:13:26 PM', clickable
+					[3349] gridcell 'Edit Ajax Full-Zip Sweatshirt', clickable
+						[7288] link 'Edit Ajax Full-Zip Sweatshirt', clickable
+				[3350] row ''
+					[3351] gridcell '', clickable
+						[7289] LabelText '', clickable
+							[7290] checkbox '', clickable, checked='false'
+							[7291] LabelText '', clickable
+					[3352] gridcell '1833', clickable
+					[3353] gridcell 'Ida Workout Parachute Pant', clickable
+						[7295] image 'Ida Workout Parachute Pant'
+					[3354] gridcell 'Ida Workout Parachute Pant', clickable
+					[3355] gridcell 'Configurable Product', clickable
+					[3356] gridcell 'Bottom', clickable
+					[3357] gridcell 'WP03', clickable
+					[3358] gridcell '$48.00', clickable
+					[3359] gridcell '0.0000', clickable
+					[3360] gridcell '', clickable
+						[7303] list ''
+					[3361] gridcell 'Catalog, Search', clickable
+					[3362] gridcell 'Enabled', clickable
+					[3363] gridcell 'Main Website', clickable
+					[3364] gridcell 'Apr 19, 2023 12:13:53 PM', clickable
+					[3365] gridcell 'Edit Ida Workout Parachute Pant', clickable
+						[7308] link 'Edit Ida Workout Parachute Pant', clickable
+				[3366] row ''
+					[3367] gridcell '', clickable
+						[7309] LabelText '', clickable
+							[7310] checkbox '', clickable, checked='false'
+							[7311] LabelText '', clickable
+					[3368] gridcell '46', clickable
+					[3369] gridcell 'Set of Sprite Yoga Straps', clickable
+						[7315] image 'Set of Sprite Yoga Straps'
+					[3370] gridcell 'Set of Sprite Yoga Straps', clickable
+					[3371] gridcell 'Grouped Product', clickable
+					[3372] gridcell 'Gear', clickable
+					[3373] gridcell '24-WG085_Group', clickable
+					[3374] gridcell '', clickable
+					[3375] gridcell '0.0000', clickable
+					[3376] gridcell '', clickable
+						[7323] list ''
+					[3377] gridcell 'Catalog, Search', clickable
+					[3378] gridcell 'Enabled', clickable
+					[3379] gridcell 'Main Website', clickable
+					[3380] gridcell 'Apr 19, 2023 12:13:13 PM', clickable
+					[3381] gridcell 'Edit Set of Sprite Yoga Straps', clickable
+						[7328] link 'Edit Set of Sprite Yoga Straps', clickable
+				[3382] row ''
+					[3383] gridcell '', clickable
+						[7329] LabelText '', clickable
+							[7330] checkbox '', clickable, checked='false'
+							[7331] LabelText '', clickable
+					[3384] gridcell '254', clickable
+					[3385] gridcell 'Marco Lightweight Active Hoodie', clickable
+						[7335] image 'Marco Lightweight Active Hoodie'
+					[3386] gridcell 'Marco Lightweight Active Hoodie', clickable
+					[3387] gridcell 'Configurable Product', clickable
+					[3388] gridcell 'Top', clickable
+					[3389] gridcell 'MH13', clickable
+					[3390] gridcell '$74.00', clickable
+					[3391] gridcell '0.0000', clickable
+					[3392] gridcell '', clickable
+						[7343] list ''
+					[3393] gridcell 'Catalog, Search', clickable
+					[3394] gridcell 'Enabled', clickable
+					[3395] gridcell 'Main Website', clickable
+					[3396] gridcell 'Apr 19, 2023 12:13:27 PM', clickable
+					[3397] gridcell 'Edit Marco Lightweight Active Hoodie', clickable
+						[7348] link 'Edit Marco Lightweight Active Hoodie', clickable
+				[3398] row ''
+					[3399] gridcell '', clickable
+						[7349] LabelText '', clickable
+							[7350] checkbox '', clickable, checked='false'
+							[7351] LabelText '', clickable
+					[3400] gridcell '62', clickable
+					[3401] gridcell 'Chaz Kangeroo Hoodie', clickable
+						[7355] image 'Chaz Kangeroo Hoodie'
+					[3402] gridcell 'Chaz Kangeroo Hoodie', clickable
+					[3403] gridcell 'Configurable Product', clickable
+					[3404] gridcell 'Top', clickable
+					[3405] gridcell 'MH01', clickable
+					[3406] gridcell '$52.00', clickable
+					[3407] gridcell '0.0000', clickable
+					[3408] gridcell '', clickable
+						[7363] list ''
+					[3409] gridcell 'Catalog, Search', clickable
+					[3410] gridcell 'Enabled', clickable
+					[3411] gridcell 'Main Website', clickable
+					[3412] gridcell 'Apr 19, 2023 12:13:23 PM', clickable
+					[3413] gridcell 'Edit Chaz Kangeroo Hoodie', clickable
+						[7368] link 'Edit Chaz Kangeroo Hoodie', clickable
+				[3414] row ''
+					[3415] gridcell '', clickable
+... Deleted 2443 lines to reduce prompt size.
+## Focused element:
+bid='1380'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The "Product Name" field has been successfully filled with "New Product Name." The next required field to fill is the "SKU" field. I will proceed to fill in the "SKU" field.
+</think>
+
+<action>
+fill('939', 'NEW-PRODUCT-SKU')
+</action>
+
+## step 1
+
+<think>
+The "SKU" field has been successfully filled with "NEW-PRODUCT-SKU." The next required field to fill is the "Price" field. I will proceed to fill in the "Price" field.
+</think>
+
+<action>
+fill('950', '100')
+</action>
+
+## step 2
+
+<think>
+The "Price" field has been successfully filled with "100." Now that all the required fields ("Product Name," "SKU," and "Price") have been filled, the next step is to save the new product. I will proceed by clicking the "Save" button.
+</think>
+
+<action>
+click('841')
+</action>
+
+## step 3
+
+<think>
+The product has been successfully saved, as indicated by the message "You saved the product." The next logical step is to navigate back to the product catalog to verify the new product's addition. I will click the "Back" button to return to the product catalog.
+</think>
+
+<action>
+click('691')
+</action>
+
+## step 4
+
+<think>
+I have successfully navigated back to the product catalog. To verify the addition of the new product, I will search for the product by its name "New Product Name" using the search functionality.
+</think>
+
+<action>
+fill('1380', 'New Product Name')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+6 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The "Search by keyword" field has been successfully filled with "New Product Name." The next step is to initiate the search by clicking the "Search" button.
+</think>
+
+<action>
+click('1381')
+</action>

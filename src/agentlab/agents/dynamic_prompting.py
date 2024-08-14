@@ -503,7 +503,6 @@ and executed by a program, make sure to follow the formatting instructions.
 {extra_instructions}
 """
 
-
 class ChatInstructions(PromptElement):
     def __init__(self, chat_messages, visible: bool = True, extra_instructions=None) -> None:
         super().__init__(visible)
@@ -551,14 +550,11 @@ Note:
 * If you are provided with augmented action, you may use it if needed. These actions are more task-specific and may help you achieve your goal faster.
 * If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
 """
-
-
 class SystemPrompt(PromptElement):
     _prompt = """\
 You are an agent trying to solve a web task based on the content of the page and
 user instructions. You can interact with the page and explore, and send messages to the user. Each time you
 submit an action it will be sent to the browser and you will receive a new page."""
-
 
 class ActionPrompt(PromptElement):
 
@@ -866,3 +862,4 @@ def make_obs_preprocessor(flags: ObsFlags):
         return obs
 
     return obs_mapping
+

@@ -1,0 +1,282 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Review the current state of the page and all other information to find the best
+possible next action to accomplish your goal. Your answer will be interpreted
+and executed by a program, make sure to follow the formatting instructions.
+# Observation of current step:
+
+## URL of the page:
+http://localhost:7780/admin/customer/index/new
+Note: This is the subpage '/customer/index/new' of shopping_admin website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'New Customer / Customers / Customers / Magento Admin', focused
+	[176] link 'Magento Admin Panel', clickable, visible
+		[177] image 'Magento Admin Panel', visible
+	[178] navigation '', visible
+		[179] menubar '', visible, orientation='horizontal'
+			[181] link '\ue604 DASHBOARD', clickable, visible
+			[184] link '\ue60b SALES', clickable, visible
+			[217] link '\ue608 CATALOG', clickable, visible
+			[235] link '\ue603 CUSTOMERS', clickable, visible
+			[254] link '\ue609 MARKETING', clickable, visible
+			[321] link '\ue602 CONTENT', clickable, visible
+			[367] link '\ue60a REPORTS', clickable, visible
+			[492] link '\ue60d STORES', clickable, visible
+			[568] link '\ue610 SYSTEM', clickable, visible
+			[651] link '\ue612 FIND PARTNERS & EXTENSIONS', clickable, visible
+	[697] banner ''
+		[700] heading 'New Customer'
+		[703] link '\ue600 admin', clickable
+		[715] link '\ue607', clickable
+		[717] Section ''
+			[719] LabelText '', clickable
+				StaticText '\ue60c'
+			[723] textbox '\ue60c', clickable
+	[729] main '', visible
+		StaticText 'New Customer'
+		[735] button '\ue626 Back', clickable, visible
+		[737] button 'Reset', clickable, visible
+		[739] button 'Save and Continue Edit', clickable, visible
+		[741] button 'Save Customer', clickable, visible
+		[761] strong '', visible
+			StaticText 'Account Information'
+		[764] group '', visible
+			[767] LabelText '', visible
+				StaticText 'Associate to Website'
+				StaticText '*'
+			[770] combobox 'notice-NQKLG0V' value='Main Website', visible, hasPopup='menu', expanded=False
+				[771] menuitem 'Main Website', selected=True
+			[773] link '\ue633 What is this?', clickable, visible
+			[776] group '', visible
+				[777] Legend '', visible
+				[782] LabelText '', visible
+					StaticText 'Group'
+					StaticText '*'
+				[785] combobox 'notice-H4DAOIH' value='General', visible, hasPopup='menu', expanded=False
+					[786] menuitem 'General', selected=True
+					[787] menuitem 'Retailer', selected=False
+					[788] menuitem 'Wholesale', selected=False
+				[791] LabelText '', clickable
+					StaticText 'Disable Automatic Group Change Based on VAT ID'
+				[795] checkbox 'Disable Automatic Group Change Based on VAT ID Disable Automatic Group Change Based on VAT ID', clickable, visible, checked='false'
+				[796] LabelText '', clickable, visible
+			[799] LabelText '', clickable, visible
+				StaticText 'Name Prefix'
+			[802] textbox 'Name Prefix', clickable, visible
+			[805] LabelText '', clickable, visible
+				StaticText 'First Name'
+				StaticText '*'
+			[808] textbox 'First Name *' value='John', clickable, visible
+			[811] LabelText '', clickable, visible
+				StaticText 'Middle Name/Initial'
+			[814] textbox 'Middle Name/Initial', clickable, visible
+			[817] LabelText '', clickable, visible
+				StaticText 'Last Name'
+				StaticText '*'
+			[820] textbox 'Last Name *' value='Doe', clickable, visible
+			[823] LabelText '', clickable, visible
+				StaticText 'Name Suffix'
+			[826] textbox 'Name Suffix', clickable, visible
+			[829] LabelText '', clickable, visible
+				StaticText 'Email'
+				StaticText '*'
+			[832] textbox 'Email *' value='john.doe@example.com', clickable, visible
+			[835] LabelText '', clickable, visible
+				StaticText 'Allow remote shopping assistance'
+			[839] checkbox 'Allow remote shopping assistance No', clickable, checked='false'
+			[840] LabelText '', clickable, visible
+			[844] LabelText '', clickable, visible
+				StaticText 'Date of Birth'
+			[847] textbox 'Date of Birth' value='01/01/1980', clickable, visible, focused
+			[848] button 'undefined \ue627', clickable, visible
+			[852] LabelText '', clickable
+				StaticText 'Tax/VAT Number'
+			[855] textbox 'Tax/VAT Number', clickable
+			[858] LabelText ''
+				StaticText 'Gender'
+			[861] combobox 'notice-ALHU8WL', hasPopup='menu', expanded=False
+				[862] menuitem '', selected=True
+				[863] menuitem 'Male', selected=False
+				[864] menuitem 'Female', selected=False
+				[865] menuitem 'Not Specified', selected=False
+			[868] LabelText ''
+				StaticText 'Send Welcome Email From'
+			[871] combobox 'notice-QF3X01L' value='Default Store View', hasPopup='menu', expanded=False
+				[874] menuitem 'Default Store View', selected=True
+		[879] strong 'CUSTOMER INFORMATION', visible
+		[880] list '', visible
+			[881] listitem 'Account Information\ue631', clickable, visible
+				[882] link 'Account Information\ue631', clickable, visible
+	[898] contentinfo ''
+		[901] paragraph ''
+			[902] link '\ue606', clickable
+			StaticText 'Copyright © 2024 Magento Commerce Inc. All rights reserved.'
+		[904] paragraph ''
+			[905] strong ''
+			StaticText 'ver. 2.4.6'
+		[906] link 'Privacy Policy', clickable
+		StaticText '|'
+		[907] link 'Account Activity', clickable
+		[908] link 'Report an Issue', clickable
+
+## Focused element:
+bid='847'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The previous action to save the customer was successful, as indicated by the message "You saved the customer." The current page shows the customer list, but no records are found. To proceed, I will add a new customer by clicking on the "Add New Customer" button.
+</think>
+
+<action>
+click('714')
+</action>
+
+## step 1
+
+<think>
+The previous action to click on the "Add New Customer" button was successful, and I am now on the "New Customer" page. To proceed with adding a new customer, I will start by filling in the "First Name" field.
+</think>
+
+<action>
+fill('808', 'John')
+</action>
+
+## step 2
+
+<think>
+The previous action to fill in the "First Name" field with "John" was successful. The next step is to fill in the "Last Name" field, which is also a required field. I will proceed by filling in the "Last Name" field.
+</think>
+
+<action>
+fill('820', 'Doe')
+</action>
+
+## step 3
+
+<think>
+The previous action to fill in the "Last Name" field with "Doe" was successful. The next step is to fill in the "Email" field, which is also a required field. I will proceed by filling in the "Email" field.
+</think>
+
+<action>
+fill('832', 'john.doe@example.com')
+</action>
+
+## step 4
+
+<think>
+The previous action to fill in the "Email" field with "john.doe@example.com" was successful. The next step is to fill in the "Date of Birth" field. I will proceed by filling in the "Date of Birth" field.
+</think>
+
+<action>
+fill('847', '01/01/1980')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+6 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The previous action to fill in the "Date of Birth" field with "01/01/1980" was successful. The next step is to save the new customer information. I will proceed by clicking the "Save Customer" button.
+</think>
+
+<action>
+click('741')
+</action>
