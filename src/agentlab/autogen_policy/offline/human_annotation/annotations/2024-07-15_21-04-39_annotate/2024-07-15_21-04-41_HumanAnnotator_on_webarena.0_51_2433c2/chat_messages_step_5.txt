@@ -1,0 +1,302 @@
+[SYSTEM]
+You are an agent trying to solve a web task based on the content of the page and
+user instructions. You can interact with the page and explore, and send messages to the user. Each time you
+submit an action it will be sent to the browser and you will receive a new page.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Review the current state of the page and all other information to find the best
+possible next action to accomplish your goal. Your answer will be interpreted
+and executed by a program, make sure to follow the formatting instructions.
+
+## Goal:
+What is the top-1 best-selling product in 2022
+
+# Observation of current step:
+
+## URL of the page:
+http://localhost:7780/admin/reports/report_sales/bestsellers
+Note: This is the subpage '/reports/report_sales/bestsellers' of shopping_admin website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Bestsellers Report / Products / Reports / Magento Admin', focused
+	[149] link 'Magento Admin Panel', clickable, visible
+		[150] image 'Magento Admin Panel', visible
+	[151] navigation '', visible
+		[152] menubar '', visible, orientation='horizontal'
+			[154] link '\ue604 DASHBOARD', clickable, visible
+			[157] link '\ue60b SALES', clickable, visible
+			[190] link '\ue608 CATALOG', clickable, visible
+			[208] link '\ue603 CUSTOMERS', clickable, visible
+			[227] link '\ue609 MARKETING', clickable, visible
+			[294] link '\ue602 CONTENT', clickable, visible
+			[340] link '\ue60a REPORTS', clickable, visible
+			[465] link '\ue60d STORES', clickable, visible
+			[541] link '\ue610 SYSTEM', clickable, visible
+			[624] link '\ue612 FIND PARTNERS & EXTENSIONS', clickable, visible
+	[646] button 'System Messages: 1', clickable, visible
+	StaticText '\ue623'
+	StaticText 'Failed to synchronize data to the Magento Business Intelligence service.'
+	[652] link 'Retry Synchronization', clickable, visible
+	[662] banner '', visible
+		[665] heading 'Bestsellers Report', visible
+		[668] link '\ue600 admin', clickable, visible
+		[680] link '\ue607', clickable, visible
+		[682] Section '', visible
+			[684] LabelText '', clickable, visible
+				StaticText '\ue60c'
+			[688] textbox '\ue60c', clickable, visible
+	[694] main '', visible
+		StaticText 'Scope:'
+		[705] button 'All Websites', clickable, visible, hasPopup='menu'
+		[716] link '\ue633 What is this?', clickable, visible
+		[722] button 'Show Report', clickable, visible
+		StaticText '\ue61a'
+		StaticText 'For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.'
+		StaticText "Last updated: Jul 15, 2024, 12:00:01 AM. To refresh last day's"
+		[730] link 'statistics', clickable, visible
+		[731] link 'here', clickable, visible
+		[737] Section '', clickable, visible
+			[739] group 'Filter', visible
+				[740] Legend '', visible
+				[746] LabelText '', visible
+					StaticText 'Period'
+				[749] combobox 'Period' value='Year', visible, hasPopup='menu', expanded=False
+					[750] menuitem 'Day', selected=False
+					[751] menuitem 'Month', selected=False
+					[752] menuitem 'Year', selected=True
+				[754] LabelText '', clickable, visible
+					StaticText 'From'
+					StaticText '*'
+				[757] textbox 'From *' value='01/1/2022', clickable, visible, required
+				[758] button 'undefined \ue627', clickable, visible
+				[761] LabelText '', clickable, visible
+					StaticText 'To'
+					StaticText '*'
+				[764] textbox 'To *' value='12/30/2022', clickable, visible, focused, required
+				[765] button 'undefined \ue627', clickable, visible
+				[768] LabelText '', visible
+					StaticText 'Empty Rows'
+				[771] combobox 'Empty Rows' value='No', visible, hasPopup='menu', expanded=False
+					[772] menuitem 'Yes', selected=False
+					[773] menuitem 'No', selected=True
+		[778] LabelText '', visible
+			StaticText 'Export to:'
+		[779] combobox 'Export to:' value='CSV', visible, hasPopup='menu', expanded=False
+			[780] menuitem 'CSV', selected=True
+			[781] menuitem 'Excel XML', selected=False
+		[782] button 'Export', clickable, visible
+		StaticText 'records found'
+		[792] table ''
+			[793] rowgroup ''
+				[794] row ''
+					[795] columnheader 'Interval'
+					[797] columnheader 'Product'
+					[799] columnheader 'Price'
+					[801] columnheader 'Order Quantity'
+			[803] rowgroup ''
+				[804] row '', clickable
+					[805] gridcell "We couldn't find any records."
+	[808] contentinfo ''
+		[811] paragraph ''
+			[812] link '\ue606', clickable
+			StaticText 'Copyright © 2024 Magento Commerce Inc. All rights reserved.'
+		[814] paragraph ''
+			[815] strong ''
+			StaticText 'ver. 2.4.6'
+		[816] link 'Privacy Policy', clickable
+		StaticText '|'
+		[817] link 'Account Activity', clickable
+		[818] link 'Report an Issue', clickable
+
+## Focused element:
+bid='764'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+None
+</think>
+
+<action>
+click('339')
+</action>
+
+## step 1
+
+<think>
+None
+</think>
+
+<action>
+click('431')
+</action>
+
+## step 2
+
+<think>
+None
+</think>
+
+<action>
+select_option('749', 'Year')
+</action>
+
+## step 3
+
+<think>
+None
+</think>
+
+<action>
+fill('757', '01/1/2022')
+</action>
+
+## step 4
+
+<think>
+None
+</think>
+
+<action>
+fill('764', '12/30/2022')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+7 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+1 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+go_to_forum(forum_name: str)
+    Description: [AUGMENTED] Navigate to the forum page with the given forum name.
+    Examples:
+        go_to_forum('')
+
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Plan:
+
+You just executed step -1 of the previously proposed plan:
+No plan yet
+
+After reviewing the effect of your previous actions, verify if your plan is still
+relevant and update it if necessary.
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<plan>
+Provide a multi step plan that will guide you to accomplish the goal. There
+should always be steps to verify if the previous action had an effect. The plan
+can be revisited at each steps. Specifically, if there was something unexpected.
+The plan should be cautious and favor exploring befor submitting.
+</plan>
+
+<step>Integer specifying the step of current action
+</step>
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<plan>
+1. fill form (failed)
+    * type first name
+    * type last name
+2. Try to activate the form
+    * click on tab 2
+3. fill form again
+    * type first name
+    * type last name
+4. verify and submit
+    * verify form is filled
+    * submit if filled, if not, replan
+</plan>
+
+<step>2</step>
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+Note:
+* Make sure to use bid to identify elements when using commands.
+* If you are provided with augmented action, you may use it if needed. These actions are more task-specific and may help you achieve your goal faster.
+* If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
+

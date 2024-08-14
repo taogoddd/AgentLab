@@ -1,2 +1,3 @@
 browsergym/workarena/data_files
-annotations
+annotations/*
+src/agentlab/autogen_policy/offline/random_exploration/experiences/*

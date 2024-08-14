@@ -1,0 +1,229 @@
+2024-07-15 21:04:41,006 - browsergym.experiments.loop - INFO - Running experiment HumanAnnotator_on_webarena.0_51 in:
+  /home/ytliu/github/AgentLab/src/agentlab/autogen_policy/trajectories/2024-07-15_21-04-39_annotate/2024-07-15_21-04-41_HumanAnnotator_on_webarena.0_51_2433c2
+2024-07-15 21:04:41,015 - browsergym.experiments.loop - DEBUG - Agent created.
+2024-07-15 21:04:41,017 - browsergym.experiments.loop - DEBUG - Environment created.
+2024-07-15 21:04:41,191 - asyncio - DEBUG - Using selector: EpollSelector
+2024-07-15 21:04:42,181 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='about:blank'>
+2024-07-15 21:04:42,321 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:42,410 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:42,413 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:42,602 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:42,603 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:43,659 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:44,677 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:44,678 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:44,684 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:45,737 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:45,739 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:45,741 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:45,743 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:45,744 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin'>
+2024-07-15 21:04:47,265 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:04:47,464 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:04:47,465 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:04:48,589 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:04:48,635 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:04:48,636 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:04:50,308 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:04:50,308 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:04:50,308 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:04:50,326 - browsergym.experiments.loop - DEBUG - Environment reset.
+2024-07-15 21:04:50,326 - browsergym.experiments.loop - DEBUG - Starting step 0.
+2024-07-15 21:04:50,397 - root - DEBUG - Loading tokenizer for model azureopenai/gpt-4o-2024-05-13
+2024-07-15 21:04:50,398 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): openaipublic.blob.core.windows.net:443
+2024-07-15 21:04:51,181 - urllib3.connectionpool - DEBUG - https://openaipublic.blob.core.windows.net:443 "GET /encodings/o200k_base.tiktoken HTTP/11" 200 3613922
+2024-07-15 21:06:44,482 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ click('339')
+2024-07-15 21:06:44,483 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:06:44,654 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:06:44,654 - browsergym.experiments.loop - INFO - action:
+click('339')
+
+2024-07-15 21:06:44,661 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:06:44,661 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:06:44,662 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:06:44,729 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:06:44,733 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:06:44,734 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:06:44,735 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:06:44,747 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:06:45,767 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:06:46,279 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:06:46,279 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:06:46,279 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:06:46,280 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:06:46,728 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:06:46,728 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:06:46,728 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:06:46,766 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:06:46,767 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:06:46,767 - browsergym.experiments.loop - DEBUG - Starting step 1.
+2024-07-15 21:07:21,358 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ click('431')
+2024-07-15 21:07:21,358 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:07:21,502 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:07:21,502 - browsergym.experiments.loop - INFO - action:
+click('431')
+
+2024-07-15 21:07:21,509 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:07:21,509 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:07:21,509 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:07:21,560 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:07:21,561 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:07:21,562 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:07:21,562 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:07:21,563 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/admin/dashboard/'>
+2024-07-15 21:07:21,839 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:07:21,902 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:07:21,904 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:07:22,842 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:07:23,355 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:07:23,355 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:07:23,355 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:07:23,355 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:07:23,796 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:07:23,797 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:07:23,797 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:07:23,833 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:07:23,833 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:07:23,833 - browsergym.experiments.loop - DEBUG - Starting step 2.
+2024-07-15 21:08:34,170 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ select_option('749', 'Year')
+2024-07-15 21:08:34,170 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:08:34,327 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:08:34,327 - browsergym.experiments.loop - INFO - action:
+select_option('749', 'Year')
+
+2024-07-15 21:08:34,331 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:08:34,331 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:08:34,331 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:08:34,364 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:08:35,368 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:08:35,876 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:08:35,876 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:08:35,876 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:08:35,876 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:08:36,430 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:08:36,430 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:08:36,430 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:08:36,468 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:08:36,469 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:08:36,469 - browsergym.experiments.loop - DEBUG - Starting step 3.
+2024-07-15 21:09:57,140 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ fill('757', '01/1/2022')
+2024-07-15 21:09:57,140 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:09:57,287 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:09:57,287 - browsergym.experiments.loop - INFO - action:
+fill('757', '01/1/2022')
+
+2024-07-15 21:09:57,292 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:09:57,292 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:09:57,292 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:09:57,323 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:09:57,324 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:09:57,329 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:09:58,330 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:09:58,839 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:09:58,839 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:09:58,839 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:09:58,840 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:09:59,271 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:09:59,272 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:09:59,272 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:09:59,309 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:09:59,309 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:09:59,309 - browsergym.experiments.loop - DEBUG - Starting step 4.
+2024-07-15 21:10:46,480 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ fill('764', '12/30/2022')
+2024-07-15 21:10:46,481 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:10:46,625 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:10:46,625 - browsergym.experiments.loop - INFO - action:
+fill('764', '12/30/2022')
+
+2024-07-15 21:10:46,636 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:10:46,636 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:10:46,636 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:10:46,663 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:10:46,664 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:10:46,667 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:10:47,668 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:10:48,177 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:10:48,177 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:10:48,178 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:10:48,178 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:10:48,700 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:10:48,701 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:10:48,701 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:10:48,725 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:10:48,725 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:10:48,725 - browsergym.experiments.loop - DEBUG - Starting step 5.
+2024-07-15 21:11:05,426 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ click('722'_
+2024-07-15 21:11:05,426 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:11:05,572 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:11:05,572 - browsergym.experiments.loop - INFO - action:
+click('722'_
+
+2024-07-15 21:11:05,577 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:11:05,577 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:11:05,577 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:11:05,578 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:11:06,085 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:11:06,086 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:11:06,086 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:11:06,086 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:11:06,579 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:11:06,579 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:11:06,579 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:11:06,594 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:11:06,594 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:11:06,594 - browsergym.experiments.loop - DEBUG - Starting step 6.
+2024-07-15 21:11:18,673 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ click('722')
+2024-07-15 21:11:18,674 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:11:18,816 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:11:18,816 - browsergym.experiments.loop - INFO - action:
+click('722')
+
+2024-07-15 21:11:18,821 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:11:18,821 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:11:18,821 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:11:18,867 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:11:18,870 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:11:18,871 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:11:18,872 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:11:18,872 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/'>
+2024-07-15 21:11:19,123 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/filter/cGVyaW9kX3R5cGU9eWVhciZmcm9tPTAxJTJGMSUyRjIwMjImdG89MTIlMkYzMCUyRjIwMjImc2hvd19lbXB0eV9yb3dzPTA=/'>
+2024-07-15 21:11:19,175 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/filter/cGVyaW9kX3R5cGU9eWVhciZmcm9tPTAxJTJGMSUyRjIwMjImdG89MTIlMkYzMCUyRjIwMjImc2hvd19lbXB0eV9yb3dzPTA=/'>
+2024-07-15 21:11:19,176 - browsergym.core.env - DEBUG - _activate_page_from_js(page) called, page=<Page url='http://localhost:7780/admin/reports/report_sales/bestsellers/filter/cGVyaW9kX3R5cGU9eWVhciZmcm9tPTAxJTJGMSUyRjIwMjImdG89MTIlMkYzMCUyRjIwMjImc2hvd19lbXB0eV9yb3dzPTA=/'>
+2024-07-15 21:11:20,157 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:11:20,669 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:11:20,669 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:11:20,669 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:11:20,670 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:11:21,088 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:11:21,088 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:11:21,088 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:11:21,125 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:11:21,125 - browsergym.experiments.loop - DEBUG - Environment stepped.
+2024-07-15 21:11:21,125 - browsergym.experiments.loop - DEBUG - Starting step 7.
+2024-07-15 21:13:07,956 - browsergym.experiments.loop - DEBUG - Agent chose action:
+ send_msg_to_user('Quest Lumaflex™ Band')
+2024-07-15 21:13:07,957 - browsergym.experiments.loop - DEBUG - Chat messages saved.
+2024-07-15 21:13:08,095 - browsergym.experiments.loop - DEBUG - Step info saved.
+2024-07-15 21:13:08,095 - browsergym.experiments.loop - INFO - action:
+send_msg_to_user('Quest Lumaflex™ Band')
+
+2024-07-15 21:13:08,101 - browsergym.experiments.loop - DEBUG - Chat info sent.
+2024-07-15 21:13:08,101 - browsergym.experiments.loop - DEBUG - Sending action to environment.
+2024-07-15 21:13:08,101 - browsergym.core.env - DEBUG - Executing action
+2024-07-15 21:13:08,110 - browsergym.core.env - DEBUG - Action executed
+2024-07-15 21:13:08,619 - browsergym.core.env - DEBUG - Active page checked
+2024-07-15 21:13:08,619 - browsergym.core.env - DEBUG - User message done
+2024-07-15 21:13:08,619 - browsergym.core.env - DEBUG - Initiating task validation
+2024-07-15 21:13:08,619 - browsergym.core.env - DEBUG - Task validation done
+2024-07-15 21:13:09,168 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-07-15 21:13:09,168 - PIL.PngImagePlugin - DEBUG - STREAM b'sRGB' 41 1
+2024-07-15 21:13:09,168 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 54 8192
+2024-07-15 21:13:09,193 - browsergym.core.env - DEBUG - Observation extracted
+2024-07-15 21:13:09,194 - browsergym.experiments.loop - DEBUG - Environment stepped.
