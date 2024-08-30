@@ -1,0 +1,230 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
+states 
+# Observation of current step:
+
+## URL of the page:
+http://localhost:9999/wiki/_create/index
+Note: This is the subpage '/wiki/_create/index' of reddit website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Creating "index"', focused
+	[18] navigation '', visible
+		[19] link 'Jump to main content', clickable
+		[20] link 'Jump to sidebar', clickable
+	[21] navigation '', visible
+		[23] HeaderAsNonLandmark '', visible
+			[24] link 'Home', clickable, visible
+				StaticText 'Postmill'
+		[34] list '', visible
+			[35] listitem '', visible
+				[36] link 'Forums', clickable, visible
+			[37] listitem '', visible
+				[38] link 'Wiki', clickable, visible
+		[39] Section '', visible
+			[48] searchbox 'Search query', clickable, visible
+		[49] list '', visible
+			[50] listitem '', visible
+				[51] link 'Notifications (0)', clickable, visible
+					[54] image '', visible
+			[55] listitem '', visible
+				[56] link 'Submit', clickable, visible
+					[59] image '', visible
+			[61] listitem '', visible
+				[62] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
+					[65] image '', visible
+					[66] strong '', visible
+	[107] main '', visible
+		[108] heading 'Creating "index"', visible
+		[109] Section '', visible
+			[112] LabelText '', visible
+				StaticText 'URL'
+				StaticText '*'
+			[114] LabelText '', visible
+				[116] textbox 'URL This field is required.' value='index', visible, disabled=True, required
+			[119] LabelText '', clickable, visible
+				StaticText 'Title'
+				StaticText '*'
+			[121] textbox 'Title This field is required.', clickable, visible, required
+			[124] LabelText '', visible
+				StaticText 'Body'
+				StaticText '*'
+			[127] textbox 'Body This field is required.', visible, required, describedby='wiki_body_help'
+			[132] checkbox 'Formatting help +', clickable, visible, checked='false'
+			StaticText 'Markdown allowed.'
+			[134] LabelText '', clickable, visible
+			[260] button 'Save', clickable, visible
+	[263] contentinfo ''
+		[264] paragraph ''
+			StaticText 'Running'
+			[266] link 'Postmill', clickable
+
+## Focused element:
+bid='16'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The "AskReddit" forum is already selected in the dropdown menu. The form now has the "Title", "Body", and "Forum" fields filled out. The next step is to submit the form by clicking the "Create submission" button.
+</think>
+
+<action>
+click('399')
+</action>
+
+## step 1
+
+<think>
+The previous action to click the "Create submission" button did not result in a successful submission. The page displays a message stating, "You cannot post more. Wait a while before trying again." This indicates that there is a posting limit in place. Since the submission cannot be completed at this time, I will explore other elements on the page to identify additional tasks or actions that can be performed.
+</think>
+
+<action>
+click('30')
+</action>
+
+## step 2
+
+<think>
+The previous action to click the "Home" link successfully navigated to the main page. The main page displays various submissions, comments, and options to interact with posts. To explore more tasks, I will click on the "Submit" link to see if there are any options for creating new posts or submissions.
+</think>
+
+<action>
+click('63')
+</action>
+
+## step 3
+
+<think>
+The previous action to click the "Submit" link successfully navigated back to the submission page. The form for creating a submission is displayed, with fields for "Title", "Body", and "Forum". Since the previous attempt to submit a post was blocked due to a posting limit, I will explore other elements on the page to identify additional tasks or actions that can be performed. I will start by clicking the "Wiki" link to see if there are any interesting tasks related to the wiki.
+</think>
+
+<action>
+click('42')
+</action>
+
+## step 4
+
+<think>
+The current page indicates that the requested wiki page was not found. There is an option to create this page. To explore the possibility of creating a new wiki page, I will click on the "Create this page" link.
+</think>
+
+<action>
+click('111')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+7 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+scroll(delta_x: float, delta_y: float)
+    Description: Scroll horizontally and vertically. Amounts in pixels, positive for right or down scrolling, negative for left or up scrolling. Dispatches a wheel event.
+    Examples:
+        scroll(0, 200)
+
+        scroll(-50.2, -100.5)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The current page is for creating a new wiki page titled "index". The form requires a "Title" and "Body" to be filled out. The "URL" field is already populated and disabled. To proceed with creating the wiki page, I will fill in the "Title" field first.
+</think>
+
+<action>
+fill('121', 'Sample Wiki Page Title')
+</action>

@@ -1,0 +1,745 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
+states 
+# Observation of current step:
+
+## URL of the page:
+http://localhost:9999/f/AskReddit/10/example-title
+Note: This is the subpage '/f/AskReddit/10/example-title' of reddit website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Example Title', focused
+	[27] navigation '', visible
+		[28] link 'Jump to main content', clickable
+		[29] link 'Jump to sidebar', clickable
+	[30] navigation '', visible
+		[32] HeaderAsNonLandmark '', visible
+			[33] link 'Home', clickable, visible
+				StaticText 'Postmill'
+		[43] list '', visible
+			[44] listitem '', visible
+				[45] link 'Forums', clickable, visible
+			[46] listitem '', visible
+				[47] link 'Wiki', clickable, visible
+		[48] Section '', visible
+			[57] searchbox 'Search query', clickable, visible
+		[58] list '', visible
+			[59] listitem '', visible
+				[60] link 'Notifications (0)', clickable, visible
+					[63] image '', visible
+			[64] listitem '', visible
+				[65] link 'Submit', clickable, visible
+					[68] image '', visible
+			[70] listitem '', visible
+				[71] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
+					[74] image '', visible
+					[75] strong '', visible
+	[116] main ''
+		[117] navigation '', visible
+			[118] list '', visible
+				[119] listitem '', visible
+					[120] link '/f/AskReddit', clickable, visible
+						[122] image '', visible
+						[124] strong '', visible
+		[125] article '', visible
+			[128] HeaderAsNonLandmark '', visible
+				[130] heading 'Example Title', visible
+					[131] link 'Example Title', clickable, visible
+				[132] paragraph '', visible
+					StaticText 'Submitted by'
+					[134] link 'MarvelsGrantMan136', clickable, visible, expanded=False
+						[135] strong '', visible
+					[136] time 'August 14, 2024 at 2:38:34 PM EDT', visible
+						StaticText '7 minutes ago'
+					[137] link 'AskReddit', clickable, visible
+						[138] strong '', visible
+			[141] paragraph '', visible
+				StaticText 'This is an example body content for the submission.'
+			[142] navigation '', visible
+				[143] list '', visible
+					[144] listitem '', visible
+						[145] link '14 comments', clickable, visible
+							[146] strong '', visible
+					[147] listitem '', visible
+						[148] link 'Edit', clickable, visible
+					[149] listitem '', visible
+						[150] Section '', visible
+							[152] button 'Delete', clickable, visible
+			[154] Section '', visible
+				[156] button 'Retract upvote', clickable, visible
+				[166] button 'Downvote', clickable, visible
+		[171] heading 'Comments', visible
+		[172] Section '', visible
+			[178] textbox 'Comment', visible, required, describedby='reply_to_submission_10_comment_help'
+			[183] checkbox 'Formatting help +', clickable, visible, checked='false'
+			StaticText 'Markdown allowed.'
+			[185] LabelText '', clickable, visible
+			[318] button 'Post', clickable, visible
+		[323] list '', visible
+			[324] listitem '', visible
+				[325] link 'Nested', clickable, visible
+			[326] listitem '', visible
+				[327] link 'Linear', clickable, visible
+		[328] article ''
+			[329] checkbox 'Hide −', clickable, visible, checked='true'
+			[332] HeaderAsNonLandmark '', visible
+				[333] heading 'MarvelsGrantMan136 Original poster wrote 7 minutes ago (edited 7 minutes later)', visible
+					[335] link 'MarvelsGrantMan136', clickable, visible, expanded=False
+						[336] strong '', visible
+					StaticText 'OP'
+					StaticText 'wrote'
+					[338] time 'August 14, 2024 at 2:38:44 PM EDT', visible
+						StaticText '7 minutes ago'
+					StaticText '(edited'
+					[340] time 'August 14, 2024 at 2:45:19 PM EDT', visible
+						StaticText '7 minutes later'
+					StaticText ')'
+				[341] list '', visible
+					[342] listitem '', visible
+						[343] LabelText '', clickable, visible
+							StaticText 'Hide −'
+			[347] paragraph '', visible
+				StaticText 'This is a further updated test comment.'
+			[348] navigation '', visible
+				[349] list '', visible
+					[350] listitem '', visible
+						[351] link 'Reply', clickable, visible
+							[352] strong '', visible
+					[353] listitem '', visible
+						[354] link 'Permalink', clickable, visible
+					[355] listitem '', visible
+						[356] Section '', visible
+							[358] button 'Delete', clickable, visible
+					[359] listitem '', visible
+						[360] link 'Edit', clickable, visible
+			[362] Section '', visible
+				[364] button 'Retract upvote', clickable, visible
+				StaticText '1'
+				[374] button 'Downvote', clickable, visible
+			[380] article '', visible
+				[381] checkbox 'Hide −', clickable, visible, checked='true'
+				[384] HeaderAsNonLandmark '', visible
+					[385] heading 'MarvelsGrantMan136 Original poster wrote 7 minutes ago', visible
+						[387] link 'MarvelsGrantMan136', clickable, visible, expanded=False
+							[388] strong '', visible
+						StaticText 'OP'
+						StaticText 'wrote'
+						[390] time 'August 14, 2024 at 2:38:59 PM EDT', visible
+							StaticText '7 minutes ago'
+					[391] list '', visible
+						[392] listitem '', visible
+							[393] LabelText '', clickable, visible
+								StaticText 'Hide −'
+				[397] paragraph '', visible
+					StaticText 'This is a reply to the test comment.'
+				[398] navigation ''
+					[399] list ''
+						[400] listitem ''
+							[401] link 'Reply', clickable
+								[402] strong ''
+						[403] listitem ''
+							[404] link 'Permalink', clickable
+						[405] listitem ''
+							[406] link 'Parent', clickable
+						[407] listitem ''
+							[408] Section ''
+								[410] button 'Delete', clickable
+						[411] listitem ''
+							[412] link 'Edit', clickable
+				[414] Section '', visible
+					[416] button 'Retract upvote', clickable, visible
+					[426] button 'Downvote', clickable
+			[431] article ''
+				[432] checkbox 'Hide −', clickable, checked='true'
+				[435] HeaderAsNonLandmark ''
+					[436] heading 'MarvelsGrantMan136 Original poster wrote 2 minutes ago'
+						[438] link 'MarvelsGrantMan136', clickable, expanded=False
+							[439] strong ''
+						StaticText 'OP'
+						StaticText 'wrote'
+						[441] time 'August 14, 2024 at 2:44:16 PM EDT'
+							StaticText '2 minutes ago'
+					[442] list ''
+						[443] listitem ''
+							[444] LabelText '', clickable
+								StaticText 'Hide −'
+				[448] paragraph ''
+					StaticText 'This is a reply to the test comment.'
+				[449] navigation ''
+					[450] list ''
+						[451] listitem ''
+							[452] link 'Reply', clickable
+								[453] strong ''
+						[454] listitem ''
+							[455] link 'Permalink', clickable
+						[456] listitem ''
+							[457] link 'Parent', clickable
+						[458] listitem ''
+							[459] Section ''
+								[461] button 'Delete', clickable
+						[462] listitem ''
+							[463] link 'Edit', clickable
+				[465] Section ''
+					[467] button 'Retract upvote', clickable
+					StaticText '1'
+					[477] button 'Downvote', clickable
+			[482] article ''
+				[483] checkbox 'Hide −', clickable, checked='true'
+				[486] HeaderAsNonLandmark ''
+					[487] heading 'MarvelsGrantMan136 Original poster wrote 1 minute ago'
+						[489] link 'MarvelsGrantMan136', clickable, expanded=False
+							[490] strong ''
+						StaticText 'OP'
+						StaticText 'wrote'
+						[492] time 'August 14, 2024 at 2:44:54 PM EDT'
+							StaticText '1 minute ago'
+					[493] list ''
+						[494] listitem ''
+							[495] LabelText '', clickable
+								StaticText 'Hide −'
+				[499] paragraph ''
+					StaticText 'This is a reply to the test comment.'
+				[500] navigation ''
+					[501] list ''
+						[502] listitem ''
+							[503] link 'Reply', clickable
+								[504] strong ''
+						[505] listitem ''
+							[506] link 'Permalink', clickable
+						[507] listitem ''
+							[508] link 'Parent', clickable
+						[509] listitem ''
+							[510] Section ''
+								[512] button 'Delete', clickable
+						[513] listitem ''
+							[514] link 'Edit', clickable
+				[516] Section ''
+					[518] button 'Retract upvote', clickable
+					[528] button 'Downvote', clickable
+			[533] article ''
+				[534] checkbox 'Hide −', clickable, checked='true'
+				[537] HeaderAsNonLandmark ''
+					[538] heading 'MarvelsGrantMan136 Original poster wrote 6 minutes ago'
+						[540] link 'MarvelsGrantMan136', clickable, expanded=False
+							[541] strong ''
+						StaticText 'OP'
+						StaticText 'wrote'
+						[543] time 'August 14, 2024 at 2:39:47 PM EDT'
+							StaticText '6 minutes ago'
+					[544] list ''
+						[545] listitem ''
+							[546] LabelText '', clickable
+								StaticText 'Hide −'
+				[550] paragraph ''
+					StaticText 'This is a nested reply to the edited comment.'
+				[551] navigation ''
+					[552] list ''
+						[553] listitem ''
+							[554] link 'Reply', clickable
+								[555] strong ''
+						[556] listitem ''
+							[557] link 'Permalink', clickable
+						[558] listitem ''
+							[559] link 'Parent', clickable
+						[560] listitem ''
+							[561] Section ''
+								[563] button 'Delete', clickable
+						[564] listitem ''
+							[565] link 'Edit', clickable
+				[567] Section ''
+					[569] button 'Retract upvote', clickable
+					StaticText '1'
+					[579] button 'Downvote', clickable
+			[584] article ''
+				[585] checkbox 'Hide −', clickable, checked='true'
+				[588] HeaderAsNonLandmark ''
+					[589] heading 'MarvelsGrantMan136 Original poster wrote 6 seconds ago'
+						[591] link 'MarvelsGrantMan136', clickable, expanded=False
+							[592] strong ''
+						StaticText 'OP'
+						StaticText 'wrote'
+						[594] time 'August 14, 2024 at 2:45:43 PM EDT'
+							StaticText '6 seconds ago'
+					[595] list ''
+						[596] listitem ''
+							[597] LabelText '', clickable
+								StaticText 'Hide −'
+				[601] paragraph ''
+					StaticText 'This is a reply to the further updated test comment.'
+				[602] navigation ''
+					[603] list ''
+						[604] listitem ''
+							[605] link 'Reply', clickable
+								[606] strong ''
+						[607] listitem ''
+							[608] link 'Permalink', clickable
+						[609] listitem ''
+							[610] link 'Parent', clickable
+						[611] listitem ''
+							[612] Section ''
+								[614] button 'Delete', clickable
+						[615] listitem ''
+							[616] link 'Edit', clickable
+				[618] Section ''
+					[620] button 'Retract upvote', clickable
+					[630] button 'Downvote', clickable
+		[635] article ''
+			[636] checkbox 'Hide −', clickable, checked='true'
+			[639] HeaderAsNonLandmark ''
+				[640] heading 'MarvelsGrantMan136 Original poster wrote 6 minutes ago'
+					[642] link 'MarvelsGrantMan136', clickable, expanded=False
+						[643] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[645] time 'August 14, 2024 at 2:40:09 PM EDT'
+						StaticText '6 minutes ago'
+				[646] list ''
+					[647] listitem ''
+						[648] LabelText '', clickable
+							StaticText 'Hide −'
+			[652] paragraph ''
+				StaticText 'This is a test comment.'
+			[653] navigation ''
+				[654] list ''
+					[655] listitem ''
+						[656] link 'Reply', clickable
+							[657] strong ''
+					[658] listitem ''
+						[659] link 'Permalink', clickable
+					[660] listitem ''
+						[661] Section ''
+							[663] button 'Delete', clickable
+					[664] listitem ''
+						[665] link 'Edit', clickable
+			[667] Section ''
+				[669] button 'Retract upvote', clickable
+				StaticText '1'
+				[679] button 'Downvote', clickable
+		[684] article ''
+			[685] checkbox 'Hide −', clickable, checked='true'
+			[688] HeaderAsNonLandmark ''
+				[689] heading 'MarvelsGrantMan136 Original poster wrote 5 minutes ago'
+					[691] link 'MarvelsGrantMan136', clickable, expanded=False
+						[692] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[694] time 'August 14, 2024 at 2:40:31 PM EDT'
+						StaticText '5 minutes ago'
+				[695] list ''
+					[696] listitem ''
+						[697] LabelText '', clickable
+							StaticText 'Hide −'
+			[701] paragraph ''
+				StaticText 'This is a test comment.'
+			[702] navigation ''
+				[703] list ''
+					[704] listitem ''
+						[705] link 'Reply', clickable
+							[706] strong ''
+					[707] listitem ''
+						[708] link 'Permalink', clickable
+					[709] listitem ''
+						[710] Section ''
+							[712] button 'Delete', clickable
+					[713] listitem ''
+						[714] link 'Edit', clickable
+			[716] Section ''
+				[718] button 'Retract upvote', clickable
+				[728] button 'Downvote', clickable
+		[733] article ''
+			[734] checkbox 'Hide −', clickable, checked='true'
+			[737] HeaderAsNonLandmark ''
+				[738] heading 'MarvelsGrantMan136 Original poster wrote 5 minutes ago'
+					[740] link 'MarvelsGrantMan136', clickable, expanded=False
+						[741] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[743] time 'August 14, 2024 at 2:40:54 PM EDT'
+						StaticText '5 minutes ago'
+				[744] list ''
+					[745] listitem ''
+						[746] LabelText '', clickable
+							StaticText 'Hide −'
+			[750] paragraph ''
+				StaticText 'This is a test comment.'
+			[751] navigation ''
+				[752] list ''
+					[753] listitem ''
+						[754] link 'Reply', clickable
+							[755] strong ''
+					[756] listitem ''
+						[757] link 'Permalink', clickable
+					[758] listitem ''
+						[759] Section ''
+							[761] button 'Delete', clickable
+					[762] listitem ''
+						[763] link 'Edit', clickable
+			[765] Section ''
+				[767] button 'Retract upvote', clickable
+				StaticText '1'
+				[777] button 'Downvote', clickable
+		[782] article ''
+			[783] checkbox 'Hide −', clickable, checked='true'
+			[786] HeaderAsNonLandmark ''
+				[787] heading 'MarvelsGrantMan136 Original poster wrote 5 minutes ago'
+					[789] link 'MarvelsGrantMan136', clickable, expanded=False
+						[790] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[792] time 'August 14, 2024 at 2:41:16 PM EDT'
+						StaticText '5 minutes ago'
+				[793] list ''
+					[794] listitem ''
+						[795] LabelText '', clickable
+							StaticText 'Hide −'
+			[799] paragraph ''
+				StaticText 'This is a test comment.'
+			[800] navigation ''
+				[801] list ''
+					[802] listitem ''
+						[803] link 'Reply', clickable
+							[804] strong ''
+					[805] listitem ''
+						[806] link 'Permalink', clickable
+					[807] listitem ''
+						[808] Section ''
+							[810] button 'Delete', clickable
+					[811] listitem ''
+						[812] link 'Edit', clickable
+			[814] Section ''
+				[816] button 'Retract upvote', clickable
+				[826] button 'Downvote', clickable
+		[831] article ''
+			[832] checkbox 'Hide −', clickable, checked='true'
+			[835] HeaderAsNonLandmark ''
+				[836] heading 'MarvelsGrantMan136 Original poster wrote 4 minutes ago'
+					[838] link 'MarvelsGrantMan136', clickable, expanded=False
+						[839] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[841] time 'August 14, 2024 at 2:41:40 PM EDT'
+						StaticText '4 minutes ago'
+				[842] list ''
+					[843] listitem ''
+						[844] LabelText '', clickable
+							StaticText 'Hide −'
+			[848] paragraph ''
+				StaticText 'This is a test comment.'
+			[849] navigation ''
+				[850] list ''
+					[851] listitem ''
+						[852] link 'Reply', clickable
+							[853] strong ''
+					[854] listitem ''
+						[855] link 'Permalink', clickable
+					[856] listitem ''
+						[857] Section ''
+							[859] button 'Delete', clickable
+					[860] listitem ''
+						[861] link 'Edit', clickable
+			[863] Section ''
+				[865] button 'Retract upvote', clickable
+				[875] button 'Downvote', clickable
+		[880] article ''
+			[881] checkbox 'Hide −', clickable, checked='true'
+			[884] HeaderAsNonLandmark ''
+				[885] heading 'MarvelsGrantMan136 Original poster wrote 3 minutes ago'
+					[887] link 'MarvelsGrantMan136', clickable, expanded=False
+						[888] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[890] time 'August 14, 2024 at 2:42:34 PM EDT'
+						StaticText '3 minutes ago'
+				[891] list ''
+					[892] listitem ''
+						[893] LabelText '', clickable
+							StaticText 'Hide −'
+			[897] paragraph ''
+				StaticText 'This is a test comment.'
+			[898] navigation ''
+				[899] list ''
+					[900] listitem ''
+						[901] link 'Reply', clickable
+							[902] strong ''
+					[903] listitem ''
+						[904] link 'Permalink', clickable
+					[905] listitem ''
+						[906] Section ''
+							[908] button 'Delete', clickable
+					[909] listitem ''
+						[910] link 'Edit', clickable
+			[912] Section ''
+				[914] button 'Retract upvote', clickable
+				[924] button 'Downvote', clickable
+		[929] article ''
+			[930] checkbox 'Hide −', clickable, checked='true'
+			[933] HeaderAsNonLandmark ''
+				[934] heading 'MarvelsGrantMan136 Original poster wrote 3 minutes ago'
+					[936] link 'MarvelsGrantMan136', clickable, expanded=False
+						[937] strong ''
+					StaticText 'OP'
+					StaticText 'wrote'
+					[939] time 'August 14, 2024 at 2:42:55 PM EDT'
+						StaticText '3 minutes ago'
+				[940] list ''
+					[941] listitem ''
+						[942] LabelText '', clickable
+							StaticText 'Hide −'
+			[946] paragraph ''
+				StaticText 'This is a test comment.'
+			[947] navigation ''
+				[948] list ''
+					[949] listitem ''
+						[950] link 'Reply', clickable
+							[951] strong ''
+					[952] listitem ''
+						[953] link 'Permalink', clickable
+					[954] listitem ''
+						[955] Section ''
+							[957] button 'Delete', clickable
+					[958] listitem ''
+						[959] link 'Edit', clickable
+			[961] Section ''
+				[963] button 'Retract upvote', clickable
+				[973] button 'Downvote', clickable
+			[979] article ''
+				[980] checkbox 'Hide −', clickable, checked='true'
+				[983] HeaderAsNonLandmark ''
+					[984] heading 'MarvelsGrantMan136 Original poster wrote 2 minutes ago'
+						[986] link 'MarvelsGrantMan136', clickable, expanded=False
+							[987] strong ''
+						StaticText 'OP'
+						StaticText 'wrote'
+						[989] time 'August 14, 2024 at 2:43:36 PM EDT'
+							StaticText '2 minutes ago'
+					[990] list ''
+						[991] listitem ''
+							[992] LabelText '', clickable
+								StaticText 'Hide −'
+				[996] paragraph ''
+					StaticText 'This is a sample reply.'
+				[997] navigation ''
+					[998] list ''
+						[999] listitem ''
+							[1000] link 'Reply', clickable
+								[1001] strong ''
+						[1002] listitem ''
+							[1003] link 'Permalink', clickable
+						[1004] listitem ''
+							[1005] link 'Parent', clickable
+						[1006] listitem ''
+							[1007] Section ''
+								[1009] button 'Delete', clickable
+						[1010] listitem ''
+							[1011] link 'Edit', clickable
+				[1013] Section ''
+					[1015] button 'Retract upvote', clickable
+					[1025] button 'Downvote', clickable
+	[1031] complementary '', visible
+		[1032] Section '', visible
+			[1033] paragraph '', visible
+				[1034] strong '', visible
+					StaticText '1 point'
+				StaticText '(+1, −0)'
+			[1037] heading 'Short URL:', visible
+			[1038] paragraph '', visible
+				StaticText 'http://localhost:9999/10'
+		[1040] Section '', visible
+			[1041] heading 'AskReddit', visible
+				[1042] link 'AskReddit', clickable, visible
+			[1043] Section '', visible
+				[1046] button 'Unsubscribe 1 subscriber', clickable, visible
+			[1053] paragraph '', visible
+				StaticText 't5_2qh1i'
+			[1054] separator '', visible, orientation='horizontal'
+			[1055] list '', visible
+				[1056] listitem '', visible
+					StaticText 'Created'
+					[1057] time 'September 30, 2022 at 8:39:16 PM EDT', visible
+						StaticText '2 years ago'
+				[1058] listitem '', visible
+					[1059] link 'Subscribe via RSS', clickable, visible
+						[1061] image '', visible
+		[1063] Details '', visible
+			[1064] DisclosureTriangle 'Hide this forum', clickable, visible, expanded=False
+		[1070] Section '', visible
+			[1071] heading 'Toolbox', visible
+			[1072] list '', visible
+				[1073] listitem '', visible
+					[1074] link 'Bans', clickable, visible
+				[1075] listitem '', visible
+					[1076] link 'Moderation log', clickable, visible
+	[1077] contentinfo ''
+		[1078] paragraph ''
+			StaticText 'Running'
+			[1080] link 'Postmill', clickable
+
+## Focused element:
+bid='25'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The previous action successfully filled the text box with the updated comment, "This is a further updated test comment." Now, to submit the edited comment, I need to click the "Save" button. This will allow me to explore the functionality of saving an edited comment and see if any additional options or tasks become available.
+</think>
+
+<action>
+click('318')
+</action>
+
+## step 1
+
+<think>
+The previous action successfully saved the edited comment. Now, I can see the updated comment thread with options to reply, view permalink, delete, and edit the comments. To explore more tasks, I will click on the "Reply" link for the first comment to see if it provides a different view or additional options.
+</think>
+
+<action>
+click('191')
+</action>
+
+## step 2
+
+<think>
+The previous action to click on the "Reply" link for the first comment has opened the reply interface for the comment. I can see the text box to write a reply and a "Post" button to submit the reply. To explore more tasks, I will write a reply in the text box and then click the "Post" button to submit the reply.
+</think>
+
+<action>
+fill('207', 'This is a reply to the further updated test comment.')
+</action>
+
+## step 3
+
+<think>
+The previous action successfully filled the text box with the reply, "This is a reply to the further updated test comment." Now, to submit the reply, I need to click the "Post" button. This will allow me to explore the functionality of posting a reply and see if any additional options or tasks become available.
+</think>
+
+<action>
+click('347')
+</action>
+
+## step 4
+
+<think>
+The previous action successfully posted the reply to the comment. Now, I can see the updated comment thread with the new reply. To explore more tasks, I will click on the "View all comments" link to see if it provides a different view or additional options.
+</think>
+
+<action>
+click('167')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+7 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+scroll(delta_x: float, delta_y: float)
+    Description: Scroll horizontally and vertically. Amounts in pixels, positive for right or down scrolling, negative for left or up scrolling. Dispatches a wheel event.
+    Examples:
+        scroll(0, 200)
+
+        scroll(-50.2, -100.5)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The previous action to click on the "View all comments" link did not change the view or provide additional options. To explore more tasks, I will click on the "Edit" link for the first comment to see if it provides a different view or additional options for editing the comment.
+</think>
+
+<action>
+click('360')
+</action>

@@ -93,7 +93,7 @@ exp_group_name = "explore"
 # relaunch_mode = "all_errors"
 relaunch_mode = None
 
-RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/explorations"
+RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/explorations"
 
 main(
     exp_root=RESULTS_DIR,

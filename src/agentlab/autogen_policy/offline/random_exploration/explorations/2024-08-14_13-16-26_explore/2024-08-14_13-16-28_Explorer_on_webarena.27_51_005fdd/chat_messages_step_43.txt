@@ -1,0 +1,260 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
+states 
+# Observation of current step:
+
+## URL of the page:
+http://localhost:9999/f/AskReddit/2/-/edit
+Note: This is the subpage '/f/AskReddit/2/-/edit' of reddit website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Editing submission New Sample Title', focused
+	[21] navigation '', visible
+		[22] link 'Jump to main content', clickable
+		[23] link 'Jump to sidebar', clickable
+	[24] navigation '', visible
+		[26] HeaderAsNonLandmark '', visible
+			[27] link 'Home', clickable, visible
+				StaticText 'Postmill'
+		[37] list '', visible
+			[38] listitem '', visible
+				[39] link 'Forums', clickable, visible
+			[40] listitem '', visible
+				[41] link 'Wiki', clickable, visible
+		[42] Section '', visible
+			[51] searchbox 'Search query', clickable, visible
+		[52] list '', visible
+			[53] listitem '', visible
+				[54] link 'Notifications (0)', clickable, visible
+					[57] image '', visible
+			[58] listitem '', visible
+				[59] link 'Submit', clickable, visible
+					[62] image '', visible
+			[64] listitem '', visible
+				[65] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
+					[68] image '', visible
+					[69] strong '', visible
+	[110] main '', visible
+		[111] heading 'Editing submission New Sample Title', visible
+		[112] Section '', visible
+			[115] LabelText '', clickable, visible
+				StaticText 'URL'
+			[116] textbox 'URL', clickable, visible
+			[119] LabelText '', visible
+				StaticText 'Title'
+				StaticText '*'
+			[121] textbox 'Title This field is required.' value='Updated Sample Title', visible, focused, required
+			[124] LabelText '', visible
+				StaticText 'Body'
+			[126] textbox 'Body' value='This is a sample body text.', visible, describedby='submission_body_help'
+			[128] heading 'Preview', visible
+			[130] paragraph '', visible
+			[132] checkbox 'Formatting help +', clickable, visible, checked='false'
+			StaticText 'Markdown allowed.'
+			[134] LabelText '', clickable, visible
+			[267] button 'Edit submission', clickable
+	[271] complementary '', visible
+		[272] Section '', visible
+			[273] heading 'AskReddit', visible
+				[274] link 'AskReddit', clickable, visible
+			[275] Section '', visible
+				[278] button 'Unsubscribe 1 subscriber', clickable, visible
+			[285] paragraph '', visible
+				StaticText 't5_2qh1i'
+			[286] separator '', visible, orientation='horizontal'
+			[287] list '', visible
+				[288] listitem '', visible
+					StaticText 'Created'
+					[289] time 'September 30, 2022 at 8:39:16 PM EDT', visible
+						StaticText '2 years ago'
+				[290] listitem '', visible
+					[291] link 'Subscribe via RSS', clickable, visible
+						[293] image '', visible
+		[295] Details '', visible
+			[296] DisclosureTriangle 'Hide this forum', clickable, visible, expanded=False
+		[302] Section '', visible
+			[303] heading 'Toolbox', visible
+			[304] list '', visible
+				[305] listitem '', visible
+					[306] link 'Bans', clickable, visible
+				[307] listitem '', visible
+					[308] link 'Moderation log', clickable, visible
+	[309] contentinfo ''
+		[310] paragraph ''
+			StaticText 'Running'
+			[312] link 'Postmill', clickable
+
+## Focused element:
+bid='121'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The previous action of clicking the "Reply" link has successfully opened a textbox to reply to the main comment. The page now displays the textbox along with a "Post" button to submit the reply.
+
+To proceed, I will fill in the reply textbox with a sample reply text and then click the "Post" button to submit the reply.
+</think>
+
+<action>
+fill('207', 'This is a sample reply.')
+</action>
+
+## step 1
+
+<think>
+The previous action of filling the reply textbox with a sample reply text has successfully populated the textbox. The page now displays the reply text along with a "Post" button to submit the reply.
+
+To proceed, I will click the "Post" button to submit the reply.
+</think>
+
+<action>
+click('347')
+</action>
+
+## step 2
+
+<think>
+The previous action of clicking the "Post" button has successfully submitted the reply. The page now displays the new reply under the main comment.
+
+To explore more functionalities, I will click the "View all comments" link to see all the comments on this post.
+</think>
+
+<action>
+click('169')
+</action>
+
+## step 3
+
+<think>
+The previous action of clicking the "View all comments" link has successfully displayed all the comments on the post. The page now shows the comments along with options to reply, permalink, delete, and edit each comment.
+
+To explore more functionalities, I will try to edit the main post by clicking the "Edit" link next to the post.
+</think>
+
+<action>
+click('150')
+</action>
+
+## step 4
+
+<think>
+The previous action of clicking the "Edit" link next to the post has successfully opened the editing interface for the post. The page now displays fields to edit the URL, Title, and Body of the post, along with a "Preview" section and an "Edit submission" button.
+
+To proceed, I will update the title of the post to "Updated Sample Title" by filling the title textbox with the new value.
+</think>
+
+<action>
+fill('121', 'Updated Sample Title')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+6 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The previous action of filling the title textbox with "Updated Sample Title" has successfully updated the title field. The page now displays the updated title along with the body text and other elements.
+
+To proceed, I will click the "Edit submission" button to save the changes made to the post.
+</think>
+
+<action>
+click('267')
+</action>

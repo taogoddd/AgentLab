@@ -1,0 +1,353 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
+states 
+# Observation of current step:
+
+## URL of the page:
+http://localhost:9999/submit
+Note: This is the subpage '/submit' of reddit website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Create submission', focused
+	[22] navigation ''
+		[23] link 'Jump to main content', clickable
+		[24] link 'Jump to sidebar', clickable
+	[25] navigation ''
+		[27] HeaderAsNonLandmark ''
+			[28] link 'Home', clickable
+				StaticText 'Postmill'
+		[38] list ''
+			[39] listitem ''
+				[40] link 'Forums', clickable
+			[41] listitem ''
+				[42] link 'Wiki', clickable
+		[43] Section ''
+			[52] searchbox 'Search query', clickable
+		[53] list ''
+			[54] listitem ''
+				[55] link 'Notifications (0)', clickable
+					[58] image ''
+			[59] listitem ''
+				[60] link 'Submit', clickable
+					[63] image ''
+			[65] listitem ''
+				[66] button 'MarvelsGrantMan136', hasPopup='menu', expanded=False
+					[69] image ''
+					[70] strong ''
+	[111] main '', visible
+		[112] heading 'Create submission'
+		[113] Section '', visible
+			[119] radio 'URL', clickable, checked='true'
+			[120] LabelText '', clickable
+			[121] radio 'Image', clickable, checked='false'
+			[122] LabelText '', clickable
+			[127] textbox '', clickable, visible
+			[135] LabelText '', visible
+				StaticText 'Title'
+				StaticText '*'
+			[137] textbox 'Title This field is required.' value='Example Title', visible, required
+			[140] LabelText '', visible
+				StaticText 'Body'
+			[142] textbox 'Body' value='This is an example body content for the submission.', visible, describedby='submission_body_help'
+			[144] heading 'Preview', visible
+			[418] paragraph '', visible
+			[147] checkbox 'Formatting help +', clickable, visible, checked='false'
+			StaticText 'Markdown allowed.'
+			[149] LabelText '', clickable, visible
+			[276] LabelText '', visible
+				StaticText 'Forum'
+				StaticText '*'
+			[382] combobox 'Choose one…' value='Choose one… Choose one…', clickable, visible, hasPopup='menu', expanded=True, owns='select2-submission_forum-results'
+				[383] textbox 'Choose one…' value='Choose one…', visible
+				[424] listbox '', clickable, visible, multiselectable=False, orientation='vertical', expanded=True
+					[425] option 'Choose one…', visible, selected=True
+					[429] option 'AskReddit', visible, selected=False
+						[434] image '', visible
+					[435] option 'cmu_lti', visible, selected=False
+						[440] image '', visible
+					[441] option 'Karaoke', visible, selected=False
+						[446] image '', visible
+					[447] option 'pittsburgh', visible, selected=False
+						[452] image '', visible
+					[453] option 'PlantsForCatParents', visible, selected=False
+						[458] image '', visible
+					[459] option 'sci_fi', selected=False
+						[464] image ''
+					[465] option 'allentown', selected=False
+					[469] option 'arlingtonva', selected=False
+					[473] option 'Art', selected=False
+					[477] option 'askscience', selected=False
+					[481] option 'aww', selected=False
+					[485] option 'baltimore', selected=False
+					[489] option 'books', selected=False
+					[493] option 'boston', selected=False
+					[497] option 'BridgeportCT', selected=False
+					[501] option 'BuyItForLife', selected=False
+					[505] option 'CambridgeMA', selected=False
+					[509] option 'ColumbiaMD', selected=False
+					[513] option 'Connecticut', selected=False
+					[517] option 'consoles', selected=False
+					[521] option 'coolgithubprojects', selected=False
+					[525] option 'creepy', selected=False
+					[529] option 'dataisbeautiful', selected=False
+					[533] option 'deeplearning', selected=False
+					[537] option 'DIY', selected=False
+					[541] option 'Documentaries', selected=False
+					[545] option 'EarthPorn', selected=False
+					[549] option 'explainlikeimfive', selected=False
+					[553] option 'food', selected=False
+					[557] option 'funny', selected=False
+					[561] option 'Futurology', selected=False
+					[565] option 'gadgets', selected=False
+					[569] option 'gaming', selected=False
+					[573] option 'GetMotivated', selected=False
+					[577] option 'gifs', selected=False
+					[581] option 'Hartford', selected=False
+					[585] option 'headphones', selected=False
+					[589] option 'history', selected=False
+					[593] option 'IAmA', selected=False
+					[597] option 'InternetIsBeautiful', selected=False
+					[601] option 'iphone', selected=False
+					[605] option 'jerseycity', selected=False
+					[609] option 'Jokes', selected=False
+					[613] option 'lakewood', selected=False
+					[617] option 'LifeProTips', selected=False
+					[621] option 'listentothis', selected=False
+					[625] option 'LowellMA', selected=False
+					[629] option 'MachineLearning', selected=False
+					[633] option 'Maine', selected=False
+					[637] option 'ManchesterNH', selected=False
+					[641] option 'massachusetts', selected=False
+					[645] option 'MechanicalKeyboards', selected=False
+					[649] option 'memes', selected=False
+					[653] option 'mildlyinteresting', selected=False
+					[657] option 'monitor', selected=False
+					[661] option 'movies', selected=False
+					[665] option 'Music', selected=False
+					[669] option 'Newark', selected=False
+					[673] option 'newhampshire', selected=False
+					[677] option 'newhaven', selected=False
+					[681] option 'newjersey', selected=False
+					[685] option 'news', selected=False
+					[689] option 'nosleep', selected=False
+					[693] option 'nottheonion', selected=False
+					[697] option 'nyc', selected=False
+					[701] option 'OldSchoolCool', selected=False
+					[705] option 'Paterson', selected=False
+					[709] option 'Pennsylvania', selected=False
+					[713] option 'personalfinance', selected=False
+					[717] option 'philadelphia', selected=False
+					[721] option 'philosophy', selected=False
+					[725] option 'photoshopbattles', selected=False
+					[729] option 'pics', selected=False
+					[733] option 'providence', selected=False
+					[737] option 'relationship_advice', selected=False
+					[741] option 'RhodeIsland', selected=False
+					[745] option 'rva', selected=False
+					[749] option 'science', selected=False
+					[753] option 'Showerthoughts', selected=False
+					[757] option 'singularity', selected=False
+					[761] option 'space', selected=False
+					[765] option 'sports', selected=False
+					[769] option 'springfieldMO', selected=False
+					[773] option 'StamfordCT', selected=False
+					[777] option 'technology', selected=False
+					[781] option 'television', selected=False
+					[785] option 'tifu', selected=False
+					[789] option 'todayilearned', selected=False
+					[793] option 'UpliftingNews', selected=False
+					[797] option 'vermont', selected=False
+					[801] option 'videos', selected=False
+					[805] option 'wallstreetbets', selected=False
+					[809] option 'Washington', selected=False
+					[813] option 'washingtondc', selected=False
+					[817] option 'WaterburyCT', selected=False
+					[821] option 'WorcesterMA', selected=False
+					[825] option 'worldnews', selected=False
+					[829] option 'WritingPrompts', selected=False
+					[833] option 'yonkers', selected=False
+			[399] button 'Create submission', clickable, visible
+	[404] contentinfo '', visible
+		[405] paragraph '', visible
+			StaticText 'Running'
+			[407] link 'Postmill', clickable, visible
+	[422] searchbox '', clickable, visible, focused, autocomplete='list', controls='select2-submission_forum-results'
+
+## Focused element:
+bid='422'
+
+## Error from previous action:
+Error: Error: Element is not a <select> element
+=========================== logs ===========================
+waiting for get_by_test_id("382")
+  locator resolved to <span bid="382" tabindex="0" role="combobox" aria-hasp…>…</span>
+  selecting specified option(s)
+  Element is not a <select> element
+============================================================
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The current page displays a list of submissions, each with options to comment, edit, or delete. There are also options to upvote or downvote each submission. To explore more tasks, I will click on the "Submit" link to see if it allows creating a new post.
+</think>
+
+<action>
+click('63')
+</action>
+
+## step 1
+
+<think>
+The current page is a submission form where users can create a new post. The form includes fields for a URL, title, body, and a dropdown to select a forum. The "Create submission" button is also present. To explore more tasks, I will start by filling in the "Title" field.
+</think>
+
+<action>
+fill('137', 'Example Title')
+</action>
+
+## step 2
+
+<think>
+The title field has been successfully filled with "Example Title". Next, I will fill in the "Body" field to provide more content for the submission.
+</think>
+
+<action>
+fill('142', 'This is an example body content for the submission.')
+</action>
+
+## step 3
+
+<think>
+The "Title" and "Body" fields have been successfully filled. Next, I need to select a forum from the dropdown menu to complete the submission form. I will expand the dropdown menu to see the available options.
+</think>
+
+<action>
+click('382')
+</action>
+
+## step 4
+
+<think>
+The dropdown menu has been expanded, revealing a list of forum options. To proceed with the submission, I will select the "AskReddit" forum from the list.
+</think>
+
+<action>
+select_option('382', 'AskReddit')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+7 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+scroll(delta_x: float, delta_y: float)
+    Description: Scroll horizontally and vertically. Amounts in pixels, positive for right or down scrolling, negative for left or up scrolling. Dispatches a wheel event.
+    Examples:
+        scroll(0, 200)
+
+        scroll(-50.2, -100.5)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The previous action to select an option from the dropdown menu failed because the element is not a <select> element. Instead, it appears to be a custom dropdown. I will try clicking on the "AskReddit" option directly to select it.
+</think>
+
+<action>
+click('429')
+</action>

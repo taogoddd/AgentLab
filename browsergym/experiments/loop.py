@@ -24,6 +24,8 @@ from browsergym.core.chat import Chat
 from .agent import Agent
 from .utils import count_messages_token, count_tokens
 
+from browsergym.utils.stack import Stack
+
 logger = logging.getLogger(__name__)
 
 
@@ -159,7 +161,9 @@ class ExpArgs:
         episode_info = []
         try:
             logger.info(f"Running experiment {self.exp_name} in:\n  {self.exp_dir}")
-            agent = self.agent_args.make_agent(exp_dir = self.exp_dir)
+
+            # make root agent
+            agent = self.agent_args.make_agent()
             logger.debug(f"Agent created.")
             env = self.env_args.make_env(
                 action_mapping=agent.action_set.to_python_code, exp_dir=self.exp_dir

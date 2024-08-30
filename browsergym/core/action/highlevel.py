@@ -11,7 +11,8 @@ from .functions import (
     go_to_best_seller_page,
     search_keyword,
     filter_reviews_by_keyword,
-    go_to_forum,
+    find_subreddit,
+    find_user,
     go_to_search_terms_page,
 
     noop,
@@ -60,7 +61,7 @@ SHOPPING_ADMIN_EXTRA_ACTIONS = [go_to_reviews_page, go_to_best_seller_page, filt
 
 SHOPPING_EXTRA_ACTIONS = [search_keyword]
 
-REDDIT_EXTRA_ACTIONS = [go_to_forum]
+REDDIT_EXTRA_ACTIONS = [find_subreddit, find_user]
 
 BID_ACTIONS = [
     scroll,
@@ -80,7 +81,7 @@ BID_ACTIONS = [
 ]
 
 WA_BID_ACTIONS = [
-    # scroll,
+    scroll,
     fill,
     select_option,
     click,

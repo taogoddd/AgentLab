@@ -110,7 +110,6 @@ def parse(input_string):
 
 def propose_action_from_exploration(trajectory):
     messages = []
-    # TODO: format the output better s.t. it can be parsed easily
     system_prompt = """\
 You will be given part of the state-action trajectory of a human user interacting with a web page to explore a website.
 Your task is to understand the trajectory and extract an useful new compact action from the trajectory which may contain multiple steps to achieve a sub-goal.
@@ -188,10 +187,12 @@ def get_experience_from_exploration(path: str, window_size: int, step_size: int)
         sub_goal = parsed_res[0]["sub_goal"]
         instruction = parsed_res[0]["instruction"]
         obs = trajectory[starting_step]["obs"]
+        processed_obs = trajectory[starting_step]["processed_obs"]
 
         experience.append({
             "sub_goal": sub_goal,
             "obs": obs,
+            "processed_obs": processed_obs,
             "instruction": instruction,
             "starting_step": starting_step,
             "ending_step": ending_step,
@@ -199,7 +200,7 @@ def get_experience_from_exploration(path: str, window_size: int, step_size: int)
     
     return experience
 
-def summarize_state(path: str, obs_type: str, processed_obs: dict):
+def summarize_state(obs_type: str, processed_obs: dict):
     if obs_type == "axtree":
         axtree = processed_obs["axtree_txt"]
         # TODO: modify the prompt
@@ -250,6 +251,37 @@ Directly output the summary of the screenshot."""
         ]
         res = generate_from_4o_chat_completion(messages, "gpt-4o-2024-05-13")
         return res
+    elif obs_type == "hybrid":
+        axtree = processed_obs["axtree_txt"]
+        screenshot_base64 = img_array_to_base64(processed_obs["screenshot"])
+        system_prompt = f"""\
+You will be given the accessibility tree (AXTree) and the screenshot of a web page.
+Your task is to summarize the content of the webpage through its AXTree and screenshot.
+Directly output the summary"""
+        human_prompt = [
+            {
+                "type": "text",
+                "text": f"AXTree:\n{axtree}\nScreenshot:"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{screenshot_base64}"
+                }
+            }
+        ]
+        messages = [
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+            {
+                "role": "user",
+                "content": human_prompt
+            }
+        ]
+        res = generate_from_4o_chat_completion(messages, "gpt-4o-2024-05-13")
+        return
     else:
         raise ValueError("Invalid obs_type")
 
@@ -265,37 +297,19 @@ def state_summaries_from_exploration(path: str, obs_type: str):
     for i, step in tqdm(enumerate(trajectory)):
         obs = step["obs"]
         processed_obs = step["processed_obs"]
-        res = summarize_state(path, obs_type, processed_obs)
+        res = summarize_state(obs_type, processed_obs)
         state_summaries.append(
             {
                 "obs": obs,
+                "processed_obs": processed_obs,
                 "summary": res
             }
         )
     return state_summaries 
 
-path = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/explorations/2024-08-11_23-09-06_explore/2024-08-11_23-09-07_Explorer_on_webarena.0_51_671048"
-window_size = 10
-step_size = 5
-experience = get_experience_from_exploration(path, window_size, step_size)
 
-# rewriting mode
-with open("/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/experiences/experiences.pkl", "wb") as f:
-    pickle.dump(experience, f)
 
-# write to json file to visualize
 
-# only keep url and axtree_txt in obs
-for exp in experience:
-    exp["obs"] = {
-        "url": exp["obs"]["url"],
-        "axtree_txt": exp["obs"]["axtree_txt"]
-    }
-
-with open("/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/experiences_json/experiences.json", "w") as f:
-    json.dump(experience, f, indent=4)
-
-# TODO: appending mode
 
 # messages = construct_prompt_from_trajectory(trajectory)
 # res = generate_from_4o_chat_completion(messages, "gpt-4o-2024-05-13")

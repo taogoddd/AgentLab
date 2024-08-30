@@ -1,0 +1,33 @@
+2024-08-15 01:55:25,534 - browsergym.experiments.loop - INFO - Running experiment Explorer_on_webarena.27_51 in:
+  /home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/explorations/2024-08-15_01-55-23_explore/2024-08-15_01-55-25_Explorer_on_webarena.27_51_fdef18
+2024-08-15 01:55:25,537 - browsergym.experiments.loop - WARNING - Exception uncaught by agent or environment in task webarena.27.
+OpenAIError:
+Missing credentials. Please pass one of `api_key`, `azure_ad_token`, `azure_ad_token_provider`, or the `AZURE_OPENAI_API_KEY` or `AZURE_OPENAI_AD_TOKEN` environment variables.
+Traceback (most recent call last):
+  File "/home/ytliu/github/AgentLab/browsergym/experiments/loop.py", line 162, in run
+    agent = self.agent_args.make_agent(exp_dir = self.exp_dir)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ytliu/github/AgentLab/src/agentlab/agents/explorer/explorer.py", line 26, in make_agent
+    return Explorer(
+           ^^^^^^^^^
+  File "/home/ytliu/github/AgentLab/src/agentlab/agents/explorer/explorer.py", line 40, in __init__
+    self.chat_llm = chat_model_args.make_chat_model()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ytliu/github/AgentLab/src/agentlab/llm/chat_api.py", line 114, in make_chat_model
+    return AzureChatOpenAI(
+           ^^^^^^^^^^^^^^^^
+  File "/home/ytliu/miniconda3/envs/agentlab/lib/python3.12/site-packages/pydantic/v1/main.py", line 339, in __init__
+    values, fields_set, validation_error = validate_model(__pydantic_self__.__class__, data)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ytliu/miniconda3/envs/agentlab/lib/python3.12/site-packages/pydantic/v1/main.py", line 1100, in validate_model
+    values = validator(cls_, values)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ytliu/miniconda3/envs/agentlab/lib/python3.12/site-packages/langchain_openai/chat_models/azure.py", line 205, in validate_environment
+    values["client"] = openai.AzureOpenAI(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/home/ytliu/miniconda3/envs/agentlab/lib/python3.12/site-packages/openai/lib/azure.py", line 169, in __init__
+    raise OpenAIError(
+openai.OpenAIError: Missing credentials. Please pass one of `api_key`, `azure_ad_token`, `azure_ad_token_provider`, or the `AZURE_OPENAI_API_KEY` or `AZURE_OPENAI_AD_TOKEN` environment variables.
+
+2024-08-15 01:55:25,537 - browsergym.experiments.loop - ERROR - Error while saving step info in the finally block: cannot access local variable 'step_info' where it is not associated with a value
+2024-08-15 01:55:25,538 - browsergym.experiments.loop - ERROR - Error while closing the environment in the finally block: cannot access local variable 'env' where it is not associated with a value

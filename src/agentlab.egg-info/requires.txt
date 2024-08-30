@@ -9,3 +9,10 @@ contexttimer
 ipython
 pyyaml>=6
 pandas
+playwright
+gymnasium
+pillow
+pyparsing
+bs4
+transformers
+lxml

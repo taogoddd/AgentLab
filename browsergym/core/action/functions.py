@@ -35,14 +35,27 @@ def go_to_search_terms_page():
     """
     page.goto("http://localhost:7780/admin/search/term/report/")
 
-def go_to_forum(forum_name: str):
+def find_subreddit(forum_name: str):
     """
-    [AUGMENTED] Navigate to the forum page with the given forum name.
+    This Reddit subroutine finds a subreddit corresponding
+19 to the query. The query can either be the name of the subreddit or a vague
+20 description of what the subreddit may contain. The subroutine hands back
+21 control once it navigates to the subreddit.
 
     Examples:
-        go_to_forum("")
+        go_to_forum("books")
     """
     page.goto(f"http://localhost:9999/f/{forum_name}")
+
+def find_user(username: str):
+    """
+    This Reddit subroutine navigates to the page of a user
+24 with user_name. The page contains all the posts made by the user.
+
+    Examples:
+        go_to_user("AdamCannon")
+    """
+    page.goto(f"http://localhost:9999/user/{username}")
 
 def filter_reviews_by_keyword(keyword: str):
     """

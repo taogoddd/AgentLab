@@ -1,0 +1,728 @@
+[SYSTEM]
+You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions.
+-----------------------------------
+Round 1
+[USER]
+# Instructions
+Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
+with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
+states 
+# Observation of current step:
+
+## URL of the page:
+http://localhost:9999/f/AskReddit/10224/why-bleaching-your-butthole-isn-t-called-changing-your-ring
+Note: This is the subpage '/f/AskReddit/10224/why-bleaching-your-butthole-isn-t-called-changing-your-ring' of reddit website.
+
+## AXTree:
+Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+
+Note: You can only interact with visible elements. If the "visible" tag is not
+present, the element is not visible on the page.
+
+RootWebArea 'Why bleaching your butthole isn’t called changing your ring tone?', focused
+	[27] navigation '', visible
+		[28] link 'Jump to main content', clickable
+		[29] link 'Jump to sidebar', clickable
+	[30] navigation '', visible
+		[32] HeaderAsNonLandmark '', visible
+			[33] link 'Home', clickable, visible
+				StaticText 'Postmill'
+		[43] list '', visible
+			[44] listitem '', visible
+				[45] link 'Forums', clickable, visible
+			[46] listitem '', visible
+				[47] link 'Wiki', clickable, visible
+		[48] Section '', visible
+			[57] searchbox 'Search query', clickable, visible
+		[58] list '', visible
+			[59] listitem '', visible
+				[60] link 'Notifications (0)', clickable, visible
+					[63] image '', visible
+			[64] listitem '', visible
+				[65] link 'Submit', clickable, visible
+					[68] image '', visible
+			[70] listitem '', visible
+				[71] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
+					[74] image '', visible
+					[75] strong '', visible
+	[116] main ''
+		[117] navigation '', visible
+			[118] list '', visible
+				[119] listitem '', visible
+					[120] link '/f/AskReddit', clickable, visible
+						[122] image '', visible
+						[124] strong '', visible
+		[125] article '', visible
+			[128] HeaderAsNonLandmark '', visible
+				[130] heading 'Why bleaching your butthole isn’t called changing your ring tone?', visible
+					[131] link 'Why bleaching your butthole isn’t called changing your ring tone?', clickable, visible
+				[132] paragraph '', visible
+					StaticText 'Submitted by'
+					[134] link 'VampiricBanghole', clickable, visible, expanded=False
+						[135] strong '', visible
+					StaticText 't3_yirgqi'
+					[137] time 'October 31, 2022 at 6:49:41 PM EDT', visible
+						StaticText '2 years ago'
+					StaticText 'in'
+					[138] link 'AskReddit', clickable, visible
+						[139] strong '', visible
+			[142] navigation '', visible
+				[143] list '', visible
+					[144] listitem '', visible
+						[145] link '17 comments', clickable, visible
+							[146] strong '', visible
+			[148] Section '', visible
+				[150] button 'Upvote', clickable, visible
+				StaticText '38'
+				[160] button 'Downvote', clickable, visible
+		[165] heading 'Comments', visible
+		[166] Section '', visible
+			[172] textbox 'Comment', visible, required, describedby='reply_to_submission_10224_comment_help'
+			[177] checkbox 'Formatting help +', clickable, visible, checked='false'
+			StaticText 'Markdown allowed.'
+			[179] LabelText '', clickable, visible
+			[312] button 'Post', clickable, visible
+		[317] list '', visible
+			[318] listitem '', visible
+				[319] link 'Nested', clickable, visible
+			[320] listitem '', visible
+				[321] link 'Linear', clickable, visible
+		[322] article '', visible
+			[323] checkbox 'Hide −', clickable, visible, checked='true'
+			[326] HeaderAsNonLandmark '', visible
+				[327] heading 'Barnaby_Cuckoldsniff [t1_iuk54i0] wrote 2 years ago', visible
+					[329] link 'Barnaby_Cuckoldsniff', clickable, visible, expanded=False
+						[330] strong '', visible
+					[332] time 'October 31, 2022 at 7:04:48 PM EDT', visible
+						StaticText '2 years ago'
+				[333] list '', visible
+					[334] listitem '', visible
+						[335] LabelText '', clickable, visible
+							StaticText 'Hide −'
+			[339] paragraph '', visible
+				StaticText 'It is now..lol'
+			[340] navigation '', visible
+				[341] list '', visible
+					[342] listitem '', visible
+						[343] link 'Reply', clickable, visible
+							[344] strong '', visible
+					[345] listitem '', visible
+						[346] link 'Permalink', clickable, visible
+			[348] Section '', visible
+				[350] button 'Upvote', clickable, visible
+				StaticText '10'
+				[360] button 'Downvote', clickable, visible
+			[366] article '', visible
+				[367] checkbox 'Hide −', clickable, visible, checked='true'
+				[370] HeaderAsNonLandmark '', visible
+					[371] heading '[deleted] [t1_iuk7dqw] wrote 2 years ago', visible
+						[373] link '[deleted]', clickable, visible, expanded=False
+							[374] strong '', visible
+						[376] time 'October 31, 2022 at 7:22:48 PM EDT', visible
+							StaticText '2 years ago'
+					[377] list '', visible
+						[378] listitem '', visible
+							[379] LabelText '', clickable, visible
+								StaticText 'Hide −'
+				[383] paragraph '', visible
+					StaticText '[removed]'
+				[384] navigation ''
+					[385] list ''
+						[386] listitem '', visible
+							[387] link 'Reply', clickable, visible
+								[388] strong '', visible
+						[389] listitem '', visible
+							[390] link 'Permalink', clickable, visible
+						[391] listitem '', visible
+							[392] link 'Parent', clickable, visible
+				[394] Section '', visible
+					[396] button 'Upvote', clickable, visible
+					StaticText '1'
+					[406] button 'Downvote', clickable, visible
+			[411] article ''
+				[412] checkbox 'Hide −', clickable, checked='true'
+				[415] HeaderAsNonLandmark ''
+					[416] heading 'MarvelsGrantMan136 wrote 7 seconds ago'
+						[418] link 'MarvelsGrantMan136', clickable, expanded=False
+							[419] strong ''
+						[420] time 'August 14, 2024 at 1:17:27 AM EDT'
+							StaticText '7 seconds ago'
+					[421] list ''
+						[422] listitem ''
+							[423] LabelText '', clickable
+								StaticText 'Hide −'
+				[427] paragraph ''
+					StaticText 'This is a sample reply.'
+				[428] navigation ''
+					[429] list ''
+						[430] listitem ''
+							[431] link 'Reply', clickable
+								[432] strong ''
+						[433] listitem ''
+							[434] link 'Permalink', clickable
+						[435] listitem ''
+							[436] link 'Parent', clickable
+						[437] listitem ''
+							[438] Section ''
+								[440] button 'Delete', clickable
+						[441] listitem ''
+							[442] link 'Edit', clickable
+				[444] Section ''
+					[446] button 'Retract upvote', clickable
+					StaticText '1'
+					[456] button 'Downvote', clickable
+		[461] article ''
+			[462] checkbox 'Hide −', clickable, checked='true'
+			[465] HeaderAsNonLandmark ''
+				[466] heading 'BaconBombThief [t1_iuk4lkg] wrote 2 years ago'
+					[468] link 'BaconBombThief', clickable, expanded=False
+						[469] strong ''
+					[471] time 'October 31, 2022 at 7:00:36 PM EDT'
+						StaticText '2 years ago'
+				[472] list ''
+					[473] listitem ''
+						[474] LabelText '', clickable
+							StaticText 'Hide −'
+			[478] paragraph ''
+				StaticText 'Because we have failed as a species.'
+			[479] navigation ''
+				[480] list ''
+					[481] listitem ''
+						[482] link 'Reply', clickable
+							[483] strong ''
+					[484] listitem ''
+						[485] link 'Permalink', clickable
+			[487] Section ''
+				[489] button 'Upvote', clickable
+				[499] button 'Downvote', clickable
+		[504] article ''
+			[505] checkbox 'Hide −', clickable, checked='true'
+			[508] HeaderAsNonLandmark ''
+				[509] heading 'Elevenst [t1_iuk5wze] wrote 2 years ago'
+					[511] link 'Elevenst', clickable, expanded=False
+						[512] strong ''
+					[514] time 'October 31, 2022 at 7:11:05 PM EDT'
+						StaticText '2 years ago'
+				[515] list ''
+					[516] listitem ''
+						[517] LabelText '', clickable
+							StaticText 'Hide −'
+			[521] paragraph ''
+				StaticText 'This is a decent post for r/showerthoughts'
+			[522] navigation ''
+				[523] list ''
+					[524] listitem ''
+						[525] link 'Reply', clickable
+							[526] strong ''
+					[527] listitem ''
+						[528] link 'Permalink', clickable
+			[530] Section ''
+				[532] button 'Upvote', clickable
+				[542] button 'Downvote', clickable
+			[548] article ''
+				[549] checkbox 'Hide −', clickable, checked='true'
+				[552] HeaderAsNonLandmark ''
+					[553] heading '[deleted] [t1_iuk6s3h] wrote 2 years ago'
+						[555] link '[deleted]', clickable, expanded=False
+							[556] strong ''
+						[558] time 'October 31, 2022 at 7:18:03 PM EDT'
+							StaticText '2 years ago'
+					[559] list ''
+						[560] listitem ''
+							[561] LabelText '', clickable
+								StaticText 'Hide −'
+				[565] paragraph ''
+					StaticText '[deleted]'
+				[566] navigation ''
+					[567] list ''
+						[568] listitem ''
+							[569] link 'Reply', clickable
+								[570] strong ''
+						[571] listitem ''
+							[572] link 'Permalink', clickable
+						[573] listitem ''
+							[574] link 'Parent', clickable
+				[576] Section ''
+					[578] button 'Upvote', clickable
+					StaticText '2'
+					[588] button 'Downvote', clickable
+		[593] article ''
+			[594] checkbox 'Hide −', clickable, checked='true'
+			[597] HeaderAsNonLandmark ''
+				[598] heading 'NicNoletree [t1_iuk5ffh] wrote 2 years ago'
+					[600] link 'NicNoletree', clickable, expanded=False
+						[601] strong ''
+					[603] time 'October 31, 2022 at 7:07:10 PM EDT'
+						StaticText '2 years ago'
+				[604] list ''
+					[605] listitem ''
+						[606] LabelText '', clickable
+							StaticText 'Hide −'
+			[610] paragraph ''
+				StaticText "Because when you fart it's still the same tone"
+			[611] navigation ''
+				[612] list ''
+					[613] listitem ''
+						[614] link 'Reply', clickable
+							[615] strong ''
+					[616] listitem ''
+						[617] link 'Permalink', clickable
+			[619] Section ''
+				[621] button 'Upvote', clickable
+				[631] button 'Downvote', clickable
+		[636] article ''
+			[637] checkbox 'Hide −', clickable, checked='true'
+			[640] HeaderAsNonLandmark ''
+				[641] heading 'BigBearSD [t1_iuk6288] wrote 2 years ago'
+					[643] link 'BigBearSD', clickable, expanded=False
+						[644] strong ''
+					[646] time 'October 31, 2022 at 7:12:15 PM EDT'
+						StaticText '2 years ago'
+				[647] list ''
+					[648] listitem ''
+						[649] LabelText '', clickable
+							StaticText 'Hide −'
+			[653] paragraph ''
+				StaticText 'How long have you been waiting to share this nugget, OP?'
+			[654] navigation ''
+				[655] list ''
+					[656] listitem ''
+						[657] link 'Reply', clickable
+							[658] strong ''
+					[659] listitem ''
+						[660] link 'Permalink', clickable
+			[662] Section ''
+				[664] button 'Upvote', clickable
+				[674] button 'Downvote', clickable
+		[679] article ''
+			[680] checkbox 'Hide −', clickable, checked='true'
+			[683] HeaderAsNonLandmark ''
+				[684] heading 'Flaky-Fellatio [t1_iuk6vt3] wrote 2 years ago'
+					[686] link 'Flaky-Fellatio', clickable, expanded=False
+						[687] strong ''
+					[689] time 'October 31, 2022 at 7:18:53 PM EDT'
+						StaticText '2 years ago'
+				[690] list ''
+					[691] listitem ''
+						[692] LabelText '', clickable
+							StaticText 'Hide −'
+			[696] paragraph ''
+				StaticText 'Lol this is the shitpost of the year imo'
+			[697] navigation ''
+				[698] list ''
+					[699] listitem ''
+						[700] link 'Reply', clickable
+							[701] strong ''
+					[702] listitem ''
+						[703] link 'Permalink', clickable
+			[705] Section ''
+				[707] button 'Upvote', clickable
+				StaticText '2'
+				[717] button 'Downvote', clickable
+		[722] article ''
+			[723] checkbox 'Hide −', clickable, checked='true'
+			[726] HeaderAsNonLandmark ''
+				[727] heading 'woohooenjoyingspeed [t1_iuk3at2] wrote 2 years ago'
+					[729] link 'woohooenjoyingspeed', clickable, expanded=False
+						[730] strong ''
+					[732] time 'October 31, 2022 at 6:50:16 PM EDT'
+						StaticText '2 years ago'
+				[733] list ''
+					[734] listitem ''
+						[735] LabelText '', clickable
+							StaticText 'Hide −'
+			[739] paragraph ''
+				StaticText 'Great guy mad skills'
+			[740] navigation ''
+				[741] list ''
+					[742] listitem ''
+						[743] link 'Reply', clickable
+							[744] strong ''
+					[745] listitem ''
+						[746] link 'Permalink', clickable
+			[748] Section ''
+				[750] button 'Upvote', clickable
+				StaticText '1'
+				[760] button 'Downvote', clickable
+		[765] article ''
+			[766] checkbox 'Hide −', clickable, checked='true'
+			[769] HeaderAsNonLandmark ''
+				[770] heading 'chronicallyonline13 [t1_iuk4vo7] wrote 2 years ago'
+					[772] link 'chronicallyonline13', clickable, expanded=False
+						[773] strong ''
+					[775] time 'October 31, 2022 at 7:02:50 PM EDT'
+						StaticText '2 years ago'
+				[776] list ''
+					[777] listitem ''
+						[778] LabelText '', clickable
+							StaticText 'Hide −'
+			[782] paragraph ''
+				StaticText 'congrats'
+			[783] navigation ''
+				[784] list ''
+					[785] listitem ''
+						[786] link 'Reply', clickable
+							[787] strong ''
+					[788] listitem ''
+						[789] link 'Permalink', clickable
+			[791] Section ''
+				[793] button 'Upvote', clickable
+				[803] button 'Downvote', clickable
+		[808] article ''
+			[809] checkbox 'Hide −', clickable, checked='true'
+			[812] HeaderAsNonLandmark ''
+				[813] heading '[deleted] [t1_iuk5sgu] wrote 2 years ago'
+					[815] link '[deleted]', clickable, expanded=False
+						[816] strong ''
+					[818] time 'October 31, 2022 at 7:10:04 PM EDT'
+						StaticText '2 years ago'
+				[819] list ''
+					[820] listitem ''
+						[821] LabelText '', clickable
+							StaticText 'Hide −'
+			[825] paragraph ''
+				StaticText '[deleted]'
+			[826] navigation ''
+				[827] list ''
+					[828] listitem ''
+						[829] link 'Reply', clickable
+							[830] strong ''
+					[831] listitem ''
+						[832] link 'Permalink', clickable
+			[834] Section ''
+				[836] button 'Upvote', clickable
+				StaticText '1'
+				[846] button 'Downvote', clickable
+		[851] article ''
+			[852] checkbox 'Hide −', clickable, checked='true'
+			[855] HeaderAsNonLandmark ''
+				[856] heading 'Good_nuff [t1_iuk6526] wrote 2 years ago'
+					[858] link 'Good_nuff', clickable, expanded=False
+						[859] strong ''
+					[861] time 'October 31, 2022 at 7:12:54 PM EDT'
+						StaticText '2 years ago'
+				[862] list ''
+					[863] listitem ''
+						[864] LabelText '', clickable
+							StaticText 'Hide −'
+			[868] paragraph ''
+				StaticText 'Do people forget that cell phones are a relatively new thing?'
+			[869] navigation ''
+				[870] list ''
+					[871] listitem ''
+						[872] link 'Reply', clickable
+							[873] strong ''
+					[874] listitem ''
+						[875] link 'Permalink', clickable
+			[877] Section ''
+				[879] button 'Upvote', clickable
+				StaticText '1'
+				[889] button 'Downvote', clickable
+		[894] article ''
+			[895] checkbox 'Hide −', clickable, checked='true'
+			[898] HeaderAsNonLandmark ''
+				[899] heading 'Beavshak [t1_iuk6uyo] wrote 2 years ago'
+					[901] link 'Beavshak', clickable, expanded=False
+						[902] strong ''
+					[904] time 'October 31, 2022 at 7:18:42 PM EDT'
+						StaticText '2 years ago'
+				[905] list ''
+					[906] listitem ''
+						[907] LabelText '', clickable
+							StaticText 'Hide −'
+			[911] paragraph ''
+				StaticText 'If I hear Coldplay one more fucking time..'
+			[912] navigation ''
+				[913] list ''
+					[914] listitem ''
+						[915] link 'Reply', clickable
+							[916] strong ''
+					[917] listitem ''
+						[918] link 'Permalink', clickable
+			[920] Section ''
+				[922] button 'Upvote', clickable
+				[932] button 'Downvote', clickable
+		[937] article ''
+			[938] checkbox 'Hide −', clickable, checked='true'
+			[941] HeaderAsNonLandmark ''
+				[942] heading 'Blainefeinspains [t1_iuk7cos] wrote 2 years ago'
+					[944] link 'Blainefeinspains', clickable, expanded=False
+						[945] strong ''
+					[947] time 'October 31, 2022 at 7:22:34 PM EDT'
+						StaticText '2 years ago'
+				[948] list ''
+					[949] listitem ''
+						[950] LabelText '', clickable
+							StaticText 'Hide −'
+			[954] paragraph ''
+				StaticText 'Good bit.'
+			[955] navigation ''
+				[956] list ''
+					[957] listitem ''
+						[958] link 'Reply', clickable
+							[959] strong ''
+					[960] listitem ''
+						[961] link 'Permalink', clickable
+			[963] Section ''
+				[965] button 'Upvote', clickable
+				[975] button 'Downvote', clickable
+		[980] article ''
+			[981] checkbox 'Hide −', clickable, checked='true'
+			[984] HeaderAsNonLandmark ''
+				[985] heading 'newstuffsucks [t1_iuk3wc6] wrote 2 years ago'
+					[987] link 'newstuffsucks', clickable, expanded=False
+						[988] strong ''
+					[990] time 'October 31, 2022 at 6:55:01 PM EDT'
+						StaticText '2 years ago'
+				[991] list ''
+					[992] listitem ''
+						[993] LabelText '', clickable
+							StaticText 'Hide −'
+			[997] paragraph ''
+				StaticText 'Because something else is already called that?'
+			[998] navigation ''
+				[999] list ''
+					[1000] listitem ''
+						[1001] link 'Reply', clickable
+							[1002] strong ''
+					[1003] listitem ''
+						[1004] link 'Permalink', clickable
+			[1006] Section ''
+				[1008] button 'Upvote', clickable
+				[1018] button 'Downvote', clickable
+		[1023] article ''
+			[1024] checkbox 'Hide −', clickable, checked='true'
+			[1027] HeaderAsNonLandmark ''
+				[1028] heading 'UseRNaME_l0St [t1_iuk4sjt] wrote 2 years ago'
+					[1030] link 'UseRNaME_l0St', clickable, expanded=False
+						[1031] strong ''
+					[1033] time 'October 31, 2022 at 7:02:09 PM EDT'
+						StaticText '2 years ago'
+				[1034] list ''
+					[1035] listitem ''
+						[1036] LabelText '', clickable
+							StaticText 'Hide −'
+			[1040] paragraph ''
+				StaticText 'This is funny af'
+			[1041] navigation ''
+				[1042] list ''
+					[1043] listitem ''
+						[1044] link 'Reply', clickable
+							[1045] strong ''
+					[1046] listitem ''
+						[1047] link 'Permalink', clickable
+			[1049] Section ''
+				[1051] button 'Upvote', clickable
+				[1061] button 'Downvote', clickable
+	[1067] complementary '', visible
+		[1068] Section '', visible
+			[1069] paragraph '', visible
+				[1070] strong '', visible
+					StaticText '0 points'
+				StaticText '(+0, −0)'
+			[1073] heading 'Short URL:', visible
+			[1074] paragraph '', visible
+				StaticText 'http://localhost:9999/10224'
+		[1076] Section '', visible
+			[1077] heading 'AskReddit', visible
+				[1078] link 'AskReddit', clickable, visible
+			[1079] Section '', visible
+				[1082] button 'Subscribe No subscribers', clickable, visible
+			[1089] paragraph '', visible
+				StaticText 't5_2qh1i'
+			[1090] separator '', visible, orientation='horizontal'
+			[1091] list '', visible
+				[1092] listitem '', visible
+					StaticText 'Created'
+					[1093] time 'September 30, 2022 at 8:39:16 PM EDT', visible
+						StaticText '2 years ago'
+				[1094] listitem '', visible
+					[1095] link 'Subscribe via RSS', clickable, visible
+						[1097] image '', visible
+		[1099] Details '', visible
+			[1100] DisclosureTriangle 'Hide this forum', clickable, visible, expanded=False
+		[1106] Section '', visible
+			[1107] heading 'Toolbox', visible
+			[1108] list '', visible
+				[1109] listitem '', visible
+					[1110] link 'Bans', clickable, visible
+				[1111] listitem '', visible
+					[1112] link 'Moderation log', clickable, visible
+	[1113] contentinfo ''
+		[1114] paragraph ''
+			StaticText 'Running'
+			[1116] link 'Postmill', clickable
+
+## Focused element:
+bid='25'
+
+
+# History of last 5 interaction with the task:
+
+## step 0
+
+<think>
+The current page displays a list of posts within the "AskReddit" forum. Each post includes a title, the submitter's name, the submission time, and the number of comments. There are also upvote and downvote buttons for each post.
+
+To explore more functionalities, I can interact with elements such as the post titles to view the full post and its comments, the upvote or downvote buttons to vote on a post, or the "Comments" link to view the comments directly.
+
+I will click on the title of the first post, "Why bleaching your butthole isn’t called changing your ring tone?", to view the full post and its comments.
+</think>
+
+<action>
+click('152')
+</action>
+
+## step 1
+
+<think>
+The current page displays the full post titled "Why bleaching your butthole isn’t called changing your ring tone?" along with its comments. The page includes options to upvote or downvote the post, reply to comments, and post a new comment. 
+
+To explore more functionalities, I can interact with elements such as the upvote or downvote buttons for the post and comments, the "Reply" links to respond to specific comments, or the "Post" button to submit a new comment.
+
+I will click on the "Reply" link for the first comment to see if it allows me to respond to that specific comment.
+</think>
+
+<action>
+click('343')
+</action>
+
+## step 2
+
+<think>
+The previous action of clicking on the "Reply" link for the first comment has focused on the reply section for that specific comment. The page now displays a textbox to enter a reply, along with a "Post" button to submit the reply.
+
+To explore more functionalities, I can interact with elements such as the textbox to enter a reply, the "Post" button to submit the reply, or other comments and their respective reply links.
+
+I will fill in the reply textbox with a sample comment and then click the "Post" button to submit the reply.
+</think>
+
+<action>
+fill('1081', 'This is a sample reply.')
+</action>
+
+## step 3
+
+<think>
+The previous action of filling in the reply textbox with a sample comment has successfully populated the textbox with the text "This is a sample reply." The page now displays the filled textbox along with the "Post" button to submit the reply.
+
+To proceed, I will click the "Post" button to submit the reply and observe the changes on the page.
+</think>
+
+<action>
+click('1221')
+</action>
+
+## step 4
+
+<think>
+The previous action of clicking the "Post" button has successfully submitted the reply, and the page now displays the newly added comment under the original post. The comment includes options to upvote, downvote, reply, view the permalink, view the parent comment, delete, and edit the comment.
+
+To explore more functionalities, I can interact with elements such as the upvote or downvote buttons for the comment, the "Reply" link to respond to the comment, or the "Edit" link to modify the comment.
+
+I will click on the "View all comments" link to see the entire comment thread for the post.
+</think>
+
+<action>
+click('162')
+</action>
+
+# Action space:
+Note: This action set allows you to interact with your environment. Most of them
+are python function executing playwright code. The primary way of referring to
+elements in the page is through bid which are specified in your observations.
+
+
+6 different types of actions are available.
+
+noop(wait_ms: float = 1000)
+    Description: Do nothing, and optionally wait for the given time (in milliseconds).
+    Examples:
+        noop()
+
+        noop(500)
+
+fill(bid: str, value: str)
+    Description: Fill out a form field. It focuses the element and triggers an input event with the entered text. It works for <input>, <textarea> and [contenteditable] elements.
+    Examples:
+        fill('237', 'example value')
+
+        fill('45', 'multi-line\nexample')
+
+        fill('a12', 'example with "quotes"')
+
+select_option(bid: str, options: str | list[str])
+    Description: Select one or multiple options in a <select> element. You can specify option value or label to select. Multiple options can be selected.
+    Examples:
+        select_option('a48', 'blue')
+
+        select_option('c48', ['red', 'green', 'blue'])
+
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
+    Description: Click an element.
+    Examples:
+        click('a51')
+
+        click('b22', button='right')
+
+        click('48', button='middle', modifiers=['Shift'])
+
+clear(bid: str)
+    Description: Clear the input field.
+    Examples:
+        clear('996')
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+
+0 augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
+Only a single action can be provided at once. Example:
+fill('a12', 'example with "quotes"')
+
+
+# Abstract Example
+
+Here is an abstract version of the answer with description of the content of
+each tag. Make sure you follow this structure, but replace the content with your
+answer:
+
+<think>
+Think step by step. If you need to make calculations such as coordinates, write them here. Describe the effect
+that your previous action had on the current content of the page.
+</think>
+
+<action>
+One single action to be executed. You can only use one action at a time.
+</action>
+
+# Concrete Example
+
+Here is a concrete example of how to format your answer.
+Make sure to follow the template with proper tags:
+
+<think>
+From previous action I tried to set the value of year to "2022",
+using select_option, but it doesn't appear to be in the form. It may be a
+dynamic dropdown, I will try using click with the bid "a324" and look at the
+response from the page.
+</think>
+
+<action>
+click('a324')
+</action>
+
+[ASSISTANT]
+<think>
+The previous action of clicking the "View all comments" link has displayed the entire comment thread for the post. The page now shows all comments along with options to upvote, downvote, reply, view the permalink, view the parent comment, delete, and edit the comments.
+
+To explore more functionalities, I can interact with elements such as the upvote or downvote buttons for the comments, the "Reply" links to respond to specific comments, or the "Edit" links to modify the comments.
+
+I will click on the "Upvote" button for the first comment to see if it increases the comment's vote count.
+</think>
+
+<action>
+click('350')
+</action>
