@@ -3,7 +3,7 @@ from agentlab.agents.ap_agent.ap_agent import AutoGenPolicyAgentArgs, AutoGenPol
 from typing import Deque
 import re
 
-class AgentManager:
+class AgentWrapper:
     agents: Deque[AutoGenPolicyAgent]
     def __init__(self, root_agent_name: str):
         self.agents = deque()
