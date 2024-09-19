@@ -414,9 +414,15 @@ class Hints(dp.PromptElement):
     # NOTE: are these hints still relevant?
 
     # MOD: Delete unrelevant hints for WebArena tasks
+
+#     _prompt = """\
+# Notes you MUST follow:
+# * Refer the provided shortcuts and skills to complete the task if they can help for the task.
+# * Make sure to use bid to identify elements when using commands.
+# * If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
+# """
     _prompt = """\
-Notes you MUST follow:
-* Refer the provided shortcuts and skills to complete the task if they can help for the task.
+Note:
 * Make sure to use bid to identify elements when using commands.
 * If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
 """

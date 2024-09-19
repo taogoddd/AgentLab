@@ -71,10 +71,10 @@ def get_skills_desc(skills_path: str):
 
 def construct_prompt_messages(
         website: str,
-        skill_root_path: str,
+        skills_file_path: str,
         trajectory: list[TrajectoryStep],
     ):
-    existing_skills_str = get_skills_desc(skills_path=f"{skill_root_path}/{website}/skills.json")
+    existing_skills_str = get_skills_desc(skills_path=skills_file_path)
     
     goal = trajectory[0]["obs"]["goal"]
     system_prompt = f"""\
@@ -253,11 +253,13 @@ def extract_skills(
         website: str,
         traj_path: str,
         model: str = "gpt-4o",
-        skill_root_path: str = "src/agentlab/skills"
+        skill_root_path: str = "src/agentlab/skills",
+        id: str = ""
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)
-        messages = construct_prompt_messages(website, skill_root_path, trajectory)
+        skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
+        messages = construct_prompt_messages(website, skills_file_path, trajectory)
         response = generate_from_openai_chat_completion(messages, model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting general skills", "*"*50)
         print(response)

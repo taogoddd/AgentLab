@@ -35,6 +35,24 @@ def format_skills(skills):
     
     return skills_str
 
+def merged_format_skills(skills):
+    prefix = "# Skills (common workflows summarized from previous experience):\n"
+
+    for i, skill in enumerate(skills):
+        if skill["type"] == "navi":
+            prefix += f"## Skill {i+1}: navigate to {skill['name']}\n"
+            prefix += f"### {skill['name']} contents: {skill['description']}\n"
+            prefix += f"### Potential usages: {skill['usages']}\n"
+            prefix += f"### Steps:\n1. navigate to {skill['name']}.```goto('{skill['URL']}')```\n"
+        elif skill["type"] == "general":
+            prefix += f"## Skill {i+1}: {skill['skill']}\n"
+            prefix += f"### Steps:\n{skill['steps']}\n"
+    
+    if len(skills) == 0:
+        prefix = "No skills available."
+    
+    return prefix
+
 def str2bool(v):
     if isinstance(v, bool):
         return v
@@ -183,7 +201,7 @@ def main():
         retrieved_skills = skills
     print("*"*50, "Retrieved skills", "*"*50)
     print(retrieved_skills)
-    skill_str = format_skills(retrieved_skills)
+    skill_str = merged_format_skills(retrieved_skills)
     
     env_args = EnvArgs(
         task_name=args.task_name,
@@ -202,7 +220,7 @@ def main():
                 max_total_tokens=128_000,  # "Maximum total tokens for the chat model."
                 max_input_tokens=126_000,  # "Maximum tokens for the input to the chat model."
                 max_new_tokens=2_000,  # "Maximum total tokens for the chat model."
-                temperature=0.7,
+                temperature=0.1,
             ),
             flags = SkillAugmentedPromptFlags(
                 obs=dp.ObsFlags(

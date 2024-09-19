@@ -65,6 +65,7 @@ def main():
                     "--id", str(i),
                     "--website", args.website,
                     "--skill_path", f"{args.skill_root_path}/{args.website}/skills.json"
+                    "--max_steps", 30
                 ])
                 process.wait()
 

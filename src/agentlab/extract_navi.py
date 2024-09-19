@@ -157,6 +157,7 @@ def extract_navi_skill(
         traj_path: str,
         model: str = "gpt-4o",
         skill_root_path: str = "src/agentlab/skills",
+        id: str = ""
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)
@@ -167,14 +168,9 @@ def extract_navi_skill(
         parsed_res_list = parse_html_tag_output(input_string=response, tags=["URL", "think", "page-summary"])
         # check if the URL has been extracted
         # load skills
-        with open(f"{skill_root_path}/{website}/skills.json", "r") as f:
+        with open(f"{skill_root_path}/{website}/skills_{id}.json", "r") as f:
             skills = json.load(f)
-        for res in parsed_res_list:
-            URL = res["URL"]
-            print(f"URL: {URL}")
-            # check if the URL has been extracted
-            if any(skill["URL"] == URL for skill in skills if skill["type"] == "navi"):
-                parsed_res_list.remove(res)
+        parsed_res_list = [res for res in parsed_res_list if not any(skill["URL"] == res["URL"] for skill in skills if skill["type"] == "navi")]
         # add traj_path to parsed_res_list
         for i, res in enumerate(parsed_res_list):
             summary = res["page-summary"]

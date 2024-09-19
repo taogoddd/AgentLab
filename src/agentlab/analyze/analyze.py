@@ -263,7 +263,7 @@ def get_task_template_id_mapping():
     return task_template_mapping
 
 # get_avg_score("/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/baseline_reattempts_single_action20240919021217")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics20240919183534")
 # get_merged_avg_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
 # get_merged_avg_template_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
 # get_sub_domain_avg_score("reddit", "/home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning")
@@ -289,3 +289,8 @@ new_get_avg_score("/home/ytliu/github/AgentLab/results/baseline_reattempts_singl
 
 # with open("/home/ytliu/github/AgentLab/src/agentlab/skills/shopping_admin/skills_1.json", "w") as f:
 #     json.dump(skills, f, indent=2)
+
+# with open("/home/ytliu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/exp_args.pkl", "rb") as f:
+#     import pickle
+#     exp_args = pickle.load(f)
+#     print(exp_args)

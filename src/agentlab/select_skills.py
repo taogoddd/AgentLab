@@ -5,15 +5,18 @@ from agentlab.utils.llms import generate_from_openai_chat_completion
 import re
 
 def parse_selection_output(input_string: str) -> List[str]:
-    # Regular expression to match 'id' and 'name' pairs
-    pattern = r'id: (\d+); name: ([^;]+)'
+    try:
+        # Regular expression to match 'id' and 'name' pairs
+        pattern = r'id: (\d+); name: ([^;]+)'
 
-    # Find all matches in the input string
-    matches = re.findall(pattern, input_string)
+        # Find all matches in the input string
+        matches = re.findall(pattern, input_string)
 
-    # Convert matches to a list of dictionaries
-    parsed_list = [{'id': int(match[0]), 'name': match[1].strip()} for match in matches]
-
+        # Convert matches to a list of dictionaries
+        parsed_list = [{'id': int(match[0]), 'name': match[1].strip()} for match in matches]
+    except Exception as e:
+        print(f"Error: {e}")
+        parsed_list = []
     return parsed_list
 
 def select_navi_skills(intent: str, website: str, navi_skills, model: str, max_skills: int = 5):
@@ -195,12 +198,15 @@ Skills to choose from:
             }
         ]
         return messages
-    
     messages = construct_prompt_messages(intent, website, general_skills)
     response = generate_from_openai_chat_completion(messages, model, 0.7, 2048)
     print("*"*50, "Response during select_general_skills", "*"*50)
     print(response)
-    parsed_res = parse_html_tag_output(input_string=response, tags=["think", "selected-skills"])[0] # Only one response
+    parsed_res_list = parse_html_tag_output(input_string=response, tags=["think", "selected-skills"])
+    if len(parsed_res_list) == 1:
+        parsed_res = parsed_res_list[0]
+    else:
+        parsed_res = {"selected-skills": ""}
     selected_skills = parse_selection_output(parsed_res["selected-skills"])
     selected_generals = [general_skills[int(skill["id"]) - 1] for skill in selected_skills]
 

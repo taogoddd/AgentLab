@@ -1,0 +1,35 @@
+[
+  {
+    "URL": "http://localhost:7780/admin/admin/dashboard/",
+    "think": "The content of the page displays overall sales metrics, including Lifetime Sales, Average Order, Recent Orders, Last Searched Terms, Top Searched Terms, and a list of Bestselling Products among others. It allows the user to track the performance of the store, identify top-selling products, and stay informed on search trends.",
+    "page-summary": "Name: Dashboard pageDescription: This page provides insights into overall sales metrics, including Lifetime Sales, Average Order, Recent Orders, Last Searched Terms, Top Searched Terms, and Bestselling Products.Usages: Monitor store performance, track best-selling products, and get insights into search trends.",
+    "name": "Dashboard page",
+    "description": "This page provides insights into overall sales metrics, including Lifetime Sales, Average Order, Recent Orders, Last Searched Terms, Top Searched Terms, and Bestselling Products.",
+    "usages": "Monitor store performance, track best-selling products, and get insights into search trends.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics20240919182206/webarena.0/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  },
+  {
+    "URL": "http://localhost:7780/admin/reports/report/",
+    "think": "This page shows a categorized menu for different types of reports, such as marketing, sales, customers, products, and business intelligence. It allows users to navigate and generate various reports.",
+    "page-summary": "Name: Reports pageDescription: it lists categories and types of reports available, such as sales, marketing, and customer reports.Usages: navigate and generate specific reports to analyze different aspects of the business.",
+    "name": "Reports page",
+    "description": "it lists categories and types of reports available, such as sales, marketing, and customer reports.",
+    "usages": "navigate and generate specific reports to analyze different aspects of the business.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics20240919182206/webarena.2/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  },
+  {
+    "URL": "http://localhost:7780/admin/reports/report_sales/bestsellers/",
+    "think": "This page shows the bestsellers report which can be filtered by date range. It provides a list of products sorted by order quantity within the selected period.",
+    "page-summary": "Name: Bestsellers Report pageDescription: it provides a list of best-selling products filtered by date range.Usages: view and analyze details of top-selling products over a specific period.",
+    "name": "Bestsellers Report page",
+    "description": "it provides a list of best-selling products filtered by date range.",
+    "usages": "view and analyze details of top-selling products over a specific period.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics20240919182206/webarena.2/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  }
+]
