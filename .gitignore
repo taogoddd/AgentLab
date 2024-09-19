@@ -8,3 +8,4 @@ src/agentlab/autogen_policy/corner_explorations/*
 src/agentlab/autogen_policy/offline/random_exploration/explorations
 __pycache__/
 src/agentlab/config_files/*
+src/agentlab/autogen_policy/skills
