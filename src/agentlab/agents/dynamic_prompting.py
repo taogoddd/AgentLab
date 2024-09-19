@@ -547,7 +547,6 @@ class Hints(PromptElement):
     _prompt = """\
 Note:
 * Make sure to use bid to identify elements when using commands.
-* If you are provided with augmented action, you may use it if needed. These actions are more task-specific and may help you achieve your goal faster.
 * If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
 """
 class SystemPrompt(PromptElement):

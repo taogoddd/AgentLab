@@ -452,7 +452,6 @@ document.addEventListener("visibilitychange", () => {
 
         # call validate
         reward, done, user_message, info = self.task.validate(self.page, self.chat.messages)
-
         # safety fix, in case validate() did mess up the active page and/or page history
         if prev_active_page != self.page or prev_page_history != self.page_history:
             logger.info(

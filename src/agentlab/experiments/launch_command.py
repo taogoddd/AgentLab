@@ -39,12 +39,13 @@ exp_args_list = None
 # exp_group_name = get_most_recent_folder(RESULTS_DIR).name
 
 # WebArena ACI Study
-exp_group_name = "aci_study"
+exp_group_name = "baseline"
 
 # relaunch_mode = "incomplete_only"
 # relaunch_mode = "all_errors"
 relaunch_mode = None
 
+# RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/corner_explorations"
 
 main(
     exp_root=RESULTS_DIR,

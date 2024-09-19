@@ -15,7 +15,9 @@ from agentlab.agents.utils import openai_monitored_agent
 from agentlab.llm.chat_api import ChatModelArgs
 from agentlab.llm.llm_utils import ParseError, RetryError, retry_and_fit, retry
 from .prompt import GenericPromptFlags, MainPrompt
+from pathlib import Path
 
+DEFAULT_EXP_DIR = Path("src/agentlab/autogen_policy/offline/human_annotation/annotations")
 @dataclass
 class HumanAnnotatorArgs(AbstractAgentArgs):
     chat_model_args: ChatModelArgs = None
@@ -23,7 +25,7 @@ class HumanAnnotatorArgs(AbstractAgentArgs):
     flags: GenericPromptFlags = None
 
     def make_agent(self, **kwargs):
-        exp_dir = kwargs.get("exp_dir", None)
+        exp_dir = kwargs.get("exp_dir", DEFAULT_EXP_DIR)
         return HumanAnnotator(
             chat_model_args=self.chat_model_args, flags=self.flags, exp_dir=exp_dir
         )
@@ -55,6 +57,7 @@ class HumanAnnotator(Agent):
         '''
         return the readable string of the chat messages
         '''
+        # exp_dir is a Path object here
         text_info_path = self.exp_dir / "annotation_text_info.txt"
         image_info_path = self.exp_dir / "annotation_image_info.jpg"
 
@@ -132,7 +135,8 @@ class HumanAnnotator(Agent):
                 HumanMessage(content=prompt),
             ]
             human_prompt = "*"*50 + "\n"
-            human_prompt += f"Text info path: {self.save_annotation_info(chat_messages)[0]}\nImage info path: {self.save_annotation_info(chat_messages)[1]}\nEnter your action based on the given info: "
+            text_path, image_path = self.save_annotation_info(chat_messages)
+            human_prompt += f"Text info path: {text_path}\nImage info path: {image_path}\nEnter your action based on the given info: "
             ans_dict = {"action": input(human_prompt)}
         except RetryError as e:
             # Likely due to maximum retry. We catch it here to be able to return

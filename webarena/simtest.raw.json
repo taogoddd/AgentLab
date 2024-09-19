@@ -1,0 +1,14 @@
+[
+    {
+        "sites": [
+            "reddit"
+        ],
+        "task_id": 0,
+        "require_login": true,
+        "storage_state": "./.auth/reddit_state.json",
+        "start_url": "http://localhost:9999/f/news",
+        "geolocation": null,
+        "intent": "\nNavigate to the Showerthoughts forum\n",
+        "require_reset": false
+    }
+]

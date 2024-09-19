@@ -153,21 +153,19 @@ def llm_fuzzy_match(pred: str, reference: str, question: str) -> float:
     message += "all the string 'N/A' that you see is a special sequence that means 'not achievable'\n"
     message += f"student answer: {pred}\n"
     message += "Conclude the judgement by correct/incorrect/partially correct."
-    print(message)
     messages = [
         {"role": "system", "content": "You are a helpful assistant"},
         {"role": "user", "content": message},
     ]
 
     response = generate_from_openai_chat_completion(
-        model="gpt-4o",
+        model="gpt-4-1106-preview",
         messages=messages,
         temperature=0,
         max_tokens=768,
         top_p=1.0,
         context_length=0,
     ).lower()
-    print(response)
     if "partially correct" in response or "incorrect" in response:
         return 0.0
     else:

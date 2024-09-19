@@ -12,7 +12,7 @@ from agentlab.agents import dynamic_prompting as dp
 from agentlab.agents.utils import openai_monitored_agent
 from agentlab.llm.chat_api import ChatModelArgs
 from agentlab.llm.llm_utils import ParseError, RetryError, retry_and_fit, retry
-from .explorer_prompt import ExplorerPromptFlags, MainPrompt, SystemPrompt
+from agentlab.agents.explorer.explorer_prompt import ExplorerPromptFlags, MainPrompt, SystemPrompt
 
 
 @dataclass

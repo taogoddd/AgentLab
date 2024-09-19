@@ -24,6 +24,7 @@ from PIL import Image
 from openai import RateLimitError
 
 
+
 def _extract_wait_time(error_message, min_retry_wait_time=60):
     """Extract the wait time from an OpenAI RateLimitError message."""
     match = re.search(r"try again in (\d+(\.\d+)?)s", error_message)
@@ -117,6 +118,7 @@ def retry_and_fit(
     rate_limit_max_wait_time=60 * 30,
     fit_function: callable = lambda shrinkable, *kw: shrinkable,
     add_missparsed_messages=True,
+    examples = []
 ):
     """Retry querying the chat models with the response from the parser until it
     returns a valid value. The prompt is passed through a fitting function at each

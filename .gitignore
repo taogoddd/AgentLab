@@ -2,3 +2,9 @@ browsergym/workarena/data_files
 annotations/*
 src/agentlab/autogen_policy/offline/random_exploration/experiences/*
 src/agentlab/autogen_policy/offline/random_exploration/explorations/*
+results/*
+src/agentlab/autogen_policy/annotations/*
+src/agentlab/autogen_policy/corner_explorations/*
+src/agentlab/autogen_policy/offline/random_exploration/explorations
+__pycache__/
+src/agentlab/config_files/*

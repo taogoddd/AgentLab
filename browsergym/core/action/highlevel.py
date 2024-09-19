@@ -80,12 +80,16 @@ BID_ACTIONS = [
     upload_file,
 ]
 
-WA_BID_ACTIONS = [
+WA_BASE_ACTIONS = [
     scroll,
     fill,
     select_option,
     click,
-    clear
+    clear,
+    hover,
+    go_back,
+    go_forward,
+    goto,
 ]
 
 COORD_ACTIONS = [
@@ -159,8 +163,8 @@ class HighLevelActionSet(AbstractActionSet):
                     case "infeas":
                         allowed_actions.extend(INFEAS_ACTIONS)
                     # bid actions for webarena, delete the unnecessary actions
-                    case "wa_bid":
-                        allowed_actions.extend(WA_BID_ACTIONS)
+                    case "wa_base":
+                        allowed_actions.extend(WA_BASE_ACTIONS)
                     case "bid":
                         allowed_actions.extend(BID_ACTIONS)
                     case "coord":
@@ -322,7 +326,7 @@ One single action to be executed. You can only use one action at a time."""
 """
         description += f"""\
 {len(augmented_actions)} augmented actions are available. These actions are more task-specific and may help you achieve your goal faster.
-"""
+""" if len(augmented_actions) > 0 else ""
         
         # prompt for augmented_actions
         for action in augmented_actions:

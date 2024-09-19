@@ -93,7 +93,7 @@ exp_group_name = "annotate"
 # relaunch_mode = "all_errors"
 relaunch_mode = None
 
-RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/annotations"
+RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/human_annotation/annotations"
 
 main(
     exp_root=RESULTS_DIR,

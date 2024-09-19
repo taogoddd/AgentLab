@@ -1,0 +1,16 @@
+[
+    {
+        "sub-goal": "\nNavigate to the latest post in the News forum and sort by New\n",
+        "instruction": "\n1. Click on the \"Forums\" menu.\n2. Click on the \"news\" forum.\n3. Click on the sorting dropdown menu.\n4. Select \"New\" from the sorting options.\n",
+        "starting-step": "\n0\n",
+        "ending-step": "\n4\n",
+        "website": "Reddit"
+    },
+    {
+        "sub-goal": "\nSort posts by 'New'\n",
+        "instruction": "\n1. Click on the dropdown menu labeled 'Hot' (element with ID 137). \n2. Select the 'New' sorting option from the dropdown menu.\n",
+        "starting-step": "\n0\n",
+        "ending-step": "\n1\n",
+        "website": "Reddit"
+    }
+]

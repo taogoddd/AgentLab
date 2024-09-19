@@ -394,12 +394,17 @@ if __name__ == "__main__":
 class Instructions(dp.PromptElement):
     _prompt = """\
 # Instructions
-Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
-with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
-states """
+Your will be given a task and the corresponding step-by-step instruction for the task.
+The task will have a general version, e.g. "Navigate to subreddit r/{subreddit}". and a specific version, e.g. "Navigate to subreddit r/books".
+Your task is to discover corner cases and edge cases of the general task that can not be completed with the given instruction.]
+You should explore on the webpage to find the corner cases to find the edge cases.
+After finding corner cases, your final output should be a list of placeholders of the corner cases, e.g. "Airplane" for {subreddit} because "Navigate to subreddit r/airplane" is a corner case of the general task and can not be completed with the given instruction.
+
+Some common reason for corner cases:
+- need to scroll down or change page
+"""
 
 # system prompt for the explorer agent
 class SystemPrompt(dp.PromptElement):
     _prompt = """\
-You are a web-agent that can interact with the given webpage by taking actions. Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
-with the webpage through these actions."""
+You are a web-agent that can interact with the given webpage by taking actions."""

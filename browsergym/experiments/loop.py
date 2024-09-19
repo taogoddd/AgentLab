@@ -24,8 +24,6 @@ from browsergym.core.chat import Chat
 from .agent import Agent
 from .utils import count_messages_token, count_tokens
 
-from browsergym.utils.stack import Stack
-
 logger = logging.getLogger(__name__)
 
 
@@ -696,6 +694,8 @@ def _get_env_name(task_name: str):
     elif task_name.startswith("workarena"):
         import browsergym.workarena
     elif task_name.startswith("webarena"):
+        import browsergym.webarena
+    elif task_name.startswith("sim_webarena"):
         import browsergym.webarena
 
     return f"browsergym/{task_name}"

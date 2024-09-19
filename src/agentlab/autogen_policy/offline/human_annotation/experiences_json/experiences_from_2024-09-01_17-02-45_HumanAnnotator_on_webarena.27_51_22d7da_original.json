@@ -1,0 +1,12 @@
+[
+    {
+        "sub-goal": "Navigate to the Showerthoughts forum",
+        "instruction": "1. Click on the \"Forums\" tab with the ID 42.\n2. Scroll through the list of forums to find the \"Showerthoughts\" forum and click on it.",
+        "website": "Reddit"
+    },
+    {
+        "sub-goal": "Sort the forum posts by 'New'",
+        "instruction": "1. Click on the sorting dropdown with the ID 128.\n2. Select the \"New\" sorting option by clicking on it.",
+        "website": "Reddit"
+    }
+]

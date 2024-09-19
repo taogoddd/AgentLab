@@ -163,6 +163,7 @@ def get_benchmark_env_args(
         "workarena.l3": 30,
         "webarena": 15,
         "miniwob": 10,
+        "sim_webarena": 30
     }
 
     n_repeat_default = {
@@ -171,6 +172,7 @@ def get_benchmark_env_args(
         "workarena.l3": 1,
         "webarena": 1,
         "miniwob": 5,
+        "sim_webarena": 1
     }
 
     if max_steps is None:
@@ -213,6 +215,12 @@ def get_benchmark_env_args(
         from browsergym.webarena import ALL_WEBARENA_TASK_IDS
 
         env_args_list = _make_env_args(ALL_WEBARENA_TASK_IDS, max_steps, n_repeat, rng)
+
+    elif benchmark_name == "sim_webarena":
+        from browsergym.webarena import ALL_SIM_WEBARENA_TASK_IDS
+
+        env_args_list = _make_env_args(ALL_SIM_WEBARENA_TASK_IDS, max_steps, n_repeat, rng)
+            
     elif benchmark_name == "miniwob":
         env_args_list = _make_env_args(MINIWOB_ALL, max_steps, n_repeat, rng)
     else:
