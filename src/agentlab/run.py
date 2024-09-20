@@ -4,7 +4,7 @@ import json
 from browsergym.experiments.loop import EnvArgs, ExpArgs
 from agentlab.agents.skill_augmented_agent.sa_agent import SkillAugmentedAgentArgs
 from agentlab.agents.skill_augmented_agent.sa_agent_prompt import SkillAugmentedPromptFlags
-from agentlab.llm.chat_api import ChatModelArgs, OpenAIChatModelArgs
+from agentlab.llm.chat_api import ChatModelArgs, OpenAIChatModelArgs, AzureOpenAIChatModelArgs
 from agentlab.agents.dynamic_prompting import Flags
 import agentlab.agents.dynamic_prompting as dp
 from agentlab.select_skills import select_skills
@@ -212,16 +212,26 @@ def main():
         slow_mo=args.slow_mo,
     )
 
+    if args.model_name.startswith("openai"):
+        chat_model_args = OpenAIChatModelArgs(
+            model_name=args.model_name,
+            max_total_tokens=128_000,
+            max_input_tokens=126_000,
+            max_new_tokens=2_000,
+            temperature=0.1,
+        )
+    elif args.model_name.startswith("azure"):
+        chat_model_args = AzureOpenAIChatModelArgs(
+            model_name=args.model_name,
+            max_total_tokens=128_000,
+            max_input_tokens=126_000,
+            max_new_tokens=2_000,
+            temperature=0.1,
+        )
     exp_args = ExpArgs(
         env_args=env_args,
         agent_args=SkillAugmentedAgentArgs(
-            chat_model_args=OpenAIChatModelArgs(
-                model_name=args.model_name,
-                max_total_tokens=128_000,  # "Maximum total tokens for the chat model."
-                max_input_tokens=126_000,  # "Maximum tokens for the input to the chat model."
-                max_new_tokens=2_000,  # "Maximum total tokens for the chat model."
-                temperature=0.1,
-            ),
+            chat_model_args=chat_model_args,
             flags = SkillAugmentedPromptFlags(
                 obs=dp.ObsFlags(
                     use_html=False,

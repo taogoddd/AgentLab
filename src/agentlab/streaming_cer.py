@@ -35,7 +35,7 @@ def parse_args():
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
     parser.add_argument("--num_samples", type=int, default=3, help="Number of times to run the same task")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
-    parser.add_argument("--model", type=str, default="gpt-4o", help="Model name to use for inference")
+    parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
     parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_results/agentlab_baseline", help="Directory to save the results")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     return parser.parse_args()
@@ -70,7 +70,7 @@ def main():
                 "python", "src/agentlab/run.py", 
                 "--task", f"webarena.{task_id}",
                 "--result_dir", f"results/{id}/webarena.{task_id}",
-                "--model_name", "azureopenai/gpt-4o",
+                "--model_name", "azureopenai/"+args.model,
                 "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{id}.json",
                 "--id", "0",
                 "--max_steps", str(args.max_steps)
