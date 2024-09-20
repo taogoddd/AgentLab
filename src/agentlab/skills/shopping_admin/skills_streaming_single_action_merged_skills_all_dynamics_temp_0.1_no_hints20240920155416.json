@@ -1,0 +1,13 @@
+[
+  {
+    "URL": "http://localhost:7780/admin/admin/dashboard/",
+    "think": "The page shows detailed statistics and reports including Life Time Sales, Average Order, Last Orders, Last Search Terms, and Top Search Terms. It also displays different tabs for Bestsellers, Most Viewed Products, New Customers, and Customers.",
+    "page-summary": "Name: Dashboard pageDescription: it shows an overview of sales statistics, detailed reports, and tabs for bestsellers, most viewed products, new customers, and customer information.Usages: view overall sales performance, check product popularity, and monitor customer activities.",
+    "name": "Dashboard page",
+    "description": "it shows an overview of sales statistics, detailed reports, and tabs for bestsellers, most viewed products, new customers, and customer information.",
+    "usages": "view overall sales performance, check product popularity, and monitor customer activities.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920155416/webarena.0/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  }
+]

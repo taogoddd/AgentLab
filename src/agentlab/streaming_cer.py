@@ -70,7 +70,7 @@ def main():
                 "python", "src/agentlab/run.py", 
                 "--task", f"webarena.{task_id}",
                 "--result_dir", f"results/{id}/webarena.{task_id}",
-                "--model_name", "openai/gpt-4o",
+                "--model_name", "azureopenai/gpt-4o",
                 "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{id}.json",
                 "--id", "0",
                 "--max_steps", str(args.max_steps)
