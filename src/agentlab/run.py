@@ -253,7 +253,7 @@ def main():
                 use_thinking=True,
                 use_memory=False,
                 use_concrete_example=True,
-                use_abstract_example=False,
+                use_abstract_example=True,
                 use_hints=True,
                 enable_chat=False,
                 max_prompt_tokens=None,

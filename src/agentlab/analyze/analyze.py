@@ -263,7 +263,7 @@ def get_task_template_id_mapping():
     return task_template_mapping
 
 # get_avg_score("/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics20240919183534")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920010650")
 # get_merged_avg_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
 # get_merged_avg_template_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
 # get_sub_domain_avg_score("reddit", "/home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning")

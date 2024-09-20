@@ -1,0 +1,13 @@
+[
+  {
+    "URL": "http://localhost:7780/admin/admin/dashboard/",
+    "think": "From the content of the page, it shows an administrative dashboard displaying various statistics like lifetime sales, average orders, bestsellers, last orders, and search terms.",
+    "page-summary": "Name: Dashboard pageDescription: It shows an administrative dashboard with various business performance statistics.Usages: View and manage business performance, including sales, orders, and search analytics.",
+    "name": "Dashboard page",
+    "description": "It shows an administrative dashboard with various business performance statistics.",
+    "usages": "View and manage business performance, including sales, orders, and search analytics.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920005513/webarena.0/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  }
+]

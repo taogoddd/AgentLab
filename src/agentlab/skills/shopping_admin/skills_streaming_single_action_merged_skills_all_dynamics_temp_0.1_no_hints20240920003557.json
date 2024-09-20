@@ -1,0 +1,13 @@
+[
+  {
+    "URL": "http://localhost:7780/admin/admin/dashboard/",
+    "think": "The content of the page shows an admin dashboard for a shopping website. It provides an overview of sales performance, last orders, search terms, and top products like bestsellers. ",
+    "page-summary": "Name: Admin Dashboard pageDescription: It provides an overview of sales performance including lifetime sales, average order value, last orders, search terms, and bestselling products.Usages: Monitor sales performance, view latest customer orders, and review top products.",
+    "name": "Admin Dashboard page",
+    "description": "It provides an overview of sales performance including lifetime sales, average order value, last orders, search terms, and bestselling products.",
+    "usages": "Monitor sales performance, view latest customer orders, and review top products.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920003557/webarena.0/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  }
+]

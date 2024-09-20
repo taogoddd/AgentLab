@@ -43,8 +43,8 @@ def parse_args():
 def main():
     args = parse_args()
 
-    # id = "streaming_single_action_merged_skills_all_dynamics"+time.strftime("%Y%m%d%H%M%S", time.localtime())
-    id = "streaming_single_action_merged_skills_all_dynamics20240919183534"
+    # id = "streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+    id = "streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920010650"
 
     config_files = [
         os.path.join("src/agentlab/config_files", f) for f in os.listdir("src/agentlab/config_files")
@@ -73,6 +73,7 @@ def main():
                 "--model_name", "openai/gpt-4o",
                 "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{id}.json",
                 "--id", "0",
+                "--max_steps", str(args.max_steps)
             ])
             process.wait()
 
@@ -91,8 +92,7 @@ def main():
                 print(general_skills)
                 save_skills(f"{args.skill_root_path}/{args.website}/skills_{id}.json", general_skills)
         except Exception as e:
-            print(f"Error: {e}")
+            print(e)
             continue
-
 if __name__ == "__main__":
     main()

@@ -25,7 +25,8 @@ def retry_with_exponential_backoff(  # type: ignore
             try:
                 return func(*args, **kwargs)
             # Retry on specified errors
-            except errors as e:
+            except Exception as e:
+            # except errors as e:
                 # Increment retries
                 num_retries += 1
 
@@ -42,8 +43,8 @@ def retry_with_exponential_backoff(  # type: ignore
                 time.sleep(delay)
 
             # Raise exceptions for any errors not specified
-            except Exception as e:
-                raise e
+            # except Exception as e:
+            #     raise e
 
     return wrapper
 

@@ -421,6 +421,7 @@ class Hints(dp.PromptElement):
 # * Make sure to use bid to identify elements when using commands.
 # * If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
 # """
+    # remove highlight skills
     _prompt = """\
 Note:
 * Make sure to use bid to identify elements when using commands.

@@ -1,0 +1,13 @@
+[
+  {
+    "URL": "http://localhost:7780/admin/admin/dashboard/",
+    "think": "From the content of the page, it shows various statistics and reports including bestsellers, last orders, search terms, and top search terms. This page is primarily for reviewing the performance and activity on the shopping website.",
+    "page-summary": "Name: Dashboard pageDescription: It shows various statistics and performance indicators including bestsellers, last orders, search terms, and top search terms.Usages: Review performance and activity on the shopping website.",
+    "name": "Dashboard page",
+    "description": "It shows various statistics and performance indicators including bestsellers, last orders, search terms, and top search terms.",
+    "usages": "Review performance and activity on the shopping website.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920004459/webarena.0/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  }
+]

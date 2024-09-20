@@ -35,10 +35,10 @@ def get_skills_desc(skills_path: str):
 
 def construct_prompt_messages(
         website: str,
-        skill_root_path: str,
+        skill_file_path: str,
         trajectory: list[TrajectoryStep],
     ):
-    existing_pages_str = get_skills_desc(f"{skill_root_path}/{website}/skills.json")
+    existing_pages_str = get_skills_desc(skill_file_path)
     goal = trajectory[0]["obs"]["goal"]
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
@@ -161,7 +161,8 @@ def extract_navi_skill(
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)
-        messages = construct_prompt_messages(website, skill_root_path, trajectory)
+        skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
+        messages = construct_prompt_messages(website, skills_file_path, trajectory)
         response = generate_from_openai_chat_completion(messages, model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting dynamics", "*"*50)
         print(response)
@@ -182,8 +183,9 @@ def extract_navi_skill(
             res["website"] = website
             res["type"] = "navi"
     except Exception as e:
-        print(f"Error: {e}")
         parsed_res_list = []
+        raise e
+        
     return parsed_res_list
 
 # traj_path = f"/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0"
