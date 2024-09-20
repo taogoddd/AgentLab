@@ -47,7 +47,7 @@ def get_skills_desc(skills_path: str):
             skills_str += f"Skill {i+1}: navigate to {skill['name']}\n"
             skills_str += f"Description: {skill['description']}\n"
             skills_str += f"Usages: {skill['usages']}\n"
-            skills_str += f"1. ```goto('{skill["URL"]}')```\n"
+            skills_str += f"1. ```goto('{skill['URL']}')```\n"
         else:
             skills_str += f"Skill {i+1}: {skill['skill']}\n"
             skills_str += f"{skill['steps']}\n"

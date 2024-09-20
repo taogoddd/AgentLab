@@ -374,7 +374,7 @@ class URL(PromptElement):
                 if value == url:
                     web_str = f"Note: This is the main page of {key} website."
                 else:
-                    web_str = f"Note: This is the subpage '{url.replace(value, "")}' of {key} website."
+                    web_str = f"Note: This is the subpage '{url.replace(value, '')}' of {key} website."
                 break
 
         self._prompt = f"\n{prefix}URL of the page:\n{url}\n{web_str}\n"
