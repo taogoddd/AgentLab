@@ -1,0 +1,13 @@
+[
+  {
+    "URL": "http://localhost:7780/admin/admin/dashboard/",
+    "think": "From the content of the page, it showcases the dashboard of an admin page where various reports and statistics are displayed, like Lifetime Sales, Average Order, Last Orders, Last Search Terms, Top Search Terms, and a list of best-selling products.",
+    "page-summary": "Name: Dashboard pageDescription: it showcases an overview of various reports and statistics, such as Lifetime Sales, Average Order, Last Orders, Last Search Terms, Top Search Terms, and a list of best-selling products.Usages: view an overview of key business metrics, including best-selling products, search terms, and recent orders.",
+    "name": "Dashboard page",
+    "description": "it showcases an overview of various reports and statistics, such as Lifetime Sales, Average Order, Last Orders, Last Search Terms, Top Search Terms, and a list of best-selling products.",
+    "usages": "view an overview of key business metrics, including best-selling products, search terms, and recent orders.",
+    "traj_path": "results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920153917/webarena.0/0",
+    "website": "shopping_admin",
+    "type": "navi"
+  }
+]
