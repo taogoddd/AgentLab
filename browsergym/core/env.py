@@ -146,6 +146,9 @@ class BrowserEnv(gym.Env, ABC):
         # action space
         self.action_space = Unicode(min_length=0, max_length=TEXT_MAX_LENGTH)
 
+        # page recovery count
+        self.page_recovery_count = 0
+
     def close(self):
         if self.task:
             # stop the task
@@ -452,13 +455,18 @@ document.addEventListener("visibilitychange", () => {
 
         # call validate
         reward, done, user_message, info = self.task.validate(self.page, self.chat.messages)
-        # safety fix, in case validate() did mess up the active page and/or page history
+
+        # safety fix, in case validate() did mess up the active page and/or page history; check up to 3 times to avoid infinite loops
+        # if self.page_recovery_count > 5:
+        #     self.page_recovery_count = 0
+        
         if prev_active_page != self.page or prev_page_history != self.page_history:
             logger.info(
                 "The active page and / or page history has changed during task.validate(). A recovery fix will be applied."
             )
             self.page = prev_active_page
             self.page_history = prev_page_history
+            # self.page_recovery_count += 1
 
         return reward, done, user_message, info
 

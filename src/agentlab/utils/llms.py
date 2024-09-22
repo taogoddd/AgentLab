@@ -62,57 +62,57 @@ def retry_with_exponential_backoff(  # type: ignore
 
     return wrapper
 
-@retry_with_exponential_backoff
-def generate_from_openai_chat_completion(
-    messages: list[dict[str, str]],
-    model: str,
-    temperature: float,
-    max_tokens: int,
-) -> str:
+# @retry_with_exponential_backoff
+# def generate_from_openai_chat_completion(
+#     messages: list[dict[str, str]],
+#     model: str,
+#     temperature: float,
+#     max_tokens: int,
+# ) -> str:
 
-    client = get_openai_client()
-    # check whether the client is AzureOpenAI or OpenAI
-    if isinstance(client, AzureOpenAI):
-        # map the name of the model to the model id
-        if model == "gpt-4o":
-            model = "gpt-4o-2024-05-13"
-        response = client.chat.completions.create(  # type: ignore
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-    elif isinstance(client, OpenAI):
-        response = client.chat.completions.create(  # type: ignore
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-    answer: str = response.choices[0].message.content
-    return answer
+#     client = get_openai_client()
+#     # check whether the client is AzureOpenAI or OpenAI
+#     if isinstance(client, AzureOpenAI):
+#         # map the name of the model to the model id
+#         if model == "gpt-4o":
+#             model = "gpt-4o-2024-05-13"
+#         response = client.chat.completions.create(  # type: ignore
+#             model=model,
+#             messages=messages,
+#             temperature=temperature,
+#             max_tokens=max_tokens,
+#         )
+#     elif isinstance(client, OpenAI):
+#         response = client.chat.completions.create(  # type: ignore
+#             model=model,
+#             messages=messages,
+#             temperature=temperature,
+#             max_tokens=max_tokens,
+#         )
+#     answer: str = response.choices[0].message.content
+#     return answer
 
 # now for azure openai
-@retry_with_exponential_backoff
-def generate_from_4o_chat_completion(
-    messages: list[dict[str, str]],
-    model: str = "gpt-4o-2024-05-13",
-    temperature: float = 1.0,
-) -> str:
+# @retry_with_exponential_backoff
+# def generate_from_4o_chat_completion(
+#     messages: list[dict[str, str]],
+#     model: str = "gpt-4o-2024-05-13",
+#     temperature: float = 1.0,
+# ) -> str:
     
-    if "AZURE_OPENAI_API_KEY" not in os.environ and "OPENAI_API_KEY" not in os.environ:
-        raise ValueError(
-            "AZURE_OPENAI_API_KEY or OPENAI_API_KEY environment variable must be set when using OpenAI API."
-        )
-    elif "OPENAI_API_KEY" in os.environ:
-        client = OpenAI()
-    elif "AZURE_OPENAI_API_KEY" in os.environ:
-        client = AzureOpenAI()
+#     if "AZURE_OPENAI_API_KEY" not in os.environ and "OPENAI_API_KEY" not in os.environ:
+#         raise ValueError(
+#             "AZURE_OPENAI_API_KEY or OPENAI_API_KEY environment variable must be set when using OpenAI API."
+#         )
+#     elif "OPENAI_API_KEY" in os.environ:
+#         client = OpenAI()
+#     elif "AZURE_OPENAI_API_KEY" in os.environ:
+#         client = AzureOpenAI()
     
-    response = client.chat.completions.create(  # type: ignore
-        model=model,
-        messages=messages,
-        temperature=temperature,
-    )
-    answer: str = response.choices[0].message.content
-    return answer
+#     response = client.chat.completions.create(  # type: ignore
+#         model=model,
+#         messages=messages,
+#         temperature=temperature,
+#     )
+#     answer: str = response.choices[0].message.content
+#     return answer

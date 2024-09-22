@@ -3,7 +3,6 @@ import numpy as np
 import gzip
 import pickle
 from agentlab.agents import dynamic_prompting as dp
-from agentlab.utils.llms import generate_from_4o_chat_completion
 from PIL import Image
 import io
 import base64

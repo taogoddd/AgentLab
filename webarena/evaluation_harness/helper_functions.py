@@ -17,6 +17,7 @@ from ..browser_env.env_config import (
 )
 from ..llms.providers.openai_utils import (
     generate_from_openai_chat_completion,
+    generate_from_openai_chat_completion_with_key_pool
 )
 
 
@@ -158,7 +159,7 @@ def llm_fuzzy_match(pred: str, reference: str, question: str) -> float:
         {"role": "user", "content": message},
     ]
 
-    response = generate_from_openai_chat_completion(
+    response = generate_from_openai_chat_completion_with_key_pool(
         model="gpt-4o",
         messages=messages,
         temperature=0,
@@ -193,8 +194,8 @@ def llm_ua_match(pred: str, reference: str, question: str) -> float:
         {"role": "user", "content": message},
     ]
 
-    response = generate_from_openai_chat_completion(
-        model="gpt-4-1106-preview",
+    response = generate_from_openai_chat_completion_with_key_pool(
+        model="gpt-4o",
         messages=messages,
         temperature=0,
         max_tokens=768,

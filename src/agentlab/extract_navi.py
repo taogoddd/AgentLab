@@ -1,8 +1,22 @@
-from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url, generate_from_4o_chat_completion
-from agentlab.utils.llms import generate_from_4o_chat_completion, generate_from_openai_chat_completion
+from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url
+from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
 import re
 import json
+
+EXCLUDED_URLS = {
+    "shopping_admin": [],
+    "shopping": [],
+    "reddit": [],
+    "gitlab": [],
+    "map": [],
+}
+def eval_URL(url: str, website: str) -> bool:
+    if url in EXCLUDED_URLS[website]:
+        return False
+    if "dashboard" in url:
+        return False
+    return True
 
 def parse_page_summary(page_summary: str):
     # Modified pattern to handle optional new lines and flexible spacing
@@ -163,7 +177,7 @@ def extract_navi_skill(
         trajectory = get_trajectory_from_annotation(traj_path)
         skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
         messages = construct_prompt_messages(website, skills_file_path, trajectory)
-        response = generate_from_openai_chat_completion(messages, model, temperature=1.0, max_tokens=2048)
+        response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting dynamics", "*"*50)
         print(response)
         parsed_res_list = parse_html_tag_output(input_string=response, tags=["URL", "think", "page-summary"])
@@ -171,7 +185,7 @@ def extract_navi_skill(
         # load skills
         with open(f"{skill_root_path}/{website}/skills_{id}.json", "r") as f:
             skills = json.load(f)
-        parsed_res_list = [res for res in parsed_res_list if not any(skill["URL"] == res["URL"] for skill in skills if skill["type"] == "navi")]
+        parsed_res_list = [res for res in parsed_res_list if not any(skill["URL"] == res["URL"] for skill in skills if skill["type"] == "navi") and eval_URL(res["URL"], website)]
         # add traj_path to parsed_res_list
         for i, res in enumerate(parsed_res_list):
             summary = res["page-summary"]

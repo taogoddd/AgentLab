@@ -10,3 +10,4 @@ __pycache__/
 src/agentlab/config_files/*.json
 src/agentlab/autogen_policy/skills
 src/agentlab/skills/*
+src/agentlab/experiment_scripts/*

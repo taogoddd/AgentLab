@@ -1,7 +1,7 @@
 from typing import List
 import json
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
-from agentlab.utils.llms import generate_from_openai_chat_completion
+from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 import re
 
 def parse_selection_output(input_string: str) -> List[str]:
@@ -93,7 +93,7 @@ Shortcuts to choose from:
         return messages
     
     messages = construct_prompt_messages(intent, website, navi_skills)
-    response = generate_from_openai_chat_completion(messages, model, 0.7, 2048)
+    response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=0.7, max_tokens=2048)
     print("*"*50, "Response during select_navi_skills", "*"*50)
     print(response)
     parsed_res_list = parse_html_tag_output(input_string=response, tags=["think", "selected-pages"])
@@ -199,7 +199,7 @@ Skills to choose from:
         ]
         return messages
     messages = construct_prompt_messages(intent, website, general_skills)
-    response = generate_from_openai_chat_completion(messages, model, 0.7, 2048)
+    response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=0.7, max_tokens=2048)
     print("*"*50, "Response during select_general_skills", "*"*50)
     print(response)
     parsed_res_list = parse_html_tag_output(input_string=response, tags=["think", "selected-skills"])

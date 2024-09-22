@@ -84,7 +84,7 @@ class SkillAugmentedAgent(Agent):
                 return None, False, str(e)
             return ans_dict, True, ""
         
-        system_prompt = dp.SystemPrompt().prompt
+        system_prompt = SystemPrompt().prompt
 
         if self.flags.skill_str is not None:
             system_prompt += "\n\n" + self.flags.skill_str
@@ -177,3 +177,9 @@ does not support vision. Disabling use_screenshot."""
             else 20  # dangerous to change the default value here?
         )
         return max_prompt_tokens, max_trunk_itr
+
+class SystemPrompt(dp.PromptElement):
+    _prompt = """\
+You are an agent trying to solve a web task based on the content of the page and
+user instructions. You can interact with the page and explore, and send messages to the user. Each time you
+submit an action it will be sent to the browser and you will receive a new page."""

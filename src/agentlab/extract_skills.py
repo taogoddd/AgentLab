@@ -1,5 +1,6 @@
-from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url, generate_from_4o_chat_completion
+from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url
 import os
+from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 from agentlab.utils.utils import reset_skills
 import json
 # def extract_skill(traj_path: str, skill_root_path: str, website: str):
@@ -28,8 +29,7 @@ import json
 # )
 
 
-from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url, generate_from_4o_chat_completion
-from agentlab.utils.llms import generate_from_4o_chat_completion, generate_from_openai_chat_completion
+from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
 
 # TODO: add website description str
@@ -260,7 +260,7 @@ def extract_skills(
         trajectory = get_trajectory_from_annotation(traj_path)
         skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
         messages = construct_prompt_messages(website, skills_file_path, trajectory)
-        response = generate_from_openai_chat_completion(messages, model, temperature=1.0, max_tokens=2048)
+        response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting general skills", "*"*50)
         print(response)
         parsed_res_list = parse_html_tag_output(input_string=response, tags=["think", "skill", "steps"])

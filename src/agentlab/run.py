@@ -136,6 +136,12 @@ def parse_args():
         help="Use thinking in the agent (chain-of-thought prompting).",
     )
     parser.add_argument(
+        "--use_reminder",
+        type=str2bool,
+        default=False,
+        help="Use reminder in the agent's observation space.",
+    )
+    parser.add_argument(
         "--max_steps",
         type=int,
         default=20,
@@ -261,6 +267,7 @@ def main():
                 use_plan=False,
                 use_criticise=False,
                 use_thinking=True,
+                use_reminder=True,
                 use_memory=False,
                 use_concrete_example=True,
                 use_abstract_example=True,

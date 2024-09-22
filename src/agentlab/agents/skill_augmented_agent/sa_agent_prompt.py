@@ -39,6 +39,7 @@ class SkillAugmentedPromptFlags(dp.Flags):
     use_plan: bool = False  #
     use_criticise: bool = False  #
     use_thinking: bool = False
+    use_reminder: bool = True
     use_memory: bool = False  #
     use_concrete_example: bool = True
     use_abstract_example: bool = False
@@ -82,6 +83,8 @@ class MainPrompt(dp.Shrinkable):
         self.obs = dp.Observation(obs_history[-1], self.flags.obs)
 
         self.action_prompt = dp.ActionPrompt(action_set, action_flags=flags.action)
+
+        self.reminder = Reminder(obs_history=obs_history, action_history=actions, visible=lambda: flags.use_reminder)
 
         def time_for_caution():
             # no need for caution if we're in single action mode
@@ -136,7 +139,9 @@ Make sure to follow the template with proper tags:
 {self.memory.concrete_ex}\
 {self.criticise.concrete_ex}\
 {self.action_prompt.concrete_ex}\
+
 """
+        prompt += self.reminder.prompt
         prompt += self.hints.prompt
         return self.obs.add_screenshot(prompt)
 
@@ -343,6 +348,11 @@ dynamic dropdown, I will try using click with the bid "a324" and look at the
 response from the page.
 </think>
 """
+    def _parse_answer(self, text_answer):
+        try:
+            return parse_html_tags_raise(text_answer, keys=["think"], merge_multiple=True)
+        except ParseError as e:
+            return {"think": text_answer, "parse_error": str(e)}
 
 class ActionPrompt(dp.PromptElement):
 
@@ -426,4 +436,33 @@ class Hints(dp.PromptElement):
 Note:
 * Make sure to use bid to identify elements when using commands.
 * If you need to select an option, you may use select_option() to do this if you know the options values. Otherwise, click on the dropdown to view the options and then use select_option() to select the option.
+"""
+
+class Reminder(dp.PromptElement):
+    max_repetitive_actions = 3
+    
+    def __init__(self, obs_history: list[dict], action_history: list[str], visible) -> None:
+        super().__init__(visible=visible)
+        self.obs_history = obs_history
+        self.action_history = action_history
+        # check if the last n actions were the same with each other
+        self.repetitive_action_flag = len(set(action_history[-self.max_repetitive_actions:])) == 1 if len(action_history) >= self.max_repetitive_actions else False
+        # check if the last action had no effect on the page
+        if len(obs_history) >= 2 and "axtree_txt" in obs_history[-1] and "axtree_txt" in obs_history[-2]:
+            self.no_effect_action_flag = obs_history[-1]["axtree_txt"] == obs_history[-2]["axtree_txt"]
+        else:
+            self.no_effect_action_flag = False
+        self.repetitive_action_reminder = f"""\
+## Repetitive Actions Reminder
+The last {self.max_repetitive_actions} actions were repetitive. All of them are {action_history[-1]}. You probably get stuck in a loop. Make sure to review the observation, goal and history and think about the next action.
+""" if self.repetitive_action_flag else ""
+        self.no_effect_action_reminder = f"""\
+## No Effect Action Reminder
+The last action you took had no effect on the page, i.e. the page does not change. If this is a scroll action, this means it is already the buttom of the page, if you can not still find results you want, you may need to modify the search query or go to somewhere else to find your answer. For other actions, this might be because the element is not operatable or the option you select does not exist. Make sure to review the observation, goal and history and think about the next action.
+""" if self.no_effect_action_flag else ""
+        self._prompt = f"""\
+# Reminder
+{"No reminder" if not self.repetitive_action_flag and not self.no_effect_action_flag else ""}
+{self.repetitive_action_reminder}
+{self.no_effect_action_reminder}
 """

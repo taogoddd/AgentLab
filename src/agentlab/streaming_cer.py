@@ -27,6 +27,16 @@ def get_dir_path_from_id(parent_path: str, id: int):
             return f"{parent_path}/{subdir_name}"
     return None
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--website", type=str, required=True,
@@ -38,13 +48,17 @@ def parse_args():
     parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
     parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_results/agentlab_baseline", help="Directory to save the results")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
+    parser.add_argument("--result_dir_id", type=str, default="", help="ID of the result directory")
+    parser.add_argument("--learn_dynamics_from_failure", type=str2bool, default=False, help="Whether to learn dynamics from failure")
     return parser.parse_args()
 
 def main():
     args = parse_args()
 
-    id = "streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints"+time.strftime("%Y%m%d%H%M%S", time.localtime())
-    # id = "streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920010650"
+    if args.result_dir_id == "":
+        result_dir_id = f"streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints{"_not_ldff" if not args.learn_dynamics_from_failure else ""}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+    else:
+        result_dir_id = args.result_dir_id
 
     config_files = [
         os.path.join("src/agentlab/config_files", f) for f in os.listdir("src/agentlab/config_files")
@@ -57,8 +71,8 @@ def main():
     task_ids = [config["task_id"] for config, flag in zip(config_list, config_flags) if flag]
 
     # init the skill file
-    if not os.path.exists(f"{args.skill_root_path}/{args.website}/skills_{id}.json"):
-        with open(f"{args.skill_root_path}/{args.website}/skills_{id}.json", "w") as f:
+    if not os.path.exists(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json"):
+        with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
             json.dump([], f)
 
     # get task id between start_id and end_id
@@ -69,28 +83,30 @@ def main():
             process = Popen([
                 "python", "src/agentlab/run.py", 
                 "--task", f"webarena.{task_id}",
-                "--result_dir", f"results/{id}/webarena.{task_id}",
+                "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
                 "--model_name", "azureopenai/"+args.model,
-                "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{id}.json",
+                "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
                 "--id", "0",
                 "--max_steps", str(args.max_steps)
             ])
             process.wait()
 
-            task_dir = f"results/{id}/webarena.{task_id}/0"
+            task_dir = f"results/{result_dir_id}/webarena.{task_id}/0"
 
-            # extract dynamics from all the tasks
-            navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, id)
-            print("*"*50, f"Extracted dynamics from task", "*"*50)
-            print(navi_skills)
-            save_skills(f"{args.skill_root_path}/{args.website}/skills_{id}.json", navi_skills)
+            if args.learn_dynamics_from_failure or gt_evaluate(f"{task_dir}/summary_info.json"):
+                # extract dynamics from all the tasks
+                navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+                print("*"*50, f"Extracted dynamics from task", "*"*50)
+                print(navi_skills)
+                save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
 
             # extract general skills from the tasks that are solved
             if gt_evaluate(f"{task_dir}/summary_info.json"):
-                general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, id)
+                general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
                 print("*"*50, f"Extracted skills", "*"*50)
                 print(general_skills)
-                save_skills(f"{args.skill_root_path}/{args.website}/skills_{id}.json", general_skills)
+                save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
+
         except Exception as e:
             print(e)
             continue

@@ -22,7 +22,7 @@ import io
 import base64
 from PIL import Image
 from openai import RateLimitError
-
+from webarena.llms.providers.openai_utils import get_api_configs_from_env
 
 
 def _extract_wait_time(error_message, min_retry_wait_time=60):
@@ -77,10 +77,37 @@ def retry(
     """
     tries = 0
     rate_limit_total_delay = 0
+    api_configs = get_api_configs_from_env()
+    config_index = os.environ.get("API_CONFIG_START_INDEX", 0)
+    if config_index.isdigit():
+        config_index = int(config_index)
+    else:
+        logging.warning(
+            f"API_CONFIG_START_INDEX is not a valid integer. Using the default value of 0."
+        )
+        config_index = 0
+
     while tries < n_retry and rate_limit_total_delay < rate_limit_max_wait_time:
         try:
+            current_config = api_configs[config_index]
+            if "AZURE_OPENAI_API_CONFIGS" in os.environ:
+                os.environ["AZURE_OPENAI_API_KEY"] = current_config["api_key"]
+                os.environ["AZURE_OPENAI_ENDPOINT"] = current_config["endpoint"]
+                os.environ["OPENAI_API_VERSION"] = current_config["version"]
+            elif "OPENAI_API_CONFIGS" in os.environ:
+                os.environ["OPENAI_API_KEY"] = current_config["api_key"]
+            
+            # modify the chat object to use the new configuration
+            chat.openai_api_key = current_config["api_key"]
+            if isinstance(chat, AzureChatOpenAI):
+                chat.azure_endpoint = current_config["endpoint"]
+                chat.openai_api_version = current_config["version"]
+            
             answer = chat.invoke(messages)
         except RateLimitError as e:
+            # Rotate to the next configuration
+            config_index = (config_index + 1) % len(api_configs)
+
             wait_time = _extract_wait_time(e.args[0], min_retry_wait_time)
             logging.warning(f"RateLimitError, waiting {wait_time}s before retrying.")
             time.sleep(wait_time)
@@ -160,10 +187,26 @@ def retry_and_fit(
     tries = 0
     rate_limit_total_delay = 0
 
+    api_configs = get_api_configs_from_env()
+    config_index = os.environ.get("API_CONFIG_START_INDEX", 0)
+    if config_index.isdigit():
+        config_index = int(config_index)
+    else:
+        logging.warning(
+            f"API_CONFIG_START_INDEX is not a valid integer. Using the default value of 0."
+        )
+        config_index = 0
+
     additional_prompts = []
 
     while tries < n_retry and rate_limit_total_delay < rate_limit_max_wait_time:
-
+        current_config = api_configs[config_index]
+        if "AZURE_OPENAI_API_CONFIGS" in os.environ:
+            os.environ["AZURE_OPENAI_API_KEY"] = current_config["api_key"]
+            os.environ["AZURE_OPENAI_ENDPOINT"] = current_config["endpoint"]
+            os.environ["OPENAI_API_VERSION"] = current_config["version"]
+        elif "OPENAI_API_CONFIGS" in os.environ:
+            os.environ["OPENAI_API_KEY"] = current_config["api_key"]
         # fit tokens
         prompt = fit_function(
             shrinkable=main_prompt, additional_prompts=[system_prompt] + additional_prompts
@@ -171,9 +214,18 @@ def retry_and_fit(
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=prompt)]
         messages += [HumanMessage(content=content) for content in additional_prompts]
 
+        # modify the chat object to use the new configuration
+        chat.openai_api_key = current_config["api_key"]
+        if isinstance(chat, AzureChatOpenAI):
+            chat.azure_endpoint = current_config["endpoint"]
+            chat.openai_api_version = current_config["version"]
+
         try:
             answer = chat.invoke(messages)
         except RateLimitError as e:
+            # Rotate to the next configuration
+            config_index = (config_index + 1) % len(api_configs)
+
             wait_time = _extract_wait_time(e.args[0], min_retry_wait_time)
             logging.warning(f"RateLimitError, waiting {wait_time}s before retrying.")
             time.sleep(wait_time)

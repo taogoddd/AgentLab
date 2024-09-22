@@ -1,8 +1,11 @@
 import json
 from pathlib import Path
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 def new_get_avg_score(path: str):
+    print(f"Analyzing {path}")
     subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
 
     records = {
@@ -57,6 +60,36 @@ def new_get_avg_score(path: str):
     records["failed_ids"] = [id for id in completed_ids if id not in successful_ids]
     
     return avg_score, records
+
+def new_get_binary_scores(path: str):
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+
+    records = {
+        "all_ids": [],
+        "successful_ids": [],
+        "failed_ids": [],
+    }
+
+    not_completed_ids = []
+
+    scores = []
+    # parse out the id from the subdirectory name, e.g. get 0 from 2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1
+    for subdir in subdirs:
+        subdir_name = subdir.name
+        id = int(subdir_name.split(".")[1])
+        # check whether file exists
+        if (subdir / "0" / "summary_info.json").exists():
+            with open(subdir / "0" / "summary_info.json", "r") as f:
+                summary_info = json.load(f)
+            score = summary_info["cum_reward"]
+            if score > 0:
+                scores.append(1)
+            else:
+                scores.append(0)
+        else:
+            not_completed_ids.append(id)
+    print(len(scores))
+    return scores
 
 def get_avg_score(path: str):
     # get all subdirectories
@@ -199,6 +232,7 @@ def get_sub_domain_avg_score(sub_domain: str, results_dir: str):
     avg_score = sum(scores) / len(scores)
     print(f"Average score for sub domain {sub_domain}: {avg_score}")
     print(f"Number of successful ids: {len(successful_ids)}")
+    print(f"Number of all ids: {len(sub_domain_ids)}")
     print(f"Successful ids: {successful_ids}")
 
 def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
@@ -213,7 +247,7 @@ def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         for task in data:
-            if sub_domain in task["sites"] and (include_multi_sites or len(task["sites"]) == 1):
+            if task["sites"][0] == sub_domain and (include_multi_sites or len(task["sites"]) == 1):
                 sub_domain_ids.append(task["task_id"])
     return sub_domain_ids
 
@@ -262,17 +296,78 @@ def get_task_template_id_mapping():
             task_template_mapping[template_id].append(task_id)
     return task_template_mapping
 
+def analyze_steps(path: str, max_steps: int):
+    '''
+    Analyze the steps of the successful tasks
+    '''
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    records = {
+        "all_ids": [],
+        "successful_ids": [],
+        "failed_ids": [],
+    }
+
+    not_completed_ids = []
+
+    scores = []
+    # parse out the id from the subdirectory name, e.g. get 0 from 2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1
+    for subdir in subdirs:
+        subdir_name = subdir.name
+        id = int(subdir_name.split(".")[1])
+        # check whether file exists
+        if (subdir / "0" / "summary_info.json").exists():
+            with open(subdir / "0" / "summary_info.json", "r") as f:
+                summary_info = json.load(f)
+            score = summary_info["cum_reward"]
+            steps = summary_info["stats.cum_steps"]
+            scores.append((id, score, steps))
+        else:
+            not_completed_ids.append(id)
+
+    # get the tasks that have steps equals max_steps
+    successful_ids = [id for id, score, steps in scores if steps == max_steps and score == 1]
+    successful_ids.sort()
+    # get the max steps of the successful tasks
+    steps = [steps for id, score, steps in scores if score == 1]
+    max_steps = max(steps)
+    print("Max steps of successful tasks: ", max_steps)
+    print(f"Number of successful ids that take max steps: {len(successful_ids)}")
+    print(f"Successful ids that take max steps: {successful_ids}")
+
+def draw_accumulated_accuracy_graph(path: str):
+    correctness = new_get_binary_scores(path)
+    # Calculate the cumulative accuracy
+    task_numbers = np.arange(1, len(correctness) + 1)
+    cumulative_accuracy = np.cumsum(correctness) / task_numbers
+
+    # Plotting the graph
+    plt.figure(figsize=(10, 6))
+    plt.plot(task_numbers, cumulative_accuracy, marker='o', linestyle='-', color='b')
+    plt.title('Cumulative Accuracy Over Task Numbers')
+    plt.xlabel('Task Number')
+    plt.ylabel('Cumulative Accuracy')
+    plt.grid(True)
+    plt.xticks(np.arange(0, len(task_numbers)+1, step=10))
+
+    # save the plt
+    plt.savefig(f"{path}/cumulative_accuracy.png")
+
+# analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
 # get_avg_score("/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240920010650")
+# print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922152639")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
+# print(new_get_binary_scores("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436"))
 # get_merged_avg_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
 # get_merged_avg_template_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
-# get_sub_domain_avg_score("reddit", "/home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning")
-# print(get_sub_domain_ids("reddit"))
+# get_sub_domain_avg_score("shopping", "/home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning")
+# print(get_sub_domain_ids("reddit", True))
 # /home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning
 
-# get_sub_domain_avg_score("reddit", "/home/ytliu/agentlab_results/agentlab_baseline")
+# get_sub_domain_avg_score("gitlab", "/home/ytliu/agentlab_results/agentlab_baseline")
 # analyze_step()
-# get_sub_domain_ids("reddit", include_multi_sites=False)
+# get_sub_domain_ids("gitlab", include_multi_sites=False)
 
 # with open("/home/ytliu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
 #     skills = json.load(f)

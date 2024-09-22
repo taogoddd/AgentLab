@@ -132,6 +132,8 @@ def noop(wait_ms: float = 1000):
         noop()
         noop(500)
     """
+    # no more than 5 seconds
+    wait_ms = min(wait_ms, 5000)
     page.wait_for_timeout(wait_ms)
 
 
