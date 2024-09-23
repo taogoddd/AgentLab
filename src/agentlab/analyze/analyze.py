@@ -4,10 +4,47 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+def check_num_steps_eval_accuracy(path: str, upper_bound: int):
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    records = {}
+    for subdir in subdirs:
+        subdir_name = subdir.name
+        id = int(subdir_name.split(".")[1])
+        # check whether file exists
+        if (subdir / "0" / "summary_info.json").exists():
+            with open(subdir / "0" / "summary_info.json", "r") as f:
+                summary_info = json.load(f)
+            num_steps = summary_info["stats.cum_steps"]
+            gt = summary_info["cum_reward"]
+            if num_steps < upper_bound:
+                eval = True
+            else:
+                eval = False
+        else:
+            gt = None
+            eval = None
+        records[id] = (gt, eval)
+    # print error ids if any
+    error_ids = [id for id, eval in records.items() if not eval]
+    print(f"Error ids: {error_ids}")
+
+    # # get the precision
+    # precision = sum([1 for id, (gt, eval) in records.items() if eval and gt == 1]) / sum([1 for id, (gt, eval) in records.items() if eval])
+    # get the accuracy
+    accuracy = sum([1 for id, (gt, eval) in records.items() if eval==gt]) / len(records)
+    print(f"Accuracy: {accuracy}")
+
+def get_exp_args(path: str):
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    subdir = subdirs[0]
+    with open(f"{subdir}/exp_args.pkl", "rb") as f:
+        import pickle
+        exp_args = pickle.load(f)
+    return exp_args
+
 def new_get_avg_score(path: str):
     print(f"Analyzing {path}")
     subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
-
     records = {
         "all_ids": [],
         "successful_ids": [],
@@ -352,12 +389,44 @@ def draw_accumulated_accuracy_graph(path: str):
     # save the plt
     plt.savefig(f"{path}/cumulative_accuracy.png")
 
+def calculate_tokens(path: str, model: str = "gpt-4o"):
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+
+    total_tokens = 0
+    # parse out the id from the subdirectory name, e.g. get 0 from 2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1
+    for subdir in subdirs:
+        subdir_name = subdir.name
+        id = int(subdir_name.split(".")[1])
+        # check whether file exists
+        if (subdir / "0" / "summary_info.json").exists():
+            with open(subdir / "0" / "summary_info.json", "r") as f:
+                summary_info = json.load(f)
+            tokens = summary_info["stats.cum_openai_total_tokens"] # prompt + completion
+            total_tokens += tokens
+    if model == "gpt-4o":
+        # $5 per 1M tokens
+        cost = total_tokens / 1e6 * 5
+    else:
+        raise ValueError("Model not supported")
+    print(f"Total tokens: {total_tokens}")
+    average_tokens = total_tokens / len(subdirs)
+    print(f"Average tokens per task: {average_tokens}")
+    print(f"Total cost: ${cost}")
+    print(f"Average cost per task: ${cost / len(subdirs)}")
+
 # analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
-# get_avg_score("/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline")
+# get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922152639")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
+
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923033851")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
+calculate_tokens("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923141347")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240922075010")
 # print(new_get_binary_scores("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436"))
 # get_merged_avg_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
 # get_merged_avg_template_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
@@ -366,6 +435,7 @@ new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_m
 # /home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning
 
 # get_sub_domain_avg_score("gitlab", "/home/ytliu/agentlab_results/agentlab_baseline")
+# check_num_steps_eval_accuracy("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
 # analyze_step()
 # get_sub_domain_ids("gitlab", include_multi_sites=False)
 
@@ -389,3 +459,6 @@ new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_m
 #     import pickle
 #     exp_args = pickle.load(f)
 #     print(exp_args)
+
+# print(get_exp_args("/home/ytliu/agentlab_results/agentlab_baseline"))
+

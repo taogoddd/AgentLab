@@ -8,6 +8,9 @@ src/agentlab/autogen_policy/corner_explorations/*
 src/agentlab/autogen_policy/offline/random_exploration/explorations
 __pycache__/
 src/agentlab/config_files/*.json
+src/agentlab/v_config_files/vwa/*
+!src/agentlab/v_config_files/vwa/*.json
 src/agentlab/autogen_policy/skills
 src/agentlab/skills/*
 src/agentlab/experiment_scripts/*
+autoeval/*

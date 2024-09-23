@@ -64,6 +64,7 @@ def get_website_description(website_name: str):
         "shopping_admin": "This is the admin page of a shopping website where you can manage products, categories, and orders. Also you can get report and statistics.",
         "gitlab": "This is Gitlab where you can go to different projects, issues, merge requests, and manage your account.",
         "wiki": "This is a wiki page where you can search about knowledge of different topics.",
+        "classifieds": "This is a classifieds website where you can browse and search for listings across various categories, view detailed product pages with images and descriptions, and filter items by location.",
         "homepage": "This is a homepage that contains a list of useful links.",
     }
     return website_description.get(website_name, "Unknown Website")
@@ -129,25 +130,30 @@ def get_trajectory_from_annotation(dir_path: str):
         file_path = os.path.join(dir_path, f"step_{i}.pkl.gz")
         with gzip.open(file_path, 'rb') as f:
             step_info = pickle.load(f)
+            # step_info has one more than num of actions, for the last one, obs only, action is None and agent_info is an empty dict
+            
             obs = step_info.obs
             action = step_info.action # e.g. click('339')
+            think = step_info.agent_info.get("think", None)
             reward = step_info.reward
 
-            processed_obs = obs_preprocessor(obs)
-            screenshot_array = processed_obs["screenshot"]
-            som_screenshot_array = processed_obs["screenshot_som"]
 
-            axtree_str = processed_obs["axtree_txt"]
+            processed_obs = obs_preprocessor(obs) if obs is not None else None
+            # screenshot_array = processed_obs["screenshot"] if processed_obs is not None else None
+            # som_screenshot_array = processed_obs["screenshot_som"] if processed_obs is not None else None
+
+            # axtree_str = processed_obs["axtree_txt"]
         
         trajectory.append({
             "obs": obs, # the original observation dict
             "processed_obs": processed_obs, # the processed observation dict
             "action": action, # e.g. click('339')
+            "think": think,
             "reward": reward,
         })
     
     return trajectory
-
+    # for step info other infos are stored in step_info.agent_info[key]
     # obs: dict_keys(['chat_messages', 'goal', 'open_pages_urls', 'active_page_index', 'url', 'screenshot', 'dom_object', 'axtree_object', 'extra_element_properties', 'focused_element_bid', 'last_action', 'last_action_error', 'last_action_result', 'elapsed_time', 'dom_txt', 'axtree_txt', 'pruned_html', 'screenshot_som'])
     # processed_obs has dom_txt, axtree_txt, pruned_html, screenshot_som
 

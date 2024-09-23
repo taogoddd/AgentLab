@@ -3,6 +3,7 @@ import json
 from agentlab.utils.utils import get_template_task_id_mapping, get_trajectory_from_annotation, save_skills, navi_to_general_skills
 from agentlab.extract_navi import extract_navi_skill
 from agentlab.extract_skills import extract_skills
+from agentlab.auto_eval.evaluate_trajectory import evaluate
 from subprocess import Popen
 import time
 import os
@@ -18,7 +19,12 @@ def gt_evaluate(summary_path: str):
     return False
 
 def auto_evaluate(traj_dir: str):
-    pass
+    traj = get_trajectory_from_annotation(traj_dir)
+    result = evaluate(
+        idx=config["task_id"], traj_info=traj_info,
+        log_save_path=log_save_path, 
+        model=args.model, eval_version=args.prompt,
+    )
 
 def get_dir_path_from_id(parent_path: str, id: int):
     subdirs = [x for x in Path(parent_path).iterdir() if x.is_dir()]
@@ -53,8 +59,6 @@ def parse_args():
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--result_dir_id", type=str, default="", help="ID of the result directory")
     parser.add_argument("--learn_dynamics_from_failure", type=str2bool, default=False, help="Whether to learn dynamics from failure")
-    parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
-    parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     return parser.parse_args()
 
 def main():
@@ -96,32 +100,9 @@ def main():
             ])
             process.wait()
 
-            # 0 here for later possible samplings
             task_dir = f"results/{result_dir_id}/webarena.{task_id}/0"
 
-            # run autoeval if args.eval_metric is auto
-            if args.eval_metric == "auto":
-                process = Popen([
-                    "python", "-m", "agentlab.autoeval.evaluate_trajectory",
-                    "--result_dir", task_dir,
-                    "--model", "gpt-4o",
-                ])
-                process.wait()
-            
-            elif args.eval_metric == "num_steps":
-                with open(f"{task_dir}/summary_info.json", "r") as f:
-                    summary = json.load(f)
-                num_steps = summary["stats.cum_steps"]
-                if num_steps < 20:
-                    eval = True
-                else:
-                    eval = False
-            elif args.eval_metric == "gt":
-                eval = gt_evaluate(f"{task_dir}/summary_info.json")
-            else:
-                eval = auto_evaluate(task_dir)
-
-            if args.use_dynamics and (args.learn_dynamics_from_failure or eval):
+            if args.learn_dynamics_from_failure or gt_evaluate(f"{task_dir}/summary_info.json"):
                 # extract dynamics from all the tasks
                 navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
                 print("*"*50, f"Extracted dynamics from task", "*"*50)
@@ -129,7 +110,7 @@ def main():
                 save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
 
             # extract general skills from the tasks that are solved
-            if eval:
+            if gt_evaluate(f"{task_dir}/summary_info.json"):
                 general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
                 print("*"*50, f"Extracted skills", "*"*50)
                 print(general_skills)
