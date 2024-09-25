@@ -11,7 +11,8 @@ from agentlab.llm.llm_utils import (
     extract_code_blocks,
     parse_html_tags_raise
 )
-
+from PIL import Image
+import requests
 
 @dataclass
 class SkillAugmentedPromptFlags(dp.Flags):
@@ -99,12 +100,73 @@ class MainPrompt(dp.Shrinkable):
         self.criticise = Criticise(visible=lambda: flags.use_criticise)
         self.memory = Memory(visible=lambda: flags.use_memory)
 
+        self.obs_history = obs_history
+
     @property
     def _prompt(self) -> str:
         # move the hint prompt from after action_prompt to the end
-        prompt = f"""\
+        prefix_prompt = f"""\
 {self.instructions.prompt}\
-{self.obs.prompt}\
+Images together with the goal are shown below. Make sure to refer to them when solving the task.
+"""     
+        prefix_messages = [{"type": "text", "text": prefix_prompt}]
+
+        img_urls = []
+        current_obs = self.obs_history[-1]
+        if "goal_image_urls" in current_obs:
+                goal_image_urls = current_obs["goal_image_urls"]
+                # get the Image object from the goal_image_urls
+                for url in goal_image_urls:
+                    if url.startswith("http"):
+                        input_image = Image.open(requests.get(url, stream=True).raw)
+                    else:
+                        input_image = Image.open(url)
+                
+                    img_urls.append(image_to_jpg_base64_url(input_image))
+        for i, img_url in enumerate(img_urls):
+            prefix_messages.append(
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": img_url,
+                    }
+                }
+            )
+        
+        prefix_obs_prompt = f"""\
+# Observation:
+"""
+        prefix_obs_prompt += "\n## Screenshot of the page (operatable elements are marked with their bid):"
+
+        
+        obs_messages = [{"type": "text", "text": prefix_obs_prompt}]
+        obs_messages.append(
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": image_to_jpg_base64_url(current_obs["screenshot_som"])
+                }
+            }
+        )
+        suffix_obs_prompt = f"""\
+## Text observation:
+Note: 
+-- This lists the bid ids of all interactable elements on the current web page with their text content if any, in the format [bid] [tagType] [text content]. tagType is the type of the element, such as button, link, or textbox. text content is the text content of the element. For example, [1234] [BUTTON] ['Add to Cart'] means that there is a button with id 1234 and text content 'Add to Cart' on the current web page. [] [StaticText] [text] means that the element is of some text that is not interactable.
+-- [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+-- Elements here are all in the screenshot of the current webpage with same bid marked on them.
+
+"""
+        som_axtree = current_obs["axtree_txt"]
+        suffix_obs_prompt += som_axtree
+
+        obs_messages.append(
+            {
+                "type": "text",
+                "text": suffix_obs_prompt
+            }
+        )
+
+        prompt = f"""\
 {self.history.prompt}\
 {self.action_prompt.prompt}\
 {self.be_cautious.prompt}\
@@ -143,11 +205,22 @@ Make sure to follow the template with proper tags:
 """
         prompt += self.reminder.prompt
         prompt += self.hints.prompt
-        return self.obs.add_screenshot(prompt)
+
+        other_messages = [
+            {
+                "type": "text",
+                "text": prompt
+            }
+        ]
+
+        full_messages = prefix_messages + obs_messages + other_messages
+
+        # return self.obs.add_screenshot(prompt)
+        return full_messages
 
     def shrink(self):
         self.history.shrink()
-        self.obs.shrink()
+        # self.obs.shrink()
 
     def _parse_answer(self, text_answer):
         ans_dict = {}
