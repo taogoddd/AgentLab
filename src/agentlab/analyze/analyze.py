@@ -252,6 +252,13 @@ def get_sub_domain_avg_score(sub_domain: str, results_dir: str):
     scores = []
     subdirs = [x for x in Path(results_dir).iterdir() if x.is_dir()]
     successful_ids = []
+    records = {
+        "all_ids": sub_domain_ids,
+        "successful_ids": [],
+        "failed_ids": [],
+    }
+
+    not_completed_ids = []
     for subdir in subdirs:
         subdir_name = subdir.name
         task_name = subdir_name.split("_")[-3]
@@ -266,11 +273,14 @@ def get_sub_domain_avg_score(sub_domain: str, results_dir: str):
                 if score == 1:
                     successful_ids.append(id)
     successful_ids.sort()
+    records["successful_ids"] = successful_ids
+    records["failed_ids"] = [id for id in sub_domain_ids if id not in successful_ids]
     avg_score = sum(scores) / len(scores)
     print(f"Average score for sub domain {sub_domain}: {avg_score}")
     print(f"Number of successful ids: {len(successful_ids)}")
     print(f"Number of all ids: {len(sub_domain_ids)}")
     print(f"Successful ids: {successful_ids}")
+    return avg_score, records
 
 def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     '''
@@ -414,15 +424,90 @@ def calculate_tokens(path: str, model: str = "gpt-4o"):
     print(f"Total cost: ${cost}")
     print(f"Average cost per task: ${cost / len(subdirs)}")
 
+def get_cross_template_avg_score(path: str):
+    task_template_id_mapping = get_task_template_id_mapping()
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+
+    avg_score, records = new_get_avg_score(path)
+    successful_ids = records["successful_ids"]
+    all_ids = records["all_ids"]
+
+    # get the avg score accross all templates, i.e. num of templates solved / num of templates
+    successful_template_ids = []
+    all_template_ids = []
+    for id in successful_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in successful_template_ids:
+                successful_template_ids.append(template_id)
+    for id in all_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in all_template_ids:
+                all_template_ids.append(template_id)
+    score = len(successful_template_ids) / len(all_template_ids)
+
+    successful_template_ids.sort()
+    
+    print(f"Number of successful templates: {len(successful_template_ids)}")
+    print(f"Successful templates: {successful_template_ids}")
+    print(f"Average score: {score}")
+
+def get_sub_domain_cross_template_avg_score(path: str, sub_domain: str):
+    task_template_id_mapping = get_task_template_id_mapping()
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+
+    avg_score, records = get_sub_domain_avg_score(sub_domain, path)
+    successful_ids = records["successful_ids"]
+    all_ids = records["all_ids"]
+
+    # get the avg score accross all templates, i.e. num of templates solved / num of templates
+    successful_template_ids = []
+    all_template_ids = []
+    for id in successful_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in successful_template_ids:
+                successful_template_ids.append(template_id)
+    for id in all_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in all_template_ids:
+                all_template_ids.append(template_id)
+    score = len(successful_template_ids) / len(all_template_ids)
+    
+    successful_template_ids.sort()
+
+    print(f"Number of successful templates: {len(successful_template_ids)}")
+    print(f"Successful templates: {successful_template_ids}")
+    print(f"Average score: {score}")
+
+def highlight_print(text: str):
+    print("*"*50, text, "*"*50)
+
 # analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
 # get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
 
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923033851")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171257")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
-calculate_tokens("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
+highlight_print("Map w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
+highlight_print("Reddit w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171257")
+highlight_print("Shopping w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171731")
+highlight_print("Shopping_admin w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
+highlight_print("Reddit ablation")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
+# get_sub_domain_avg_score("shopping_admin", "/home/ytliu/agentlab_results/agentlab_baseline")
+
+# highlight_print("baseline")
+# get_sub_domain_cross_template_avg_score("/home/ytliu/agentlab_results/agentlab_baseline", "map")
+# highlight_print("CER")
+# get_cross_template_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
+
+# print(len(get_task_template_id_mapping()))
+# calculate_tokens("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923141347")

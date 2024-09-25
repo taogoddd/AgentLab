@@ -55,6 +55,7 @@ def parse_args():
     parser.add_argument("--learn_dynamics_from_failure", type=str2bool, default=False, help="Whether to learn dynamics from failure")
     parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
+    parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
     return parser.parse_args()
 
 def main():
@@ -92,7 +93,8 @@ def main():
                 "--model_name", "azureopenai/"+args.model,
                 "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
                 "--id", "0",
-                "--max_steps", str(args.max_steps)
+                "--max_steps", str(args.max_steps),
+                "--use_screenshot", "1" if args.use_screenshot else "0"
             ])
             process.wait()
 
