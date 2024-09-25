@@ -229,6 +229,16 @@ def extract_dom_snapshot(
 
 
 def extract_dom_extra_properties(dom_snapshot):
+    def build_parent_to_children_map(parent_indices):
+        parent_to_children = {}
+        for child_idx, parent_idx in enumerate(parent_indices):
+            if parent_idx == -1:
+                continue  # Skip if no parent
+            if parent_idx not in parent_to_children:
+                parent_to_children[parent_idx] = []
+            parent_to_children[parent_idx].append(child_idx)
+        return parent_to_children
+
     def to_string(idx):
         if idx == -1:
             return None
@@ -467,6 +477,8 @@ def extract_dom_extra_properties(dom_snapshot):
             if val != -1:
                 node_idx_to_text_content[idx] = to_string(val)
 
+        parent_to_children = build_parent_to_children_map(document["nodes"]["parentIndex"])
+
         for node_idx in range(len(document["nodes"]["parentIndex"])):
             node = doc_properties[doc]["nodes"][node_idx]
             bid = node["bid"]
@@ -481,10 +493,11 @@ def extract_dom_extra_properties(dom_snapshot):
                 # Collect text content from various sources
                 text_content = node_idx_to_text_content.get(node_idx, "")
 
-                # For elements, collect text from child text nodes
+                # Collect text from child text nodes using the parent-to-children mapping
                 if document["nodes"]["nodeType"][node_idx] == 1:  # Element node
-                    for child_idx, parent_idx in enumerate(document["nodes"]["parentIndex"]):
-                        if parent_idx == node_idx and document["nodes"]["nodeType"][child_idx] == 3:  # Text node
+                    child_indices = parent_to_children.get(node_idx, [])
+                    for child_idx in child_indices:
+                        if document["nodes"]["nodeType"][child_idx] == 3:  # Text node
                             child_text = node_idx_to_text_content.get(child_idx, "")
                             if child_text:
                                 content_parts.append(child_text.strip())

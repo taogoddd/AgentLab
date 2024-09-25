@@ -413,8 +413,8 @@ def analyze_steps(path: str, max_steps: int):
         else:
             not_completed_ids.append(id)
 
-    # get the tasks that have steps equals max_steps
-    successful_ids = [id for id, score, steps in scores if steps == max_steps and score == 1]
+    # get the tasks that have steps equal or more than max_steps
+    successful_ids = [id for id, score, steps in scores if score == 1 and steps >= max_steps]
     successful_ids.sort()
     # get the max steps of the successful tasks
     steps = [steps for id, score, steps in scores if score == 1]
@@ -515,15 +515,14 @@ def get_sub_domain_cross_template_avg_score(path: str, sub_domain: str):
 def highlight_print(text: str):
     print("*"*50, text, "*"*50)
 
-order_vwa_task_ids("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa.json")
-print(get_task_id_splits("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa_ordered.json"))
+# order_vwa_task_ids("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa.json")
+# print(get_task_id_splits("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa_ordered.json"))
 # analyze_steps("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
 # get_avg_score("/home/ubuntu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
 # new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
 
 # new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
-new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075014")
 # new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
 # new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
 # calculate_tokens("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
@@ -540,7 +539,7 @@ new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_
 
 # get_sub_domain_avg_score("gitlab", "/home/ubuntu/agentlab_results/agentlab_baseline")
 # check_num_steps_eval_accuracy("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
-# analyze_step()
+analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050", 20)
 # get_sub_domain_ids("gitlab", include_multi_sites=False)
 
 # with open("/home/ubuntu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
