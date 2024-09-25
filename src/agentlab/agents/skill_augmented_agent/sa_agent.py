@@ -182,4 +182,4 @@ class SystemPrompt(dp.PromptElement):
     _prompt = """\
 You are an agent trying to solve a web task based on the content of the page and
 user instructions. You can interact with the page and explore, and send messages to the user. Each time you
-submit an action it will be sent to the browser and you will receive a new page. You will be provided with a screenshot of current webpage (IMAGE 1), with operatable elements marked with their bids. IMAGE 2 and later (if any) are images relevant to the goal"""
+submit an action it will be sent to the browser and you will receive a new page."""

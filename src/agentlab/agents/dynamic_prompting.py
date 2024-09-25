@@ -401,7 +401,7 @@ class SoMAXTree(PromptElement):
         self._prompt = f"""\
 Note: 
 -- [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
--- Elements here are all in the screenshot of the current webpage (IMAGE 1) with same bid marked on them.
+-- Elements here are all in the screenshot of the current webpage with same bid marked on them.
 
 {som_axtree_str}
 """
@@ -460,7 +460,7 @@ class Observation(Shrinkable):
     @property
     def _prompt(self) -> str:
         return f"""
-# Operatable elements of current step (screenshot is IMAGE 1):
+# Observation:
 {self.url.prompt}{self.html.prompt}{self.ax_tree.prompt}{self.som_axtree.prompt}{self.focused_element.prompt}{self.error.prompt}{self.result.prompt}
 """
 

@@ -58,67 +58,6 @@ from urllib.parse import urljoin, urlparse
 
 logger = logging.getLogger(__name__)
 
-def get_captioning_fn(
-    device, dtype, model_name: str = "Salesforce/blip2-flan-t5-xl"
-) -> callable:
-    # if "blip2" in model_name:
-    #     captioning_processor = Blip2Processor.from_pretrained(model_name)
-    #     captioning_model = Blip2ForConditionalGeneration.from_pretrained(
-    #         model_name, torch_dtype=dtype
-    #     )
-    # else:
-    #     raise NotImplementedError(
-    #         "Only BLIP-2 models are currently supported"
-    #     )
-    # captioning_model.to(device)
-    pass
-
-    def caption_images(
-        images: List[Image.Image],
-        prompt: List[str] = None,
-        max_new_tokens: int = 32,
-    ) -> List[str]:
-        if prompt is None:
-            # Perform VQA
-            inputs = captioning_processor(
-                images=images, return_tensors="pt"
-            ).to(device, dtype)
-            generated_ids = captioning_model.generate(
-                **inputs, max_new_tokens=max_new_tokens
-            )
-            captions = captioning_processor.batch_decode(
-                generated_ids, skip_special_tokens=True
-            )
-        else:
-            # Regular captioning. Prompt is a list of strings, one for each image
-            assert len(images) == len(
-                prompt
-            ), "Number of images and prompts must match, got {} and {}".format(
-                len(images), len(prompt)
-            )
-            inputs = captioning_processor(
-                images=images, text=prompt, return_tensors="pt"
-            ).to(device, dtype)
-            generated_ids = captioning_model.generate(
-                **inputs, max_new_tokens=max_new_tokens
-            )
-            captions = captioning_processor.batch_decode(
-                generated_ids, skip_special_tokens=True
-            )
-
-        return captions
-
-    return caption_images
-
-def remove_unicode(input_string):
-    # Define a regex pattern to match Unicode characters
-    unicode_pattern = re.compile(r"[^\x00-\x7F]+")
-
-    # Use the pattern to replace Unicode characters with an empty string
-    cleaned_string = unicode_pattern.sub("", input_string)
-
-    return cleaned_string
-
 class BrowserEnv(gym.Env, ABC):
     """The main BrowserGym class, which encapsulates instruction-following Web browsing into a Gymnasium environment."""
 
@@ -232,42 +171,6 @@ class BrowserEnv(gym.Env, ABC):
 
         # page recovery count
         self.page_recovery_count = 0
-
-        # cache captions
-        self.url2caption = {}
-
-        # Load a (possibly different) captioning model for running VQA evals.
-        DATASET = os.getenv("DATASET", "webarena")
-        eval_captioning_model_device = os.getenv("EVAL_CAPTIONING_MODEL_DEVICE", "cpu")
-        eval_captioning_model = os.getenv("EVAL_CAPTIONING_MODEL", "Salesforce/blip2-flan-t5-xl")
-        captioning_model = os.getenv("CAPTIONING_MODEL", "Salesforce/blip2-flan-t5-xl")
-        device = torch.device("cuda") if torch.cuda.is_available() else "cpu"
-        dtype = torch.float16 if torch.cuda.is_available() else torch.float32
-        caption_image_fn = get_captioning_fn(
-            device, dtype, captioning_model
-        )
-        if DATASET == 'visualwebarena':
-            if (
-                caption_image_fn and eval_captioning_model == captioning_model
-            ):
-                eval_caption_image_fn = caption_image_fn
-            else:
-                eval_caption_image_fn = get_captioning_fn(
-                    eval_captioning_model_device,
-                    torch.float16
-                    if (
-                        torch.cuda.is_available()
-                        and eval_captioning_model_device == "cuda"
-                    )
-                    else torch.float32,
-                    eval_captioning_model,
-                )
-        else:
-            caption_image_fn = None
-            eval_caption_image_fn = None
-        
-        self.captioning_fn = caption_image_fn
-        self.eval_captioning_fn = eval_caption_image_fn
 
     def close(self):
         if self.task:
