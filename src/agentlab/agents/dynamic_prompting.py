@@ -394,6 +394,18 @@ bid={repr(bid)}
 None
 """
 
+class SoMAXTree(PromptElement):
+    def __init__(self, som_axtree_str: str, visible: bool = True, prefix="") -> None:
+        super().__init__(visible=visible)
+        # bid_descriptions is a dictionary with bid as key and description as value
+        self._prompt = f"""\
+Note: 
+-- [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+-- Elements here are all in the screenshot of the current webpage (IMAGE 1) with same bid marked on them.
+
+{som_axtree_str}
+"""
+        
 
 class Observation(Shrinkable):
     """Observation of the current step.
@@ -419,6 +431,11 @@ class Observation(Shrinkable):
             visible_tag=flags.extract_visible_tag,
             prefix="## ",
         )
+        self.som_axtree = SoMAXTree(
+            obs["som_axtree_str"],
+            visible=lambda: flags.use_som, # true by default if use_som is true
+            prefix="",
+        )
         self.error = Error(
             obs["last_action_error"],
             visible=lambda: flags.use_error_logs and obs["last_action_error"],
@@ -443,9 +460,8 @@ class Observation(Shrinkable):
     @property
     def _prompt(self) -> str:
         return f"""
-# Observation of current step:
-{self.url.prompt}{self.html.prompt}{self.ax_tree.prompt}{self.focused_element.prompt}{self.error.prompt}{self.result.prompt}
-
+# Operatable elements of current step (screenshot is IMAGE 1):
+{self.url.prompt}{self.html.prompt}{self.ax_tree.prompt}{self.som_axtree.prompt}{self.focused_element.prompt}{self.error.prompt}{self.result.prompt}
 """
 
     def add_screenshot(self, prompt):

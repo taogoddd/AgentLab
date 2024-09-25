@@ -71,8 +71,8 @@ def main():
     task_ids = [config["task_id"] for config, flag in zip(config_list, config_flags) if flag]
 
     # init the skill file
-    if not os.path.exists(f"{args.skill_root_path}/{args.website}/v_skills_{result_dir_id}.json"):
-        with open(f"{args.skill_root_path}/{args.website}/v_skills_{result_dir_id}.json", "w") as f:
+    if not os.path.exists(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json"):
+        with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
             json.dump([], f)
 
     # get task id between start_id and end_id
@@ -85,7 +85,7 @@ def main():
                 "--task", f"visualwebarena.{task_id}",
                 "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
                 "--model_name", "azureopenai/"+args.model,
-                "--skill_path", f"{args.skill_root_path}/{args.website}/v_skills_{result_dir_id}.json",
+                "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
                 "--id", "0",
                 "--max_steps", str(args.max_steps),
                 "--use_screenshot", "1" if args.use_screenshot else "0",
@@ -123,14 +123,14 @@ def main():
                 navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
                 print("*"*50, f"Extracted dynamics from task", "*"*50)
                 print(navi_skills)
-                save_skills(f"{args.skill_root_path}/{args.website}/v_skills_{result_dir_id}.json", navi_skills)
+                save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
 
             # extract general skills from the tasks that are solved
             if eval:
                 general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
                 print("*"*50, f"Extracted skills", "*"*50)
                 print(general_skills)
-                save_skills(f"{args.skill_root_path}/{args.website}/v_skills_{result_dir_id}.json", general_skills)
+                save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
 
         except Exception as e:
             print(e)

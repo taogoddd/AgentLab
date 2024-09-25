@@ -2,7 +2,17 @@ from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectorySte
 from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
 import re
+from PIL import Image
+import requests
 import json
+import numpy as np
+from agentlab.llm.llm_utils import (
+    ParseError,
+    count_tokens,
+    image_to_jpg_base64_url,
+    parse_html_tags_raise,
+    extract_code_blocks,
+)
 
 EXCLUDED_URLS = {
     "shopping_admin": [],
@@ -10,11 +20,35 @@ EXCLUDED_URLS = {
     "reddit": [],
     "gitlab": [],
     "map": [],
+    "classifieds": [],
+}
+website_base_depth = {
+    "shopping_admin": 3,
+    "shopping": 2,
+    "reddit": 2,
+    "gitlab": 2,
+    "map": 2,
+    "classifieds": 2,
+}
+website_max_depth = {
+    "shopping_admin": 4,
+    "shopping": 3,
+    "reddit": 3,
+    "gitlab": 3,
+    "map": 3,
+    "classifieds": 3,
 }
 def eval_URL(url: str, website: str) -> bool:
     if url in EXCLUDED_URLS[website]:
         return False
     if "dashboard" in url:
+        return False
+    # check if the url has too many levels
+    # remove the first part
+    url = url.split("://")[-1]
+    # remove ending /
+    url = url.rstrip("/")
+    if len(url.split("/")) > website_max_depth[website]:
         return False
     return True
 
@@ -54,6 +88,15 @@ def construct_prompt_messages(
     ):
     existing_pages_str = get_skills_desc(skill_file_path)
     goal = trajectory[0]["obs"]["goal"]
+    goal_image_urls = trajectory[0]["obs"].get("goal_image_urls", [])
+    img_urls = []
+    if goal_image_urls:
+        for url in goal_image_urls:
+            if url.startswith("http"):
+                input_image = Image.open(requests.get(url, stream=True).raw)
+            else:
+                input_image = Image.open(url)
+            img_urls.append(image_to_jpg_base64_url(input_image))
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
 You need to summarize the useful pages and pair it up with the corresponding URLs.
@@ -114,8 +157,18 @@ IMPORTANT NOTES you should absolutely follow:
 4. Check existing pages before generating, do not summarize pages that have already been summarized, instead, use "Summarized before" in the steps.
 5. Focus on the main content of the page and may ignore the modifications made by the user when generating the summary.
 """
-    prefix = f"""\
+#     prefix = f"""\
+# Overall goal of the trajectory: {goal}
+# Current website: {get_website_description(website)}
+# Existing summarized pages:
+# {existing_pages_str}
+# Human user trajectory:
+# """
+    goal = f"""\
 Overall goal of the trajectory: {goal}
+Images relevant to the goal:
+"""
+    other_info = f"""\
 Current website: {get_website_description(website)}
 Existing summarized pages:
 {existing_pages_str}
@@ -124,9 +177,20 @@ Human user trajectory:
     human_prompt = [
         {
             "type": "text",
-            "text": prefix
-        }
+            "text": goal
+        },
     ]
+    for i, img_url in enumerate(img_urls, start=1):
+        human_prompt.append({
+            "type": "image_url",
+            "image_url": {
+                "url": f"{img_url}"
+            }
+        })
+    human_prompt.append({
+        "type": "text",
+        "text": other_info
+    })
     for i, step in enumerate(trajectory):
         obs = step["obs"]
         url = obs["url"]

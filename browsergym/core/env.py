@@ -34,9 +34,90 @@ from browsergym.utils.obs import (
     search_keyword_from_tree_str,
     format_function_call_str,
 )
+import os
+
+from PIL import Image, ImageDraw, ImageFont
+
+from playwright.sync_api import CDPSession, Page, ViewportSize
+
+import requests
+
+import json
+
+from typing import List
+
+import numpy as np
+from PIL import Image
+from skimage.metrics import structural_similarity as ssim
+from transformers import (
+    Blip2ForConditionalGeneration,
+    Blip2Processor,
+)
+import torch
+from urllib.parse import urljoin, urlparse
 
 logger = logging.getLogger(__name__)
 
+def get_captioning_fn(
+    device, dtype, model_name: str = "Salesforce/blip2-flan-t5-xl"
+) -> callable:
+    # if "blip2" in model_name:
+    #     captioning_processor = Blip2Processor.from_pretrained(model_name)
+    #     captioning_model = Blip2ForConditionalGeneration.from_pretrained(
+    #         model_name, torch_dtype=dtype
+    #     )
+    # else:
+    #     raise NotImplementedError(
+    #         "Only BLIP-2 models are currently supported"
+    #     )
+    # captioning_model.to(device)
+    pass
+
+    def caption_images(
+        images: List[Image.Image],
+        prompt: List[str] = None,
+        max_new_tokens: int = 32,
+    ) -> List[str]:
+        if prompt is None:
+            # Perform VQA
+            inputs = captioning_processor(
+                images=images, return_tensors="pt"
+            ).to(device, dtype)
+            generated_ids = captioning_model.generate(
+                **inputs, max_new_tokens=max_new_tokens
+            )
+            captions = captioning_processor.batch_decode(
+                generated_ids, skip_special_tokens=True
+            )
+        else:
+            # Regular captioning. Prompt is a list of strings, one for each image
+            assert len(images) == len(
+                prompt
+            ), "Number of images and prompts must match, got {} and {}".format(
+                len(images), len(prompt)
+            )
+            inputs = captioning_processor(
+                images=images, text=prompt, return_tensors="pt"
+            ).to(device, dtype)
+            generated_ids = captioning_model.generate(
+                **inputs, max_new_tokens=max_new_tokens
+            )
+            captions = captioning_processor.batch_decode(
+                generated_ids, skip_special_tokens=True
+            )
+
+        return captions
+
+    return caption_images
+
+def remove_unicode(input_string):
+    # Define a regex pattern to match Unicode characters
+    unicode_pattern = re.compile(r"[^\x00-\x7F]+")
+
+    # Use the pattern to replace Unicode characters with an empty string
+    cleaned_string = unicode_pattern.sub("", input_string)
+
+    return cleaned_string
 
 class BrowserEnv(gym.Env, ABC):
     """The main BrowserGym class, which encapsulates instruction-following Web browsing into a Gymnasium environment."""
@@ -151,6 +232,42 @@ class BrowserEnv(gym.Env, ABC):
 
         # page recovery count
         self.page_recovery_count = 0
+
+        # cache captions
+        self.url2caption = {}
+
+        # Load a (possibly different) captioning model for running VQA evals.
+        DATASET = os.getenv("DATASET", "webarena")
+        eval_captioning_model_device = os.getenv("EVAL_CAPTIONING_MODEL_DEVICE", "cpu")
+        eval_captioning_model = os.getenv("EVAL_CAPTIONING_MODEL", "Salesforce/blip2-flan-t5-xl")
+        captioning_model = os.getenv("CAPTIONING_MODEL", "Salesforce/blip2-flan-t5-xl")
+        device = torch.device("cuda") if torch.cuda.is_available() else "cpu"
+        dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+        caption_image_fn = get_captioning_fn(
+            device, dtype, captioning_model
+        )
+        if DATASET == 'visualwebarena':
+            if (
+                caption_image_fn and eval_captioning_model == captioning_model
+            ):
+                eval_caption_image_fn = caption_image_fn
+            else:
+                eval_caption_image_fn = get_captioning_fn(
+                    eval_captioning_model_device,
+                    torch.float16
+                    if (
+                        torch.cuda.is_available()
+                        and eval_captioning_model_device == "cuda"
+                    )
+                    else torch.float32,
+                    eval_captioning_model,
+                )
+        else:
+            caption_image_fn = None
+            eval_caption_image_fn = None
+        
+        self.captioning_fn = caption_image_fn
+        self.eval_captioning_fn = eval_caption_image_fn
 
     def close(self):
         if self.task:
@@ -542,6 +659,209 @@ document.addEventListener("visibilitychange", () => {
         # active page should not be closed
         if self.page.is_closed():
             raise RuntimeError(f"Unexpected: active page has been closed ({self.page}).")
+        
+    def fetch_browser_info(
+        self,
+        page: Page,
+        client: CDPSession,
+    ):
+        # extract domtree
+        tree = client.send(
+            "DOMSnapshot.captureSnapshot",
+            {
+                "computedStyles": [],
+                "includeDOMRects": True,
+                "includePaintOrder": True,
+            },
+        )
+
+        # calibrate the bounds, in some cases, the bounds are scaled somehow
+        bounds = tree["documents"][0]["layout"]["bounds"]
+        b = bounds[0]
+        n = b[2] / self.viewport_size["width"]
+        bounds = [[x / n for x in bound] for bound in bounds]
+        tree["documents"][0]["layout"]["bounds"] = bounds
+
+        # extract browser info
+        win_top_bound = page.evaluate("window.pageYOffset")
+        win_left_bound = page.evaluate("window.pageXOffset")
+        win_width = page.evaluate("window.screen.width")
+        win_height = page.evaluate("window.screen.height")
+        win_right_bound = win_left_bound + win_width
+        win_lower_bound = win_top_bound + win_height
+        device_pixel_ratio = page.evaluate("window.devicePixelRatio")
+        assert device_pixel_ratio == 1.0, "devicePixelRatio is not 1.0"
+
+        config = {
+            "win_top_bound": win_top_bound,
+            "win_left_bound": win_left_bound,
+            "win_width": win_width,
+            "win_height": win_height,
+            "win_right_bound": win_right_bound,
+            "win_lower_bound": win_lower_bound,
+            "device_pixel_ratio": device_pixel_ratio,
+        }
+
+        # assert len(tree['documents']) == 1, "More than one document in the DOM tree"
+        info = {"DOMTree": tree, "config": config}
+
+        return info
+    
+    # only run this if vwa & captioning_axtree is enabled
+    def get_captioned_axtree(self, page: Page, client: CDPSession):
+        # get the tab info
+        open_tabs = page.context.pages
+        try:
+            tab_titles = [tab.title() for tab in open_tabs]
+            current_tab_idx = open_tabs.index(page)
+            for idx in range(len(open_tabs)):
+                if idx == current_tab_idx:
+                    tab_titles[
+                        idx
+                    ] = f"Tab {idx} (current): {open_tabs[idx].title()}"
+                else:
+                    tab_titles[idx] = f"Tab {idx}: {open_tabs[idx].title()}"
+            tab_title_str = " | ".join(tab_titles)
+        except Exception:
+            tab_title_str = " | ".join(
+                ["Tab {idx}" for idx in range(len(open_tabs))]
+            )
+        
+        try:
+            browser_info = self.fetch_browser_info(page, client)
+        except Exception:
+            page.wait_for_load_state("load", timeout=2500)
+            browser_info = self.fetch_browser_info(page, client)
+        
+        # Check if the current page is an image url
+        if page.url.endswith((".jpg", ".jpeg", ".png")):
+            # Load image from current url and run captioning on it.
+            if page.url not in self.url2caption and self.captioning_fn is not None:
+                try:
+                    image = Image.open(
+                        requests.get(page.url, stream=True).raw
+                    )
+                    caption = self.captioning_fn([image])[0].strip()
+                    self.url2caption[page.url] = remove_unicode(caption)
+                except Exception as e:
+                    print("WARNING: ", e)
+
+            content = self.url2caption.get(page.url, "Image")
+        else:
+            if self.captioning_fn is not None:
+                try:
+                    image_data = page.evaluate("""
+                        () => {
+                            const images = document.querySelectorAll('img');
+                            return Array.from(images).map(img => img.getAttribute('src') || '');
+                        }
+                    """)
+                except Exception as e:
+                    print("Failed to fetch image sources: ", e)
+                    image_data = []
+
+                image_urls = []
+                for image_src in image_data:
+                    try:
+                        if not image_src.startswith(("http://", "https://", "www.")):
+                            image_src = urljoin(page.url, image_src)
+                        if image_src not in self.url2caption:
+                            image_urls.append(image_src)
+                    except Exception as e:
+                        print("WARNING:", e)
+
+                # Run image captioning on image_url pixels. This is for models which use captioning as a baseline.
+                if len(image_urls) > 0:
+                    image_pixels = []
+                    valid_urls = []
+                    for url in image_urls:
+                        if "data:image/svg" in url:
+                            continue
+                        else:
+                            try:
+                                image = Image.open(
+                                    requests.get(url, stream=True).raw
+                                )
+                                image_pixels.append(image)
+                                valid_urls.append(url)
+                            except Exception as e:
+                                print("WARNING: ", e)
+
+                    # Caption images.
+                    if image_pixels:
+                        bs = 4
+                        captions = []
+                        for i in range(0, len(image_pixels), bs):
+                            try:
+                                captions.extend(
+                                    self.captioning_fn(
+                                        image_pixels[i : i + bs]
+                                    )
+                                )
+                            except Exception as e:
+                                print("WARNING: ", e)
+                                captions.extend(
+                                    [""] * len(image_pixels[i : i + bs])
+                                )
+                        assert len(valid_urls) == len(
+                            captions
+                        ), f"len(images)={len(valid_urls)}, len(captions)={len(captions)}"
+                        for image_url, caption in zip(valid_urls, captions):
+                            self.url2caption[image_url] = remove_unicode(
+                                caption.strip()
+                            )
+
+                image_updates = []
+                images_data = page.evaluate("""
+                    () => {
+                        const images = document.querySelectorAll('img');
+                        return Array.from(images).map(img => ({
+                            alt: img.getAttribute('alt') || '',
+                            src: img.getAttribute('src')
+                        }));
+                    }
+                """)
+                for image_data in images_data:
+                    try:
+                        updated_alt, image_url = image_data['alt'], image_data['src']
+                        if not image_url.startswith(("http://", "https://", "www.")):
+                            image_url = urljoin(page.url, image_url)
+                        if image_url in self.url2caption:
+                            if self.url2caption[image_url] not in updated_alt:
+                                if updated_alt:
+                                    updated_alt = f"{updated_alt}, description: {self.url2caption[image_url]}"
+                                else:
+                                    updated_alt = f"description: {self.url2caption[image_url]}"
+                        elif "data:image/svg" not in image_url:
+                            print(f"WARNING: {image_url} not in self.url2caption")
+
+                        if "url:" not in updated_alt:
+                            updated_alt = f"{updated_alt}, url: {image_url}"
+
+                        safe_updated_alt = json.dumps(updated_alt)
+                        image_updates.append({'image_url': image_url, 'updated_alt': safe_updated_alt})
+                    except Exception as e:
+                        print("WARNING:", e)
+
+                # Execute the batch update
+                js_code = """
+                    (image_updates => {
+                        const images = document.querySelectorAll('img');
+                        const urlToImageMap = {};
+                        images.forEach(img => {
+                            urlToImageMap[img.src] = img;
+                        });
+
+                        image_updates.forEach(update => {
+                            const img = urlToImageMap[update.image_url];
+                            if (img) {
+                                img.alt = update.updated_alt;
+                            }
+                        });
+                    })(%s);
+                """ % json.dumps(image_updates)
+                page.evaluate(js_code)
+                content = ""  # Not used for SoM
 
     def _get_obs(self):
 
@@ -553,7 +873,7 @@ document.addEventListener("visibilitychange", () => {
                 dom = extract_dom_snapshot(self.page)
                 axtree = extract_merged_axtree(self.page)
                 focused_element_bid = extract_focused_element_bid(self.page)
-                extra_properties = extract_dom_extra_properties(dom)
+                extra_properties, som_axtree_str = extract_dom_extra_properties(dom)
             except (playwright.sync_api.Error, MarkingError) as e:
                 err_msg = str(e)
                 # try to add robustness to async events (detached / deleted frames)
@@ -610,6 +930,7 @@ document.addEventListener("visibilitychange", () => {
             "last_action_error": self.last_action_error,
             "last_action_result": self.last_action_result,
             "elapsed_time": np.asarray([time.time() - self.start_time]),
+            "som_axtree_str": som_axtree_str, # program drafted axtree
         }
 
         return obs

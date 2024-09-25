@@ -3,7 +3,17 @@ import json
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
 from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 import re
-
+from PIL import Image
+import requests
+import json
+import numpy as np
+from agentlab.llm.llm_utils import (
+    ParseError,
+    count_tokens,
+    image_to_jpg_base64_url,
+    parse_html_tags_raise,
+    extract_code_blocks,
+)
 def parse_selection_output(input_string: str) -> List[str]:
     try:
         # Regular expression to match 'id' and 'name' pairs
@@ -19,7 +29,7 @@ def parse_selection_output(input_string: str) -> List[str]:
         parsed_list = []
     return parsed_list
 
-def select_navi_skills(intent: str, website: str, navi_skills, model: str, max_skills: int = 5):
+def select_navi_skills(intent: str, goal_image_urls: str, website: str, navi_skills, model: str, max_skills: int = 5):
     """
     Select the navigation skills based on the intent and website.
 
@@ -34,6 +44,14 @@ def select_navi_skills(intent: str, website: str, navi_skills, model: str, max_s
 
     def construct_prompt_messages(intent: str, website: str, navi_skills, max_skills: int = 5):
         navi_skill_str = ""
+        img_urls = []
+        if goal_image_urls:
+            for url in goal_image_urls:
+                if url.startswith("http"):
+                    input_image = Image.open(requests.get(url, stream=True).raw)
+                else:
+                    input_image = Image.open(url)
+                img_urls.append(image_to_jpg_base64_url(input_image))
         for i, skill in enumerate(navi_skills):
             URL = skill["URL"]
             name = skill["name"]
@@ -74,12 +92,31 @@ The goal is to upvote the hottest post in r/books. The user needs to navigate to
 <selected-pages>
 id: 1; name: Forums page
 </selected-pages>"""
-        human_prompt = f"""\
+        goal = f"""\
 Task goal: {intent}
+Images relevant to the goal:
+"""
+        
+        other_info = f"""\
 Current website: {get_website_description(website)}
 Shortcuts to choose from:
 {navi_skill_str}
 """
+        human_prompt = [
+            {
+                "type": "text",
+                "text": goal
+            },
+        ]
+        for img_url in img_urls:
+            human_prompt.append({
+                "type": "image_url",
+                "image_url": img_url
+            })
+        human_prompt.append({
+            "type": "text",
+            "text": other_info
+        })
         messages = [
             {
                 "role": "system",
@@ -122,8 +159,16 @@ def select_general_skills(intent: str, website: str, general_skills, model, max_
     - A dictionary of general skills based on the intent and website.
     """
 
-    def construct_prompt_messages(intent: str, website: str, general_skills, max_skills: int = 5):
+    def construct_prompt_messages(intent: str, goal_image_urls: str, website: str, general_skills, max_skills: int = 5):
         general_skill_str = ""
+        img_urls = []
+        if goal_image_urls:
+            for url in goal_image_urls:
+                if url.startswith("http"):
+                    input_image = Image.open(requests.get(url, stream=True).raw)
+                else:
+                    input_image = Image.open(url)
+                img_urls.append(image_to_jpg_base64_url(input_image))
         for i, skill in enumerate(general_skills):
             skill_name = skill["skill"]
             steps = skill["steps"]
@@ -182,11 +227,29 @@ id: 3; name: Sort posts by hotness
 Notes:
 1. Some skills might not be consistent with the current task but it is still useful to refer to, e.g. write a post to express happiness is useful in a task to write a post to express sadness.
 """
-        human_prompt = f"""\
+        goal = f"""\
 Task goal: {intent}
+Images relevant to the goal:
+"""
+        other_info = f"""\
 Current website: {get_website_description(website)}
 Skills to choose from:
 {general_skill_str}"""
+        human_prompt = [
+            {
+                "type": "text",
+                "text": goal
+            },
+        ]
+        for img_url in img_urls:
+            human_prompt.append({
+                "type": "image_url",
+                "image_url": img_url
+            })
+        human_prompt.append({
+            "type": "text",
+            "text": other_info
+        })
         messages = [
             {
                 "role": "system",
@@ -215,7 +278,7 @@ Skills to choose from:
         selected_generals = selected_generals[:max_skills]
     return selected_generals
 
-def select_skills(intent: str, website: str, skill_path: str, model: str = "gpt-4o", max_skills = (5, 5)) -> dict[str, List[str]]:
+def select_skills(intent: str, goal_image_urls: list[str], website: str, skill_path: str, model: str = "gpt-4o", max_skills = (5, 5)) -> dict[str, List[str]]:
     """
     Select the skills based on the intent and website.
 
@@ -234,12 +297,12 @@ def select_skills(intent: str, website: str, skill_path: str, model: str = "gpt-
     max_navi_skills, max_general_skills = max_skills
     
     navi_skills = [skill for skill in skills if skill["type"] == "navi"]
-    selected_navi_skills = select_navi_skills(intent, website, navi_skills, model, max_navi_skills)
+    selected_navi_skills = select_navi_skills(intent, goal_image_urls, website, navi_skills, model, max_navi_skills)
     print("*"*50, "Selected navigation skills", "*"*50)
     print(selected_navi_skills)
 
     general_skills = [skill for skill in skills if skill["type"] == "general"]
-    selected_general_skills = select_general_skills(intent, website, general_skills, model, max_general_skills)
+    selected_general_skills = select_general_skills(intent, goal_image_urls, website, general_skills, model, max_general_skills)
     print("*"*50, "Selected general skills", "*"*50)
     print(selected_general_skills)
 

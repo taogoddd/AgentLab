@@ -3,6 +3,18 @@ import os
 from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 from agentlab.utils.utils import reset_skills
 import json
+from PIL import Image
+import requests
+import json
+import numpy as np
+from agentlab.llm.llm_utils import (
+    ParseError,
+    count_tokens,
+    image_to_jpg_base64_url,
+    parse_html_tags_raise,
+    extract_code_blocks,
+)
+
 # def extract_skill(traj_path: str, skill_root_path: str, website: str):
 #     trajectory = get_trajectory_from_annotation(traj_path)
 
@@ -75,8 +87,16 @@ def construct_prompt_messages(
         trajectory: list[TrajectoryStep],
     ):
     existing_skills_str = get_skills_desc(skills_path=skills_file_path)
-    
     goal = trajectory[0]["obs"]["goal"]
+    goal_image_urls = trajectory[0]["obs"].get("goal_image_urls", [])
+    img_urls = []
+    if goal_image_urls:
+        for url in goal_image_urls:
+            if url.startswith("http"):
+                input_image = Image.open(requests.get(url, stream=True).raw)
+            else:
+                input_image = Image.open(url)
+            img_urls.append(image_to_jpg_base64_url(input_image))
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
 You need to summarize skills from the trajectory.
@@ -197,19 +217,33 @@ IMPORTANT NOTES you should absolutely follow:
 2. Check existing skills before generating, do not summarize skills that have already been summarized, instead, use "Summarized before" in the steps.
 3. You should break the overall goal into sub-goals and summarize each sub-goal as a skill.
 """
-    prefix = f"""\
+    goal = f"""\
 Overall goal of the trajectory: {goal}
+Images relevant to the goal:
+"""
+    other_info = f"""\
 Current website: {get_website_description(website)}
-Exisiting skills: 
+Existing summarized pages:
 {existing_skills_str}
 Human user trajectory:
 """
     human_prompt = [
         {
             "type": "text",
-            "text": prefix
-        }
+            "text": goal
+        },
     ]
+    for i, img_url in enumerate(img_urls):
+        human_prompt.append({
+            "type": "image_url",
+            "image_url": {
+                "url": f"{img_url}"
+            }
+        })
+    human_prompt.append({
+        "type": "text",
+        "text": other_info
+    })
     for i, step in enumerate(trajectory):
         obs = step["obs"]
         url = obs["url"]

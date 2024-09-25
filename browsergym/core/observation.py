@@ -248,6 +248,10 @@ def extract_dom_extra_properties(dom_snapshot):
         som_string_id = dom_snapshot["strings"].index(SOM_ATTR)
     except ValueError:
         som_string_id = -1
+    try:
+        alt_string_id = dom_snapshot["strings"].index("alt")
+    except ValueError:
+        alt_string_id = -1
 
     # build the iframe tree (DFS from the first frame)
     doc_properties = {
@@ -313,6 +317,34 @@ def extract_dom_extra_properties(dom_snapshot):
             for _ in enumerate(document["nodes"]["parentIndex"])
         ]  # all nodes in document
 
+        # Extract Element, Alt, and TextContent
+        for node_idx in range(len(document["nodes"]["parentIndex"])):
+            node = doc_properties[doc]["nodes"][node_idx]
+            node["element"] = None  # Initialize element
+            node["alt"] = None      # Initialize Alt text
+            node["text_content"] = None  # Initialize TextContent
+
+            # Get nodeName (element tag)
+            node_name_index = document["nodes"]["nodeName"][node_idx]
+            node["element"] = to_string(node_name_index)
+
+            # Get textValue (TextContent)
+            text_value_index = document["nodes"]["textValue"]["index"]
+            text_value_values = document["nodes"]["textValue"]["value"]
+            if node_idx in text_value_index:
+                idx_in_text_values = text_value_index.index(node_idx)
+                text_value_string_index = text_value_values[idx_in_text_values]
+                text_content = to_string(text_value_string_index)
+
+            # Extract attributes
+            node_attrs = document["nodes"]["attributes"][node_idx]
+            for i in range(0, len(node_attrs), 2):
+                name_string_id = node_attrs[i]
+                value_string_id = node_attrs[i + 1]
+                if name_string_id == alt_string_id:
+                    node["alt"] = to_string(value_string_id)
+
+
         # extract clickable property
         for node_idx in document["nodes"]["isClickable"]["index"]:
             doc_properties[doc]["nodes"][node_idx]["clickable"] = True
@@ -376,19 +408,227 @@ def extract_dom_extra_properties(dom_snapshot):
         # document["layout"]["paintOrders"]
 
     # collect the extra properties of all nodes with a browsergym_id attribute
+    # extra_properties = {}
+    # for doc in doc_properties.keys():
+    #     for node_idx, node in enumerate(doc_properties[doc]["nodes"]):
+    #         bid = node["bid"]
+    #         if bid:
+    #             if bid in extra_properties:
+    #                 logger.warning(f"duplicate {BID_ATTR}={repr(bid)} attribute detected")
+    #             extra_properties[bid] = {
+    #                 extra_prop: node[extra_prop]
+    #                 for extra_prop in (
+    #                     "visibility",
+    #                     "bbox",
+    #                     "clickable",
+    #                     "set_of_marks",
+    #                     "element",
+    #                     "alt",
+    #                     "text_content",
+    #                 )
+    #             }
+    # # generate text descriptions for nodes with a set_of_marks attribute
+    # text_descriptions = {}
+    # for bid, props in extra_properties.items():
+    #     if props["set_of_marks"]:
+    #         content = ""
+    #         element = props["element"].upper() if props["element"] else "UNKNOWN"
+    #         # Include 'Alt' text if the element is an 'IMG' and 'Alt' is present
+    #         if element == "IMG" and props["alt"]:
+    #             content += props["alt"]
+    #         # Include 'TextContent' if present
+    #         if props["text_content"]:
+    #             content += props["text_content"].strip().replace("\n", "").replace("\t", "")[:200]
+    #         content = content.strip()
+    #         # If content is empty, we can decide whether to include it or not
+    #         text_descriptions[bid] = f"[{element}] element with content [{content}]"
+
+    #         # modify the extra properties to include the text description
+    #         extra_properties[bid]["text_description"] = text_descriptions[bid]
+    #     else:
+    #         text_descriptions[bid] = None
     extra_properties = {}
     for doc in doc_properties.keys():
-        for node in doc_properties[doc]["nodes"]:
+        document = dom_snapshot["documents"][doc]
+
+        # Build mappings for text content
+        node_idx_to_text_content = {}
+
+        # TextValue mapping
+        for idx, val in zip(document["nodes"]["textValue"]["index"], document["nodes"]["textValue"]["value"]):
+            node_idx_to_text_content[idx] = to_string(val)
+
+        # InputValue mapping
+        for idx, val in zip(document["nodes"]["inputValue"]["index"], document["nodes"]["inputValue"]["value"]):
+            node_idx_to_text_content[idx] = to_string(val)
+
+        # NodeValue mapping (for text nodes)
+        for idx, val in enumerate(document["nodes"]["nodeValue"]):
+            if val != -1:
+                node_idx_to_text_content[idx] = to_string(val)
+
+        for node_idx in range(len(document["nodes"]["parentIndex"])):
+            node = doc_properties[doc]["nodes"][node_idx]
             bid = node["bid"]
             if bid:
-                if bid in extra_properties:
-                    logger.warning(f"duplicate {BID_ATTR}={repr(bid)} attribute detected")
-                extra_properties[bid] = {
-                    extra_prop: node[extra_prop]
-                    for extra_prop in ("visibility", "bbox", "clickable", "set_of_marks")
-                }
+                # Extract element (tag name)
+                node_name_idx = document["nodes"]["nodeName"][node_idx]
+                node["element"] = to_string(node_name_idx).upper() if node_name_idx != -1 else None
 
-    return extra_properties
+                # Initialize content
+                content_parts = []
+
+                # Collect text content from various sources
+                text_content = node_idx_to_text_content.get(node_idx, "")
+
+                # For elements, collect text from child text nodes
+                if document["nodes"]["nodeType"][node_idx] == 1:  # Element node
+                    for child_idx, parent_idx in enumerate(document["nodes"]["parentIndex"]):
+                        if parent_idx == node_idx and document["nodes"]["nodeType"][child_idx] == 3:  # Text node
+                            child_text = node_idx_to_text_content.get(child_idx, "")
+                            if child_text:
+                                content_parts.append(child_text.strip())
+
+                if text_content:
+                    content_parts.append(text_content.strip())
+
+                # Extract 'alt' attribute for IMG elements
+                node_attrs = document["nodes"]["attributes"][node_idx]
+                node["alt"] = None
+                for i in range(0, len(node_attrs), 2):
+                    name_string_id = node_attrs[i]
+                    value_string_id = node_attrs[i + 1]
+                    attr_name = to_string(name_string_id)
+                    if attr_name == "alt":
+                        node["alt"] = to_string(value_string_id)
+                        break  # Assuming only one 'alt' attribute per node
+
+                # Save the extracted content
+                content = " ".join(content_parts).strip()
+                node["text_content"] = content if content else None
+
+                # Include in extra_properties
+                extra_properties[bid] = {
+                    extra_prop: node.get(extra_prop)
+                    for extra_prop in (
+                        "visibility",
+                        "bbox",
+                        "clickable",
+                        "set_of_marks",
+                        "element",
+                        "alt",
+                        "text_content",
+                    )
+                }
+    
+
+    # # Generate text descriptions
+    # text_descriptions = {}
+    # for bid, props in extra_properties.items():
+    #     if props["set_of_marks"]:
+    #         content_parts = []
+
+    #         # Include 'alt' text if the element is an 'IMG'
+    #         element = props["element"] if props["element"] else "UNKNOWN"
+    #         if element == "IMG" and props["alt"]:
+    #             content_parts.append(props["alt"])
+
+    #         # Include 'text_content' if present
+    #         if props["text_content"]:
+    #             content_parts.append(props["text_content"]).strip().replace("\n", "").replace("\t", "")[:200]
+
+    #         # Combine content parts and limit length
+    #         content = " ".join(content_parts)
+
+    #         text_descriptions[bid] = f"element <{str(element).lower()}> with content [{content}]"
+    
+    #         # Modify the extra properties to include the text description
+    #         extra_properties[bid]["text_description"] = text_descriptions[bid]
+    #     else:
+    #         text_descriptions[bid] = None
+    #         extra_properties[bid]["text_description"] = None
+    def build_text_content_elements(extra_properties):
+        text_content_elements = []
+        text_content_text = set()
+        id2semantic = {}
+
+        for bid, props in extra_properties.items():
+            if not props.get("clickable"):
+                content = ""
+                if props.get("element") == "IMG" and props.get("alt"):
+                    content += props["alt"]
+                if props.get("text_content"):
+                    content += props["text_content"].strip().replace("\n", "").replace("\t", "")[:200]
+                if content and not (
+                    content.startswith(".") and "{" in content
+                ):
+                    # Add elements which are not interactable as StaticText
+                    if content not in text_content_text:
+                        text_content_elements.append(
+                            f"[] [StaticText] [{content}]"
+                        )
+                        text_content_text.add(content)
+                continue
+
+            content = ""
+            if props.get("element") == "IMG" and props.get("alt"):
+                    content += props["alt"]
+            if props.get("element") == "INPUT":
+                if props.get("text_content"):
+                    content += props["text_content"].strip().replace("\n", "").replace("\t", "")[:200]
+                    if re.match(r'^[A-Za-z0-9+/=]{30,}', content):
+                        continue
+            if props.get("text_content"):
+                content += props["text_content"].strip().replace("\n", "").replace("\t", "")[:200]
+            text_content_element = f"[{bid}] [{props.get('element', '')}] [{content}]"
+            text_content_elements.append(text_content_element)
+
+            if content in text_content_text:
+                # Remove text_content_elements with content
+                text_content_elements = [
+                    element
+                    for element in text_content_elements
+                    if element.strip() != content
+                ]
+            text_content_text.add(content)
+        content_str = "\n".join(text_content_elements)
+        return content_str
+
+            # if props.get("set_of_marks"):
+            #     content = ""
+            #     element = props.get("element") or "UNKNOWN"
+
+            #     # Include 'alt' text if the element is an 'IMG'
+            #     if element == "IMG" and props.get("alt"):
+            #         content += props["alt"]
+
+            #     # Include 'text_content' if present
+            #     if props.get("text_content"):
+            #         content += props["text_content"].strip().replace("\n", "").replace("\t", "")[:200]
+
+            #     content = content.strip()
+            #     unique_id = bid  # Use 'bid' as the unique identifier
+
+            #     # Build formatted strings
+            #     text_content_element = f"[{unique_id}] [{element}] [{content}]"
+            #     id2semantic[unique_id] = f"[{element}] element with content [{content}]"
+
+            #     # Handle duplicates
+            #     if content in text_content_text:
+            #         # Remove entries with the same content
+            #         text_content_elements = [
+            #             elem for elem in text_content_elements if content not in elem
+            #         ]
+            #     else:
+            #         text_content_text.add(content)
+            #         text_content_elements.append(text_content_element)
+
+        # return text_content_elements, id2semantic
+    
+    content_str = build_text_content_elements(extra_properties)
+    # print(content_str)
+
+    return extra_properties, content_str
 
 
 def extract_all_frame_axtrees(page: playwright.sync_api.Page):

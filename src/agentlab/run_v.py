@@ -194,15 +194,36 @@ def main():
 
     # get the intent of the task
     task_id = args.task_name.split(".")[1]
-    config_path = os.path.join("src/agentlab/config_files", f"{task_id}.json")
-    config = json.load(open(config_path))
+    configs_path = os.path.join("visualwebarena", f"test_raw.json")
+    configs = json.load(open(configs_path))
+    config = [c for c in configs if c["task_id"] == int(task_id)][0]
     intent = config["intent"]
     start_url = config["start_url"]
+    goal_image_urls = config.get("image", [])
+    if goal_image_urls is None:
+        goal_image_urls = []
+    if isinstance(goal_image_urls, str):
+        goal_image_urls = [goal_image_urls]
+    
+    def remove_placeholders_in_url(url):
+        mapping ={
+            "__CLASSIFIEDS__": "CLASSIFIEDS",
+            "__REDDIT__": "REDDIT",
+            "__SHOPPING__": "SHOPPING",
+            "__WIKIPEDIA__": "WIKIPEDIA",
+        }
+        for key, value in mapping.items():
+            if key in url:
+                base_url = os.environ.get(value)
+                url = url.replace(key, base_url)
+        return url
+
+    goal_image_urls = [remove_placeholders_in_url(url) for url in goal_image_urls]
 
     # get the skills
     skills = json.load(open(args.skill_path))
     if len(skills) > args.max_skills:
-        retrieved_skills = select_skills(intent, args.website, args.skill_path, args.model_name.split("/")[-1], (args.max_skills//2, args.max_skills-args.max_skills//2))
+        retrieved_skills = select_skills(intent, goal_image_urls, args.website, args.skill_path, args.model_name.split("/")[-1], (args.max_skills//2, args.max_skills-args.max_skills//2))
     else:
         retrieved_skills = skills
     print("*"*50, "Retrieved skills", "*"*50)
@@ -258,7 +279,7 @@ def main():
                     extract_clickable_tag=True,
                     extract_coords="False",
                     filter_visible_elements_only=False,
-                    openai_vision_detail="high"
+                    # openai_vision_detail="high"
                 ),
                 action=dp.ActionFlags(
                     multi_actions=False,
