@@ -21,7 +21,8 @@ from agentlab.llm.llm_utils import (
     parse_html_tags_raise,
     extract_code_blocks,
 )
-
+from PIL import Image
+import requests
 
 class Flags:
     """Base class for flags. Mostly for backward compatibility."""
@@ -455,13 +456,42 @@ class Observation(Shrinkable):
                 screenshot = self.obs["screenshot_som"]
             else:
                 screenshot = self.obs["screenshot"]
-            img_url = image_to_jpg_base64_url(screenshot)
+            img_urls = [image_to_jpg_base64_url(screenshot)]
+            if "goal_image_urls" in self.obs:
+                goal_image_urls = self.obs["goal_image_urls"]
+                # get the Image object from the goal_image_urls
+                for url in goal_image_urls:
+                    if url.startswith("http"):
+                        input_image = Image.open(requests.get(url, stream=True).raw)
+                    else:
+                        input_image = Image.open(url)
+                
+                    img_urls.append(image_to_jpg_base64_url(input_image))
+            prompt.append(
+                {
+                    "type": "text",
+                    "text": "IMAGES: (1) current page screenshot",
+                }
+            )
             prompt.append(
                 {
                     "type": "image_url",
-                    "image_url": {"url": img_url, "detail": self.flags.openai_vision_detail},
+                    "image_url": {"url": img_urls[0], "detail": self.flags.openai_vision_detail},
                 }
             )
+            for i, img_url in enumerate(img_urls[1:], start=2):
+                prompt.append(
+                    {
+                        "type": "text",
+                        "text": f"({i}) input image (relevant to the task goal) {i-1}",
+                    }
+                )
+                prompt.append(
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": img_url, "detail": self.flags.openai_vision_detail},
+                    }
+                )
         return prompt
 
 

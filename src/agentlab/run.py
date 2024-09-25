@@ -110,7 +110,7 @@ def parse_args():
     parser.add_argument(
         "--use_screenshot",
         type=str2bool,
-        default=True,
+        default=False,
         help="Use screenshot in the agent's observation space.",
     )
     parser.add_argument(
@@ -225,6 +225,7 @@ def main():
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
+            vision_support=True,
         )
     elif args.model_name.startswith("azure"):
         chat_model_args = AzureOpenAIChatModelArgs(
@@ -233,6 +234,7 @@ def main():
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
+            vision_support=True,
         )
     exp_args = ExpArgs(
         env_args=env_args,
@@ -250,8 +252,8 @@ def main():
                     use_think_history=True,
                     use_diff=False,
                     html_type="pruned_html",
-                    use_screenshot=True,
-                    use_som=False,
+                    use_screenshot=args.use_screenshot,
+                    use_som=True,
                     extract_visible_tag=True,
                     extract_clickable_tag=True,
                     extract_coords="False",

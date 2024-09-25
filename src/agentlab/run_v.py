@@ -110,7 +110,7 @@ def parse_args():
     parser.add_argument(
         "--use_screenshot",
         type=str2bool,
-        default=True,
+        default=False,
         help="Use screenshot in the agent's observation space.",
     )
     parser.add_argument(
@@ -194,7 +194,7 @@ def main():
 
     # get the intent of the task
     task_id = args.task_name.split(".")[1]
-    config_path = os.path.join(f"src/agentlab/v_config_files/vwa/test_{args.website}", f"{task_id}.json")
+    config_path = os.path.join("src/agentlab/config_files", f"{task_id}.json")
     config = json.load(open(config_path))
     intent = config["intent"]
     start_url = config["start_url"]
@@ -214,7 +214,7 @@ def main():
         task_seed=None,
         max_steps=args.max_steps,
         headless=args.headless,
-        viewport={"width": 1500, "height": 1280},
+        viewport={"width": 1280, "height": 2048},
         slow_mo=args.slow_mo,
     )
 
@@ -225,6 +225,7 @@ def main():
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
+            vision_support=True,
         )
     elif args.model_name.startswith("azure"):
         chat_model_args = AzureOpenAIChatModelArgs(
@@ -233,6 +234,7 @@ def main():
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
+            vision_support=True,
         )
     exp_args = ExpArgs(
         env_args=env_args,
@@ -241,7 +243,7 @@ def main():
             flags = SkillAugmentedPromptFlags(
                 obs=dp.ObsFlags(
                     use_html=False,
-                    use_ax_tree=True,
+                    use_ax_tree=args.use_ax_tree,
                     use_focused_element=True,
                     use_error_logs=True,
                     use_history=True,
@@ -250,12 +252,13 @@ def main():
                     use_think_history=True,
                     use_diff=False,
                     html_type="pruned_html",
-                    use_screenshot=True,
-                    use_som=False,
+                    use_screenshot=args.use_screenshot,
+                    use_som=True,
                     extract_visible_tag=True,
                     extract_clickable_tag=True,
                     extract_coords="False",
                     filter_visible_elements_only=False,
+                    openai_vision_detail="high"
                 ),
                 action=dp.ActionFlags(
                     multi_actions=False,

@@ -202,5 +202,5 @@ def extract_navi_skill(
         
     return parsed_res_list
 
-# traj_path = f"/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0"
+# traj_path = f"/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0"
 # print(extract_navi_skill(website="reddit", traj_path=traj_path, model="gpt-4o"))

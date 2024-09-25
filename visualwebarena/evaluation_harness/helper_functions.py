@@ -9,7 +9,7 @@ from beartype import beartype
 from beartype.typing import Dict, List
 from playwright.sync_api import CDPSession, Page
 
-from browser_env.env_config import (
+from ..browser_env.env_config import (
     ACCOUNTS,
     REDDIT,
     SHOPPING,

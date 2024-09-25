@@ -64,7 +64,7 @@ def get_auto_eval_accuracy(results_path: str, model_name: str, prompt_type: str)
     print(f"Total Accuracy: {accuracy}")
     return accuracy, records
 
-# get_auto_eval_accuracy("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", "gpt-4o", "vision")
+# get_auto_eval_accuracy("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", "gpt-4o", "vision")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

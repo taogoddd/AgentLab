@@ -2,7 +2,7 @@ from agentlab.autogen_policy.offline.human_annotation.autogen import *
 import numpy as np
 from typing import Any
 from agentlab.autogen_policy.offline.human_annotation.utils import Obs, ProcessedObs, TrajectoryStep, simplify_readable_trajectory
-ROOT_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy"
+ROOT_DIR = "/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy"
 
 exp_name = "2024-09-01_17-02-43_annotate"
 task_name = "2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da"

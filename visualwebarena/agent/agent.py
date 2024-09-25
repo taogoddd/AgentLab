@@ -6,21 +6,24 @@ import tiktoken
 from beartype import beartype
 from PIL import Image
 
-from agent.prompts import *
-from browser_env import Trajectory
-from browser_env.actions import (
+from ..agent.prompts import *
+from ..browser_env import Trajectory
+from ..browser_env.actions import (
     Action,
     ActionParsingError,
     create_id_based_action,
     create_none_action,
     create_playwright_action,
 )
-from browser_env.utils import Observation, StateInfo
-from llms import (
+from ..browser_env.utils import Observation, StateInfo
+from ..llms import (
     call_llm,
+    generate_from_huggingface_completion,
+    generate_from_openai_chat_completion,
+    generate_from_openai_completion,
     lm_config,
 )
-from llms.tokenizers import Tokenizer
+from ..llms.tokenizers import Tokenizer
 
 
 class Agent:

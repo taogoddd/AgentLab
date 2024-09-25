@@ -4,6 +4,49 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+def order_vwa_task_ids(json_path: str):
+    with open(json_path, "r") as f:
+        data = json.load(f)
+        for i, task in enumerate(data):
+            task["task_id"] = i
+    save_path = json_path.replace(".json", "_ordered.json")
+    with open(save_path, "w") as f:
+        json.dump(data, f, indent=4)
+
+def get_task_id_splits(json_path: str):
+    with open(json_path, "r") as f:
+        data = json.load(f)
+    splits = {
+        "reddit": [],
+        "shopping": [],
+        "classifieds": [],
+        "multi-sites": [],
+        "wikipedia": [],
+    }
+    for task in data:
+        # if len(task["sites"]) > 1:
+        #     splits["multi-sites"].append(task["task_id"])
+        if task["sites"][0] == "reddit":
+            splits["reddit"].append(task["task_id"])
+        elif task["sites"][0] == "shopping":
+            splits["shopping"].append(task["task_id"])
+        elif task["sites"][0] == "classifieds":
+            splits["classifieds"].append(task["task_id"])
+        elif task["sites"][0] == "wikipedia":
+            splits["wikipedia"].append(task["task_id"])
+    
+    # add length of each split
+    total_length = 0
+    for key, value in splits.items():
+        total_length += len(value)
+    print(f"Total length: {total_length}")
+    # sort the splits
+    for key, value in splits.items():
+        value.sort()
+        splits[key] = value
+    
+    return splits
+
 def check_num_steps_eval_accuracy(path: str, upper_bound: int):
     subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
     records = {}
@@ -252,6 +295,12 @@ def get_sub_domain_avg_score(sub_domain: str, results_dir: str):
     scores = []
     subdirs = [x for x in Path(results_dir).iterdir() if x.is_dir()]
     successful_ids = []
+    records = {
+        "all_ids": sub_domain_ids,
+        "successful_ids": [],
+        "failed_ids": [],
+    }
+    not_completed_ids = []
     for subdir in subdirs:
         subdir_name = subdir.name
         task_name = subdir_name.split("_")[-3]
@@ -266,11 +315,14 @@ def get_sub_domain_avg_score(sub_domain: str, results_dir: str):
                 if score == 1:
                     successful_ids.append(id)
     successful_ids.sort()
+    records["successful_ids"] = successful_ids
+    records["failed_ids"] = [id for id in sub_domain_ids if id not in successful_ids]
     avg_score = sum(scores) / len(scores)
     print(f"Average score for sub domain {sub_domain}: {avg_score}")
     print(f"Number of successful ids: {len(successful_ids)}")
     print(f"Number of all ids: {len(sub_domain_ids)}")
     print(f"Successful ids: {successful_ids}")
+    return avg_score, records
 
 def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     '''
@@ -281,7 +333,7 @@ def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     include_multi_sites: bool - whether to include tasks with multiple sites
     '''
     sub_domain_ids = []
-    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
+    with open("/home/ubuntu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         for task in data:
             if task["sites"][0] == sub_domain and (include_multi_sites or len(task["sites"]) == 1):
@@ -289,15 +341,15 @@ def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     return sub_domain_ids
 
 def dump_sub_domain_data(sub_domain: str):
-    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
+    with open("/home/ubuntu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         # only keep the task whose sites have reddit
         new_data = [task for task in data if sub_domain in task["sites"]]
 
-    with open(f"/home/ytliu/github/AgentLab/webarena/test.{sub_domain}.json", "w") as f:
+    with open(f"/home/ubuntu/github/AgentLab/webarena/test.{sub_domain}.json", "w") as f:
         json.dump(new_data, f, indent=4)
 
-def analyze_step(step_result_dir: str = "/home/ytliu/agentlab_results/2405_all_tasks_step_webarena_bugfix"):
+def analyze_step(step_result_dir: str = "/home/ubuntu/agentlab_results/2405_all_tasks_step_webarena_bugfix"):
     # Load the CSV file
     df = pd.read_csv(f'{step_result_dir}/summary.csv')
 
@@ -322,7 +374,7 @@ def analyze_step(step_result_dir: str = "/home/ytliu/agentlab_results/2405_all_t
     print(f"Successful Reddit tasks: {successful_reddit_tasks}")
 
 def get_task_template_id_mapping():
-    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
+    with open("/home/ubuntu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         task_template_mapping: dict[str, list] = {}
         for task in data:
@@ -414,32 +466,84 @@ def calculate_tokens(path: str, model: str = "gpt-4o"):
     print(f"Total cost: ${cost}")
     print(f"Average cost per task: ${cost / len(subdirs)}")
 
-# analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
-# get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
+def get_cross_template_avg_score(path: str):
+    task_template_id_mapping = get_task_template_id_mapping()
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    avg_score, records = new_get_avg_score(path)
+    successful_ids = records["successful_ids"]
+    all_ids = records["all_ids"]
+    # get the avg score accross all templates, i.e. num of templates solved / num of templates
+    successful_template_ids = []
+    all_template_ids = []
+    for id in successful_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in successful_template_ids:
+                successful_template_ids.append(template_id)
+    for id in all_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in all_template_ids:
+                all_template_ids.append(template_id)
+    score = len(successful_template_ids) / len(all_template_ids)
+    successful_template_ids.sort()
+    
+    print(f"Number of successful templates: {len(successful_template_ids)}")
+    print(f"Successful templates: {successful_template_ids}")
+    print(f"Average score: {score}")
+def get_sub_domain_cross_template_avg_score(path: str, sub_domain: str):
+    task_template_id_mapping = get_task_template_id_mapping()
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    avg_score, records = get_sub_domain_avg_score(sub_domain, path)
+    successful_ids = records["successful_ids"]
+    all_ids = records["all_ids"]
+    # get the avg score accross all templates, i.e. num of templates solved / num of templates
+    successful_template_ids = []
+    all_template_ids = []
+    for id in successful_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in successful_template_ids:
+                successful_template_ids.append(template_id)
+    for id in all_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            if id in ids and template_id not in all_template_ids:
+                all_template_ids.append(template_id)
+    score = len(successful_template_ids) / len(all_template_ids)
+    
+    successful_template_ids.sort()
+    print(f"Number of successful templates: {len(successful_template_ids)}")
+    print(f"Successful templates: {successful_template_ids}")
+    print(f"Average score: {score}")
+def highlight_print(text: str):
+    print("*"*50, text, "*"*50)
+
+order_vwa_task_ids("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa.json")
+print(get_task_id_splits("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa_ordered.json"))
+# analyze_steps("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
+# get_avg_score("/home/ubuntu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
 
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923033851")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
-calculate_tokens("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923141347")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240922075010")
-# print(new_get_binary_scores("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436"))
-# get_merged_avg_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
-# get_merged_avg_template_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
-# get_sub_domain_avg_score("shopping", "/home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
+new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075014")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
+# calculate_tokens("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923141347")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240922075010")
+# print(new_get_binary_scores("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436"))
+# get_merged_avg_score(["/home/ubuntu/agentlab_results/agentlab_baseline", "/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline"])
+# get_merged_avg_template_score(["/home/ubuntu/agentlab_results/agentlab_baseline", "/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline"])
+# get_sub_domain_avg_score("shopping", "/home/ubuntu/agentlab_results/2024-08-15_03-45-52_offline_learning")
 # print(get_sub_domain_ids("reddit", True))
-# /home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning
+# /home/ubuntu/agentlab_results/2024-08-15_03-45-52_offline_learning
 
-# get_sub_domain_avg_score("gitlab", "/home/ytliu/agentlab_results/agentlab_baseline")
-# check_num_steps_eval_accuracy("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
+# get_sub_domain_avg_score("gitlab", "/home/ubuntu/agentlab_results/agentlab_baseline")
+# check_num_steps_eval_accuracy("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
 # analyze_step()
 # get_sub_domain_ids("gitlab", include_multi_sites=False)
 
-# with open("/home/ytliu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
+# with open("/home/ubuntu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
 #     skills = json.load(f)
 
 # for skill in skills:
@@ -452,13 +556,13 @@ calculate_tokens("/home/ytliu/github/AgentLab/results/streaming_single_action_me
 #         skill["description"] = description
 #         skill["usages"] = usages
 
-# with open("/home/ytliu/github/AgentLab/src/agentlab/skills/shopping_admin/skills_1.json", "w") as f:
+# with open("/home/ubuntu/github/AgentLab/src/agentlab/skills/shopping_admin/skills_1.json", "w") as f:
 #     json.dump(skills, f, indent=2)
 
-# with open("/home/ytliu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/exp_args.pkl", "rb") as f:
+# with open("/home/ubuntu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/exp_args.pkl", "rb") as f:
 #     import pickle
 #     exp_args = pickle.load(f)
 #     print(exp_args)
 
-# print(get_exp_args("/home/ytliu/agentlab_results/agentlab_baseline"))
+# print(get_exp_args("/home/ubuntu/agentlab_results/agentlab_baseline"))
 

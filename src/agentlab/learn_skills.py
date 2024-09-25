@@ -36,7 +36,7 @@ def parse_args():
     parser.add_argument("--num_samples", type=int, default=3, help="Number of times to run the same task")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
     parser.add_argument("--model", type=str, default="gpt-4o", help="Model name to use for inference")
-    parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_results/agentlab_baseline", help="Directory to save the results")
+    parser.add_argument("--result_dir", type=str, default="/home/ubuntu/agentlab_results/agentlab_baseline", help="Directory to save the results")
     return parser.parse_args()
 
 def main():

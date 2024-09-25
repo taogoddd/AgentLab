@@ -45,7 +45,7 @@ exp_group_name = "openai_baseline"
 # relaunch_mode = "all_errors"
 relaunch_mode = None
 
-# RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/corner_explorations"
+# RESULTS_DIR = "/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/corner_explorations"
 
 main(
     exp_root=RESULTS_DIR,

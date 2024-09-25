@@ -189,7 +189,7 @@ does not support vision. Disabling use_screenshot."""
         return max_prompt_tokens, max_trunk_itr
     
     def load_experience(self):
-        with open('/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/experiences_json/new_experiences.json', 'r') as f:
+        with open('/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/experiences_json/new_experiences.json', 'r') as f:
             experience = json.load(f)
         return experience
     

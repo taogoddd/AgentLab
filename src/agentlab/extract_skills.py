@@ -23,8 +23,8 @@ import json
 #     instructor.save(instructed_skills, f"{skill_root_path}/{website}/{skill_type}/skills.pkl")
 
 # extract_skill(
-#     traj_path="/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0",
-#     skill_root_path="/home/ytliu/github/AgentLab/src/agentlab/skills",
+#     traj_path="/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0",
+#     skill_root_path="/home/ubuntu/github/AgentLab/src/agentlab/skills",
 #     website="shopping_admin"
 # )
 
@@ -279,5 +279,5 @@ def extract_skills(
     return parsed_res_list
 
 # reset_skills(f"src/agentlab/skills/reddit/skills.json")
-# traj_path = f"/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da"
+# traj_path = f"/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da"
 # print(extract_skills(website="reddit", traj_path=traj_path, model="gpt-4o", skill_root_path="src/agentlab/skills"))

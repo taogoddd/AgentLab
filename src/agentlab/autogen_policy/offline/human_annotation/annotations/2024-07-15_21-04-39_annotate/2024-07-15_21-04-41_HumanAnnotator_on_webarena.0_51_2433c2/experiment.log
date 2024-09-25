@@ -1,5 +1,5 @@
 2024-07-15 21:04:41,006 - browsergym.experiments.loop - INFO - Running experiment HumanAnnotator_on_webarena.0_51 in:
-  /home/ytliu/github/AgentLab/src/agentlab/autogen_policy/trajectories/2024-07-15_21-04-39_annotate/2024-07-15_21-04-41_HumanAnnotator_on_webarena.0_51_2433c2
+  /home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/trajectories/2024-07-15_21-04-39_annotate/2024-07-15_21-04-41_HumanAnnotator_on_webarena.0_51_2433c2
 2024-07-15 21:04:41,015 - browsergym.experiments.loop - DEBUG - Agent created.
 2024-07-15 21:04:41,017 - browsergym.experiments.loop - DEBUG - Environment created.
 2024-07-15 21:04:41,191 - asyncio - DEBUG - Using selector: EpollSelector

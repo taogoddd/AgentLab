@@ -18,7 +18,8 @@ class VisualWebArenaInstance:
 
         # setup visualwebarena environment variables (visualwebarena will read those on import)
         os.environ["DATASET"] = "visualwebarena"
-        append_vwa = lambda x: f"VWA_{x}"
+        # append_vwa = lambda x: f"VWA_{x}"
+        append_vwa = lambda x: f"{x}"
         for key in ENV_VARS:
             assert append_vwa(key) in os.environ, (
                 f"Environment variable {append_vwa(key)} missing.\n"
@@ -98,12 +99,13 @@ class VisualWebArenaInstance:
                 page.goto(url)
 
             case "classifieds":
-                username = self.credentials[site]["username"]
-                password = self.credentials[site]["password"]
-                page.goto(f"{url}/index.php?page=login")
-                page.locator("#email").fill(username)
-                page.locator("#password").fill(password)
-                page.get_by_role("button", name="Log in").click()
+                # username = self.credentials[site]["username"]
+                # password = self.credentials[site]["password"]
+                # page.goto(f"{url}/index.php?page=login")
+                # page.locator("#email").fill(username)
+                # page.locator("#password").fill(password)
+                # page.get_by_role("button", name="Log in").click()
+                pass
 
             case _:
                 raise ValueError

@@ -7,10 +7,8 @@ from io import BytesIO, StringIO
 from typing import Any, Optional, TypedDict, Union
 from urllib.parse import urljoin, urlparse
 
-import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
-import pandas as pd
 import playwright
 import requests
 from gymnasium import spaces
@@ -877,6 +875,7 @@ class ImageObservationProcessor(ObservationProcessor):
         """
         min_width and min_height: Minimum dimensions of the bounding box to be plotted.
         """
+        import pandas as pd
         # Read CSV data
         df = pd.read_csv(StringIO(data_string), delimiter=",", quotechar='"')
         df["Area"] = df["Width"] * df["Height"]
@@ -906,6 +905,7 @@ class ImageObservationProcessor(ObservationProcessor):
         font = ImageFont.truetype(font_path, font_size)
 
         # Create a color cycle using one of the categorical color palettes in matplotlib
+        import matplotlib.pyplot as plt
         color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         bbox_id2visid = {}
         bbox_id2desc = {}

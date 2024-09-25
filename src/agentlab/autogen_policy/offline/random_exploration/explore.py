@@ -15,7 +15,7 @@
 
 #     TASK_ID = 0
 #     benchmark = "webarena"
-#     exp_dir = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/trajectories"
+#     exp_dir = "/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/trajectories"
 #     trajectory = Trajectory()
 #     obs = None
 
@@ -93,7 +93,7 @@ exp_group_name = "explore"
 # relaunch_mode = "all_errors"
 relaunch_mode = None
 
-RESULTS_DIR = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/explorations"
+RESULTS_DIR = "/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/offline/random_exploration/explorations"
 
 main(
     exp_root=RESULTS_DIR,

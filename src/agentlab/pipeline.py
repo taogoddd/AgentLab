@@ -83,5 +83,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # navi_skills = extract_navi_skill(website="reddit", traj_path="/home/ytliu/github/AgentLab/results/20240916160632/webarena.29/1", model="gpt-4o")
+    # navi_skills = extract_navi_skill(website="reddit", traj_path="/home/ubuntu/github/AgentLab/results/20240916160632/webarena.29/1", model="gpt-4o")
     # print(navi_skills)

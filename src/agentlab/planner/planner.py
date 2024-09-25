@@ -79,7 +79,7 @@ OBJECTIVE: {objective}
 
 task_id = 0
 objective = "What is the top-1 best-selling product in 2022"
-obs_path = "/home/ytliu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/screenshot_step_0.jpg"
+obs_path = "/home/ubuntu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/screenshot_step_0.jpg"
 url = "http://localhost:7780/admin/admin/dashboard/"
 messages = construct_prompt_messages(task_id, obs_path, url, objective)
 model = "gpt-4o-2024-05-13"

@@ -44,8 +44,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--website", type=str, required=True,
                         choices=["shopping", "reddit", "classifieds"])
-    parser.add_argument("--start_id", type=int, default=0, help="Starting task id")
-    parser.add_argument("--end_id", type=int, help="Ending task id, not greater than max_id in the website tasks")
+    parser.add_argument("--start_id", type=int, default=None, help="Starting task id")
+    parser.add_argument("--end_id", type=int, default=None, help="Ending task id, not greater than max_id in the website tasks")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
     parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
@@ -53,22 +53,19 @@ def parse_args():
     parser.add_argument("--learn_dynamics_from_failure", type=str2bool, default=False, help="Whether to learn dynamics from failure")
     parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
+    parser.add_argument("--use_screenshot", type=str2bool, default=True, help="Whether to use screenshot")
+    parser.add_argument("--use_ax_tree", type=str2bool, default=False, help="Whether to use ax tree")
     return parser.parse_args()
 
 def main():
     args = parse_args()
 
     if args.result_dir_id == "":
-        result_dir_id = f"v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints{"_not_ldff" if not args.learn_dynamics_from_failure else ""}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+        result_dir_id = f"v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints{'_not_ldff' if not args.learn_dynamics_from_failure else ''}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
     else:
         result_dir_id = args.result_dir_id
 
-    config_files = [
-        os.path.join(f"src/agentlab/v_config_files/vwa/task_{args.website}", f) for f in os.listdir("src/agentlab/config_files")
-        if f.endswith(".json") and f.split(".")[0].isdigit()
-    ]
-    config_files = sorted(config_files, key=lambda x: int(x.split("/")[-1].split(".")[0]))
-    config_list = [json.load(open(f)) for f in config_files]
+    config_list = json.load(open("visualwebarena/test_raw.json", "r"))
     # filter the config files based on the website
     config_flags = [config["sites"][0] == args.website for config in config_list]
     task_ids = [config["task_id"] for config, flag in zip(config_list, config_flags) if flag]
@@ -79,18 +76,20 @@ def main():
             json.dump([], f)
 
     # get task id between start_id and end_id
-    new_task_ids = [tid for tid in task_ids if args.start_id <= tid < args.end_id]
+    new_task_ids = [tid for tid in task_ids if (args.start_id is None and args.end_id is None) or args.start_id <= tid < args.end_id]
     for task_id in new_task_ids:
         try:
             # run only one sample for this setting
             process = Popen([
-                "python", "src/agentlab/run.py", 
-                "--task", f"webarena.{task_id}",
+                "python", "src/agentlab/run_v.py", 
+                "--task", f"visualwebarena.{task_id}",
                 "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
                 "--model_name", "azureopenai/"+args.model,
                 "--skill_path", f"{args.skill_root_path}/{args.website}/v_skills_{result_dir_id}.json",
                 "--id", "0",
-                "--max_steps", str(args.max_steps)
+                "--max_steps", str(args.max_steps),
+                "--use_screenshot", "1" if args.use_screenshot else "0",
+                "--use_ax_tree", "1" if args.use_ax_tree else "0",
             ])
             process.wait()
 

@@ -4,7 +4,7 @@ from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectorySte
 import json
 import pickle
 import os
-ROOT_PATH = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy"
+ROOT_PATH = "/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy"
 
 def prepare_skill_dir(skill_type: str):
     # check if the directory exists
@@ -92,8 +92,8 @@ def generate_exploration_task_from_skill(skill, task_id: int):
 
     return task
 
-# skill_learning("/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da")
-# skill_learning("/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0")
+# skill_learning("/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da")
+# skill_learning("/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0")
 
 
 
@@ -102,14 +102,14 @@ def generate_exploration_task_from_skill(skill, task_id: int):
 # '''
 
 # # load the skill
-# traj_path = "/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da"
+# traj_path = "/home/ubuntu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da"
 # task_name = traj_path.split("/")[-1]
 # skill_path = f"{ROOT_PATH}/skills/located_skills/pkl/{task_name}.pkl"
 # skills = pickle.load(open(skill_path, "rb"))
 # skill = skills[2]
 
 # # load the tasks
-# sim_tasks_path = "/home/ytliu/github/AgentLab/webarena/simtest.raw.json"
+# sim_tasks_path = "/home/ubuntu/github/AgentLab/webarena/simtest.raw.json"
 # with open(sim_tasks_path, "r") as f:
 #     sim_tasks = json.load(f)
 

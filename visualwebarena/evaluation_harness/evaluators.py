@@ -17,10 +17,10 @@ from nltk.tokenize import word_tokenize  # type: ignore
 from PIL import Image
 from playwright.sync_api import CDPSession, Page
 
-from browser_env.actions import Action
-from browser_env.utils import StateInfo
-from evaluation_harness import image_utils
-from evaluation_harness.helper_functions import (
+from ..browser_env.actions import Action
+from ..browser_env.utils import StateInfo
+from . import image_utils
+from .helper_functions import (
     PseudoPage,
     get_query_text,
     get_query_text_lowercase,
@@ -364,7 +364,10 @@ class HTMLContentExactEvaluator(Evaluator):
             locator: str = target["locator"]  # js element locator
 
             # navigate to that url
+            prev_page = None
             if target_url != "last":
+                prev_page = page
+                page = page.context.new_page()
                 page.goto(target_url)
                 time.sleep(3)  # TODO [shuyanzh]: fix this hard-coded sleep
 
@@ -477,6 +480,11 @@ class HTMLContentExactEvaluator(Evaluator):
                     f"Unknown required_contents: {target['required_contents'].keys()}"
                 )
 
+            if prev_page:
+                page.close()
+                page = prev_page
+                prev_page = None
+
         return score
 
 
@@ -508,7 +516,10 @@ class PageImageEvaluator(Evaluator):
                 target_url = eval(func)
 
             # navigate to that url
+            prev_page = None
             if target_url != "last":
+                prev_page = page
+                page = page.context.new_page()
                 page.goto(target_url)
                 time.sleep(3)  # TODO(jykoh): fix this hard-coded sleep
 
@@ -600,6 +611,11 @@ class PageImageEvaluator(Evaluator):
                                 found_exact_match = True
                                 break
                     score *= float(found_exact_match)
+
+            if prev_page:
+                page.close()
+                page = prev_page
+                prev_page = None
 
         return score
 

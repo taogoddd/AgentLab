@@ -215,6 +215,11 @@ def get_benchmark_env_args(
         from browsergym.webarena import ALL_WEBARENA_TASK_IDS
 
         env_args_list = _make_env_args(ALL_WEBARENA_TASK_IDS, max_steps, n_repeat, rng)
+    
+    elif benchmark_name == "visualwebarena":
+        from browsergym.visualwebarena import ALL_VISUALWEBARENA_TASK_IDS
+
+        # env_args_list = _make_env_args(ALL_VISUALWEBARENA_TASK_IDS, max_steps, n_repeat, rng)
 
     elif benchmark_name == "sim_webarena":
         from browsergym.webarena import ALL_SIM_WEBARENA_TASK_IDS

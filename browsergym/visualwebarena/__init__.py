@@ -7,6 +7,7 @@ ALL_VISUALWEBARENA_TASK_IDS = []
 VISUALWEBARENA_TASK_IDS_WITH_RESET = []
 VISUALWEBARENA_TASK_IDS_WITHOUT_RESET = []
 
+print("*"*100)
 # register the WebArena benchmark
 for task_id in config.TASK_IDS:
     gym_id = f"visualwebarena.{task_id}"
