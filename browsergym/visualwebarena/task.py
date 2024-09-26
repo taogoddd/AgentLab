@@ -82,7 +82,7 @@ class GenericVisualWebArenaTask(AbstractBrowserTask):
 
         self.task_configs = task_configs
 
-    def setup(self, page: playwright.sync_api.Page) -> tuple[str, dict]:
+    def setup(self, page: playwright.sync_api.Page, captioning_fn = None) -> tuple[str, dict]:
         # import webarena on instanciation
         from visualwebarena.evaluation_harness.evaluators import evaluator_router
 
@@ -96,7 +96,7 @@ class GenericVisualWebArenaTask(AbstractBrowserTask):
             self.config_file = f.name
 
         # build the evaluator
-        self.evaluator = evaluator_router(self.config_file)
+        self.evaluator = evaluator_router(self.config_file, captioning_fn=captioning_fn)
 
         # reset instance if needed (classifieds domain only)
         if self.config.get("require_reset", False):

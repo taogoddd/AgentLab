@@ -12,49 +12,6 @@ from pathlib import Path
 import torch
 from visualwebarena.evaluation_harness import image_utils
 
-def format_skills(skills):
-    navi_skills = [skill for skill in skills if skill["type"] == "navi"]
-    general_skills = [skill for skill in skills if skill["type"] == "general"]
-    navi_skills_str = "# Shortcut URLs to navigate to a specific page, you can use goto(URL: str) to directly navigate to these pages if needed:\n"
-    for i, skill in enumerate(navi_skills):
-        navi_skills_str += f"## Page {i+1}: {skill['name']}\n"
-        navi_skills_str += f"### Page description: {skill['description']}\n"
-        navi_skills_str += f"### Page possible usages: {skill['usages']}\n"
-        navi_skills_str += f"### Page URL: {skill['URL']}\n"
-
-    general_skills_str = "# General skills:\n"
-    for i, skill in enumerate(general_skills):
-        general_skills_str += f"## Skill {i+1}: {skill['skill']}\n"
-        general_skills_str += f"{skill['steps']}\n"
-    
-    if len(navi_skills) == 0:
-        navi_skills_str = "No shortcuts available."
-
-    if len(general_skills) == 0:
-        general_skills_str = "No general skills available."
-    
-    skills_str = f"{navi_skills_str}\n{general_skills_str}"
-    
-    return skills_str
-
-def merged_format_skills(skills):
-    prefix = "# Skills (common workflows summarized from previous experience):\n"
-
-    for i, skill in enumerate(skills):
-        if skill["type"] == "navi":
-            prefix += f"## Skill {i+1}: navigate to {skill['name']}\n"
-            prefix += f"### {skill['name']} contents: {skill['description']}\n"
-            prefix += f"### Potential usages: {skill['usages']}\n"
-            prefix += f"### Steps:\n1. navigate to {skill['name']}.```goto('{skill['URL']}')```\n"
-        elif skill["type"] == "general":
-            prefix += f"## Skill {i+1}: {skill['skill']}\n"
-            prefix += f"### Steps:\n{skill['steps']}\n"
-    
-    if len(skills) == 0:
-        prefix = "No skills available."
-    
-    return prefix
-
 def str2bool(v):
     if isinstance(v, bool):
         return v
@@ -183,18 +140,50 @@ def parse_args():
 
     return parser.parse_args()
 
-def main():
-    args = parse_args()
+def format_skills(skills):
+    navi_skills = [skill for skill in skills if skill["type"] == "navi"]
+    general_skills = [skill for skill in skills if skill["type"] == "general"]
+    navi_skills_str = "# Shortcut URLs to navigate to a specific page, you can use goto(URL: str) to directly navigate to these pages if needed:\n"
+    for i, skill in enumerate(navi_skills):
+        navi_skills_str += f"## Page {i+1}: {skill['name']}\n"
+        navi_skills_str += f"### Page description: {skill['description']}\n"
+        navi_skills_str += f"### Page possible usages: {skill['usages']}\n"
+        navi_skills_str += f"### Page URL: {skill['URL']}\n"
 
-    # collect examples
-    # config_files = [
-    #     os.path.join("config_files", f) for f in os.listdir("config_files")
-    #     if f.endswith(".json") and f.split(".")[0].isdigit()
-    # ]
-    # config_files = sorted(config_files, key=lambda x: int(x.split("/")[-1].split(".")[0]))
-    # config_list = [json.load(open(f)) for f in config_files]
+    general_skills_str = "# General skills:\n"
+    for i, skill in enumerate(general_skills):
+        general_skills_str += f"## Skill {i+1}: {skill['skill']}\n"
+        general_skills_str += f"{skill['steps']}\n"
+    
+    if len(navi_skills) == 0:
+        navi_skills_str = "No shortcuts available."
 
-    # get the intent of the task
+    if len(general_skills) == 0:
+        general_skills_str = "No general skills available."
+    
+    skills_str = f"{navi_skills_str}\n{general_skills_str}"
+    
+    return skills_str
+
+def merged_format_skills(skills):
+    prefix = "# Skills (common workflows summarized from previous experience):\n"
+
+    for i, skill in enumerate(skills):
+        if skill["type"] == "navi":
+            prefix += f"## Skill {i+1}: navigate to {skill['name']}\n"
+            prefix += f"### {skill['name']} contents: {skill['description']}\n"
+            prefix += f"### Potential usages: {skill['usages']}\n"
+            prefix += f"### Steps:\n1. navigate to {skill['name']}.```goto('{skill['URL']}')```\n"
+        elif skill["type"] == "general":
+            prefix += f"## Skill {i+1}: {skill['skill']}\n"
+            prefix += f"### Steps:\n{skill['steps']}\n"
+    
+    if len(skills) == 0:
+        prefix = "No skills available."
+    
+    return prefix
+
+def run(args, captioning_fn=None):
     task_id = args.task_name.split(".")[1]
     configs_path = os.path.join("visualwebarena", f"test_raw.json")
     configs = json.load(open(configs_path))
@@ -222,10 +211,6 @@ def main():
         return url
 
     goal_image_urls = [remove_placeholders_in_url(url) for url in goal_image_urls]
-    captioning_fn = None
-    if "page_image_query" in config["eval"].get("eval_types"):
-        from agentlab.streaming_cer_v import captioning_fn as cf
-        captioning_fn = cf
 
     # get the skills
     skills = json.load(open(args.skill_path))
@@ -317,6 +302,10 @@ def main():
     exp_args.run()
 
     os.rename(exp_args.exp_dir, f"{args.result_dir}/{args.id}")
+
+def main():
+    args = parse_args()
+    run(args)
 
 if __name__ == "__main__":
     main()

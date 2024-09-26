@@ -537,9 +537,13 @@ def highlight_print(text: str):
 # print(get_sub_domain_ids("reddit", True))
 # /home/ubuntu/agentlab_results/2024-08-15_03-45-52_offline_learning
 
+highlight_print("Shopping VWA")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240926175707")
+highlight_print("Reddit VWA")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240926175713")
 # get_sub_domain_avg_score("gitlab", "/home/ubuntu/agentlab_results/agentlab_baseline")
 # check_num_steps_eval_accuracy("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
-analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050", 20)
+# analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050", 20)
 # get_sub_domain_ids("gitlab", include_multi_sites=False)
 
 # with open("/home/ubuntu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
@@ -565,3 +569,5 @@ analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merge
 
 # print(get_exp_args("/home/ubuntu/agentlab_results/agentlab_baseline"))
 
+# import subprocess
+# subprocess.run(["src/agentlab/v_reset_scripts/reset_shopping.sh"])

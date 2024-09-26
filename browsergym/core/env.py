@@ -185,9 +185,13 @@ class BrowserEnv(gym.Env, ABC):
             self.task = None
 
     def reset(self, seed=None, *args, **kwargs):
-        super().reset(seed=seed, *args, **kwargs)
+        new_kwargs = kwargs.copy()
+        # Remove 'captioning_fn' if it exists in the kwargs
+        if 'captioning_fn' in new_kwargs:
+            new_kwargs.pop('captioning_fn')
+        super().reset(seed=seed, *args, **new_kwargs)
         self.np_random = None  # make sure all randomness is handled by the task
-
+        self.captioning_fn = kwargs.get("captioning_fn", None)
         if self.task:
             self.task.teardown()
             self.context.close()
@@ -289,7 +293,7 @@ document.addEventListener("visibilitychange", () => {
         recording_start_time = time.time()
 
         # setup the task
-        goal, task_info = self.task.setup(page=self.page)
+        goal, task_info = self.task.setup(page=self.page, captioning_fn=self.captioning_fn)
 
         # initialize the chat
         self.chat.add_message(

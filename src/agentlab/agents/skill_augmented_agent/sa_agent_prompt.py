@@ -136,6 +136,8 @@ Images together with the goal are shown below. Make sure to refer to them when s
         prefix_obs_prompt = f"""\
 # Observation:
 """
+        url = dp.URL(current_obs["url"], True, "## ")
+        prefix_obs_prompt += url.prompt
         prefix_obs_prompt += "\n## Screenshot of the page (operatable elements are marked with their bid):"
 
         
@@ -156,7 +158,7 @@ Note:
 -- Elements here are all in the screenshot of the current webpage with same bid marked on them.
 
 """
-        som_axtree = current_obs["axtree_txt"]
+        som_axtree = current_obs["som_axtree_str"]
         suffix_obs_prompt += som_axtree
 
         obs_messages.append(

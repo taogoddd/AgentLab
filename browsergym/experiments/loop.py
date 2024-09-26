@@ -118,6 +118,7 @@ class ExpArgs:
     stack_trace: str = None
     order: int = None  # use to keep the original order the experiments were meant to be launched.
     logging_level: int = logging.INFO
+    captioning_fn: Any = None
 
     def prepare(self, exp_root):
         """Prepare the experiment directory and save the experiment arguments.
@@ -146,7 +147,15 @@ class ExpArgs:
 
         self.exp_dir.mkdir(parents=True, exist_ok=True)
         with open(self.exp_dir / "exp_args.pkl", "wb") as f:
-            pickle.dump(self, f)
+            # Create a shallow copy of the object to exclude captioning_fn
+            exp_args = self.__dict__.copy()
+
+            # Remove captioning_fn from the copied dict
+            if "captioning_fn" in exp_args:
+                del exp_args["captioning_fn"]
+
+            # Pickle the object without captioning_fn
+            pickle.dump(exp_args, f)
 
     # TODO distinguish between agent error and environment or system error. e.g.
     # the parsing error of an action should not be re-run.
@@ -171,7 +180,7 @@ class ExpArgs:
             err_msg, stack_trace = None, None
             step_info = StepInfo(step=0)
             episode_info = [step_info]
-            step_info.from_reset(env, seed=self.env_args.task_seed)
+            step_info.from_reset(env, seed=self.env_args.task_seed, captioning_fn=self.captioning_fn)
             logger.debug(f"Environment reset.")
 
             while not step_info.is_done:  # set a limit
@@ -334,10 +343,10 @@ class StepInfo:
 
         return self.action
 
-    def from_reset(self, env: gym.Env, seed: int):
+    def from_reset(self, env: gym.Env, seed: int, captioning_fn=None):
         t = self.profiling
         t.env_start = time.time()
-        self.obs, env_info = env.reset(seed=seed)
+        self.obs, env_info = env.reset(seed=seed, captioning_fn=captioning_fn)
         self.reward, self.terminated, self.truncated = 0, False, False
         t.env_stop = time.time()
 
@@ -401,7 +410,11 @@ class StepInfo:
                     # check whether message.content is a list of messages
                     content = message.content
                     if isinstance(content, list):
-                        content = message.content[0].get("text", "") # only take the text part
+                        content = ""
+                        # concatenate all part that have a type of text
+                        for part in message.content:
+                            if part.get("type", "") == "text":
+                                content += part.get("text", "")
                     chat_message_str += "-----------------------------------\n"
                     chat_message_str += "Round " + str(round) + "\n"
                     chat_message_str += "[USER]\n" + content + "\n"

@@ -352,26 +352,36 @@ class URL(PromptElement):
     def __init__(self, url, visible: bool = True, prefix="") -> None:
         super().__init__(visible=visible)
         URLS = {
-            "reddit": os.getenv("REDDIT"),
+            "reddit-like": os.getenv("REDDIT"),
             "shopping": os.getenv("SHOPPING"),
             "shopping_admin": os.getenv("SHOPPING_ADMIN"),
-            "gitlab": os.getenv("GITLAB"),
-            "wikipedia": os.getenv("WIKIPEDIA"),
-            "map": os.getenv("MAP"),
+            "gitlab-like": os.getenv("GITLAB"),
+            "wikipedia-like": os.getenv("WIKIPEDIA"),
+            "map-like": os.getenv("MAP"),
+            "classifieds": os.getenv("CLASSIFIEDS"),
         }
 
         web_str = ""
         # check whether the current url is one of the predefined urls
         for key, value in URLS.items():
-            # strip url and value to avoid partial matches
-            url = url.strip()
-            value = value.strip()
-            # remove the / at the end of the url
+            # Ensure the URL exists and is not None before stripping
+            if url:
+                url = url.strip()
+            else:
+                continue  # Skip if url is None or empty
+            
+            # Handle cases where value might be None
+            if value:
+                value = value.strip()
+                # Remove the / at the end of the value if it exists
+                if value[-1] == "/":
+                    value = value[:-1]
+            # Remove the / at the end of the url
             if url[-1] == "/":
                 url = url[:-1]
-            if value[-1] == "/":
-                value = value[:-1]
-            if value in url:
+            
+            # If value is still None, skip further processing for this iteration
+            if value and value in url:
                 if value == url:
                     web_str = f"Note: This is the main page of {key} website."
                 else:

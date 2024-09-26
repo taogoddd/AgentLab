@@ -111,7 +111,9 @@ Shortcuts to choose from:
         for img_url in img_urls:
             human_prompt.append({
                 "type": "image_url",
-                "image_url": img_url
+                "image_url": {
+                    "url": img_url
+                }
             })
         human_prompt.append({
             "type": "text",
@@ -146,7 +148,7 @@ Shortcuts to choose from:
         selected_navis = selected_navis[:max_skills]
     return selected_navis
 
-def select_general_skills(intent: str, website: str, general_skills, model, max_skills: int = 5) -> dict[str, List[str]]:
+def select_general_skills(intent: str, goal_image_urls: str, website: str, general_skills, model, max_skills: int = 5) -> dict[str, List[str]]:
     """
     Select the general skills based on the intent and website.
 
@@ -261,7 +263,7 @@ Skills to choose from:
             }
         ]
         return messages
-    messages = construct_prompt_messages(intent, website, general_skills)
+    messages = construct_prompt_messages(intent=intent, goal_image_urls=goal_image_urls, website=website, general_skills=general_skills)
     response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=0.7, max_tokens=2048)
     print("*"*50, "Response during select_general_skills", "*"*50)
     print(response)

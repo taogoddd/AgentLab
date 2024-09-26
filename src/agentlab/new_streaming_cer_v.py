@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import subprocess
 from visualwebarena.evaluation_harness import image_utils
+from agentlab.new_run_v import run as run_v_run
 
 eval_captioning_model = "Salesforce/blip2-flan-t5-xl"
 eval_captioning_model_device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -75,6 +76,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    args = parse_args()
 
     if args.result_dir_id == "":
         result_dir_id = f"v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints{'_not_ldff' if not args.learn_dynamics_from_failure else ''}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
@@ -101,10 +103,14 @@ def main():
         new_task_ids = [tid for tid in task_ids if tid < args.end_id]
     else:
         new_task_ids = task_ids
+
     for task_id in new_task_ids:
         try:
+            config = [config for config in config_list if config["task_id"] == task_id][0]
             # reset env if required
-            reset_flag = [config["require_reset"] for config in config_list if config["task_id"] == task_id][0]
+            reset_flag = config["require_reset"]
+
+            page_eval_flag = True if "page_image_query" in config["eval"].get("eval_types", []) else False
 
             if reset_flag:
                 # run bash command to reset the environment
@@ -113,19 +119,34 @@ def main():
                 elif args.website == "reddit":
                     subprocess.run(["src/agentlab/v_reset_scripts/reset_reddit.sh"])
 
-            # run only one sample for this setting
-            process = Popen([
-                "python", "src/agentlab/run_v.py", 
-                "--task_name", f"visualwebarena.{task_id}",
-                "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
-                "--model_name", "azureopenai/"+args.model,
-                "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
-                "--id", "0",
-                "--max_steps", str(args.max_steps),
-                "--use_screenshot", "1" if args.use_screenshot else "0",
-                "--use_ax_tree", "1" if args.use_ax_tree else "0",
-            ])
-            process.wait()
+            # Prepare arguments for run_v.py
+            args_run_v = argparse.Namespace()
+            args_run_v.model_name = "azureopenai/" + args.model
+            args_run_v.task_name = f"visualwebarena.{task_id}"
+            args_run_v.start_url = "https://www.google.com"  # Adjust if needed
+            args_run_v.slow_mo = 30  # Default or adjust as needed
+            args_run_v.headless = True  # Set based on your requirements
+            args_run_v.demo_mode = True  # Set based on your requirements
+            args_run_v.use_html = False  # Set based on your requirements
+            args_run_v.use_ax_tree = args.use_ax_tree
+            args_run_v.use_screenshot = args.use_screenshot
+            args_run_v.multi_actions = True  # Set based on your requirements
+            args_run_v.action_space = "bid"  # Set based on your requirements
+            args_run_v.use_history = True  # Set based on your requirements
+            args_run_v.use_thinking = True  # Set based on your requirements
+            args_run_v.use_reminder = False  # Set based on your requirements
+            args_run_v.max_steps = args.max_steps
+            args_run_v.skill_path = f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json"
+            args_run_v.result_dir = f"results/{result_dir_id}/webarena.{task_id}"
+            args_run_v.id = "0"
+            args_run_v.website = args.website
+            args_run_v.max_skills = 10  # Set based on your requirements
+
+            if page_eval_flag:
+                args_run_v.max_steps = 20
+
+            # Call the run function directly
+            run_v_run(args_run_v, captioning_fn=captioning_fn)
 
             # 0 here for later possible samplings
             task_dir = f"results/{result_dir_id}/webarena.{task_id}/0"

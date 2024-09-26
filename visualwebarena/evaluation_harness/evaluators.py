@@ -43,6 +43,7 @@ from .helper_functions import (
     shopping_get_sku_latest_review_rating,
     shopping_get_sku_latest_review_text,
 )
+import torch
 
 Trajectory = list[Union[Action, StateInfo]]
 
