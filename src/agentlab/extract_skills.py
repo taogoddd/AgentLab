@@ -73,10 +73,11 @@ def construct_prompt_messages(
         website: str,
         skills_file_path: str,
         trajectory: list[TrajectoryStep],
+        no_goal: bool = False
     ):
     existing_skills_str = get_skills_desc(skills_path=skills_file_path)
-    
     goal = trajectory[0]["obs"]["goal"]
+    goal_str = f"Overall goal of the trajectory: {goal}" if not no_goal else ""
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
 You need to summarize skills from the trajectory.
@@ -198,7 +199,7 @@ IMPORTANT NOTES you should absolutely follow:
 3. You should break the overall goal into sub-goals and summarize each sub-goal as a skill.
 """
     prefix = f"""\
-Overall goal of the trajectory: {goal}
+{goal_str}
 Current website: {get_website_description(website)}
 Exisiting skills: 
 {existing_skills_str}
@@ -254,12 +255,13 @@ def extract_skills(
         traj_path: str,
         model: str = "gpt-4o",
         skill_root_path: str = "src/agentlab/skills",
-        id: str = ""
+        id: str = "",
+        no_goal: bool = False,
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)
         skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
-        messages = construct_prompt_messages(website, skills_file_path, trajectory)
+        messages = construct_prompt_messages(website, skills_file_path, trajectory, no_goal)
         response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting general skills", "*"*50)
         print(response)

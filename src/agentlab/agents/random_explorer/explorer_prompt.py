@@ -395,7 +395,7 @@ class Instructions(dp.PromptElement):
     _prompt = """\
 # Instructions
 Your objective is to discover diverse and interesting tasks (that a human might give to an agent) by interacting
-with the webpage through these actions. You’ve executed the following actions, and observed the following webpage
+with the webpage through these actions. You've executed the following actions, and observed the following webpage
 states """
 
 # system prompt for the explorer agent

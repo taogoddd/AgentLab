@@ -14,3 +14,4 @@ src/agentlab/autogen_policy/skills
 src/agentlab/skills/*
 src/agentlab/experiment_scripts/*
 autoeval/*
+src/agentlab/v_config_files_1/*
