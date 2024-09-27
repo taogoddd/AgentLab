@@ -10,11 +10,39 @@ EXCLUDED_URLS = {
     "reddit": [],
     "gitlab": [],
     "map": [],
+    "classifieds": [],
 }
+# website_base_depth = {
+#     "shopping_admin": 3,
+#     "shopping": 2,
+#     "reddit": 2,
+#     "gitlab": 2,
+#     "map": 2,
+#     "classifieds": 2,
+# }
+website_max_depth = {
+    "shopping_admin": 4,
+    "shopping": 3,
+    "reddit": 3,
+    "gitlab": 3,
+    "map": 3,
+    "classifieds": 4,
+}
+MAX_LENGTH = 60
 def eval_URL(url: str, website: str) -> bool:
     if url in EXCLUDED_URLS[website]:
         return False
     if "dashboard" in url:
+        return False
+    # check if the url has too many levels
+    # remove the first part
+    url = url.split("://")[-1]
+    # remove ending /
+    url = url.rstrip("/")
+    if len(url.split("/")) > website_max_depth[website]:
+        return False
+    # filter by length
+    if len(url) > MAX_LENGTH:
         return False
     return True
 

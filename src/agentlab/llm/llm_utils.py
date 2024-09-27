@@ -90,12 +90,12 @@ def retry(
     while tries < n_retry and rate_limit_total_delay < rate_limit_max_wait_time:
         try:
             current_config = api_configs[config_index]
-            if "AZURE_OPENAI_API_CONFIGS" in os.environ:
-                os.environ["AZURE_OPENAI_API_KEY"] = current_config["api_key"]
-                os.environ["AZURE_OPENAI_ENDPOINT"] = current_config["endpoint"]
-                os.environ["OPENAI_API_VERSION"] = current_config["version"]
-            elif "OPENAI_API_CONFIGS" in os.environ:
-                os.environ["OPENAI_API_KEY"] = current_config["api_key"]
+            # if "AZURE_OPENAI_API_CONFIGS" in os.environ:
+            #     os.environ["AZURE_OPENAI_API_KEY"] = current_config["api_key"]
+            #     os.environ["AZURE_OPENAI_ENDPOINT"] = current_config["endpoint"]
+            #     os.environ["OPENAI_API_VERSION"] = current_config["version"]
+            # elif "OPENAI_API_CONFIGS" in os.environ:
+            #     os.environ["OPENAI_API_KEY"] = current_config["api_key"]
             
             # modify the chat object to use the new configuration
             chat.openai_api_key = current_config["api_key"]
@@ -118,6 +118,12 @@ def retry(
                 )
                 raise
             continue
+
+        # resume chat with initial configuration
+        chat.openai_api_key = api_configs[0]["api_key"]
+        if isinstance(chat, AzureChatOpenAI):
+            chat.azure_endpoint = api_configs[0]["endpoint"]
+            chat.openai_api_version = api_configs[0]["version"]
 
         messages.append(answer)
 

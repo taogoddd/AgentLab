@@ -65,7 +65,6 @@ def main():
         result_dir_id = f"streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints{'_not_ldff' if not args.learn_dynamics_from_failure else ''}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
     else:
         result_dir_id = args.result_dir_id
-
     skill_path = args.skill_path
     if skill_path is None:
         skill_path = f"src/agentlab/skills/{args.website}/skills_{result_dir_id}.json"
@@ -105,41 +104,41 @@ def main():
             # 0 here for later possible samplings
             task_dir = f"results/{result_dir_id}/webarena.{task_id}/0"
 
-            # # run autoeval if args.eval_metric is auto
-            # if args.eval_metric == "auto":
-            #     process = Popen([
-            #         "python", "-m", "agentlab.autoeval.evaluate_trajectory",
-            #         "--result_dir", task_dir,
-            #         "--model", "gpt-4o",
-            #     ])
-            #     process.wait()
+            # run autoeval if args.eval_metric is auto
+            if args.eval_metric == "auto":
+                process = Popen([
+                    "python", "-m", "agentlab.autoeval.evaluate_trajectory",
+                    "--result_dir", task_dir,
+                    "--model", "gpt-4o",
+                ])
+                process.wait()
             
-            # elif args.eval_metric == "num_steps":
-            #     with open(f"{task_dir}/summary_info.json", "r") as f:
-            #         summary = json.load(f)
-            #     num_steps = summary["stats.cum_steps"]
-            #     if num_steps < 20:
-            #         eval = True
-            #     else:
-            #         eval = False
-            # elif args.eval_metric == "gt":
-            #     eval = gt_evaluate(f"{task_dir}/summary_info.json")
-            # else:
-            #     eval = auto_evaluate(task_dir)
+            elif args.eval_metric == "num_steps":
+                with open(f"{task_dir}/summary_info.json", "r") as f:
+                    summary = json.load(f)
+                num_steps = summary["stats.cum_steps"]
+                if num_steps < 20:
+                    eval = True
+                else:
+                    eval = False
+            elif args.eval_metric == "gt":
+                eval = gt_evaluate(f"{task_dir}/summary_info.json")
+            else:
+                eval = auto_evaluate(task_dir)
 
-            # if args.use_dynamics and (args.learn_dynamics_from_failure or eval):
-            #     # extract dynamics from all the tasks
-            #     navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
-            #     print("*"*50, f"Extracted dynamics from task", "*"*50)
-            #     print(navi_skills)
-            #     save_skills(f"{skill_path}", navi_skills)
+            if args.use_dynamics and (args.learn_dynamics_from_failure or eval):
+                # extract dynamics from all the tasks
+                navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+                print("*"*50, f"Extracted dynamics from task", "*"*50)
+                print(navi_skills)
+                save_skills(f"{skill_path}", navi_skills)
 
-            # # extract general skills from the tasks that are solved
-            # if eval:
-            #     general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
-            #     print("*"*50, f"Extracted skills", "*"*50)
-            #     print(general_skills)
-            #     save_skills(f"{skill_path}", general_skills)
+            # extract general skills from the tasks that are solved
+            if eval:
+                general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+                print("*"*50, f"Extracted skills", "*"*50)
+                print(general_skills)
+                save_skills(f"{skill_path}", general_skills)
 
         except Exception as e:
             print(e)

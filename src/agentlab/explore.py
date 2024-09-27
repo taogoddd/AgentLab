@@ -271,7 +271,7 @@ def main():
                 use_plan=False,
                 use_criticise=False,
                 use_thinking=True,
-                use_reminder=True,
+                # use_reminder=True,
                 use_memory=False,
                 use_concrete_example=True,
                 use_abstract_example=True,
