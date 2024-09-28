@@ -4,8 +4,8 @@ import json
 from browsergym.experiments.loop import EnvArgs, ExpArgs
 # from agentlab.agents.skill_augmented_agent.sa_agent import SkillAugmentedAgentArgs
 # from agentlab.agents.skill_augmented_agent.sa_agent_prompt import SkillAugmentedPromptFlags
-from agentlab.agents.random_explorer.explorer import ExplorerArgs
-from agentlab.agents.random_explorer.explorer_prompt import ExplorerPromptFlags
+from agentlab.agents.annotator.human_annotator import HumanAnnotatorArgs
+from agentlab.agents.annotator.prompt import GenericPromptFlags
 from agentlab.llm.chat_api import ChatModelArgs, OpenAIChatModelArgs, AzureOpenAIChatModelArgs
 from agentlab.agents.dynamic_prompting import Flags
 import agentlab.agents.dynamic_prompting as dp
@@ -180,13 +180,6 @@ def parse_args():
         default=10,
         help="Maximum number of skills to select for the agent."
     )
-    # add temperature
-    parser.add_argument(
-        "--temperature",
-        type=float,
-        default=0.1,
-        help="Temperature for the chat model."
-    )
 
     return parser.parse_args()
 
@@ -233,7 +226,7 @@ def main():
             max_total_tokens=128_000,
             max_input_tokens=126_000,
             max_new_tokens=2_000,
-            temperature=args.temperature,
+            temperature=0.1,
             vision_support=True,
         )
     elif args.model_name.startswith("azure"):
@@ -242,14 +235,14 @@ def main():
             max_total_tokens=128_000,
             max_input_tokens=126_000,
             max_new_tokens=2_000,
-            temperature=args.temperature,
+            temperature=0.1,
             vision_support=True,
         )
     exp_args = ExpArgs(
         env_args=env_args,
-        agent_args=ExplorerArgs(
+        agent_args=HumanAnnotatorArgs(
             chat_model_args=chat_model_args,
-            flags = ExplorerPromptFlags(
+            flags = GenericPromptFlags(
                 obs=dp.ObsFlags(
                     use_html=False,
                     use_ax_tree=True,

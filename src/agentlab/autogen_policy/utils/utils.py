@@ -78,16 +78,20 @@ def get_trajectory_from_annotation(dir_path: str):
         file_path = os.path.join(dir_path, f"step_{i}.pkl.gz")
         with gzip.open(file_path, 'rb') as f:
             step_info = pickle.load(f)
-            obs = step_info.obs
-            action = step_info.action # e.g. click('339')
-            reward = step_info.reward
+            try: 
+                obs = step_info.obs
+                action = step_info.action # e.g. click('339')
+                reward = step_info.reward
 
-            processed_obs = obs_preprocessor(obs)
-            screenshot_array = processed_obs["screenshot"]
-            som_screenshot_array = processed_obs["screenshot_som"]
+                processed_obs = obs_preprocessor(obs)
+                screenshot_array = processed_obs["screenshot"]
+                som_screenshot_array = processed_obs["screenshot_som"]
 
-            axtree_str = processed_obs["axtree_txt"]
-        
+                axtree_str = processed_obs["axtree_txt"]
+            except Exception as e:
+                print(f"Error in reading step {i} in {dir_path}")
+                print(e)
+                continue
         trajectory.append({
             "obs": obs, # the original observation dict
             "processed_obs": processed_obs, # the processed observation dict

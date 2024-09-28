@@ -257,9 +257,10 @@ def extract_skills(
         skill_root_path: str = "src/agentlab/skills",
         id: str = "",
         no_goal: bool = False,
+        max_steps: int = 30
     ):
     try:
-        trajectory = get_trajectory_from_annotation(traj_path)
+        trajectory = get_trajectory_from_annotation(traj_path)[:max_steps]
         skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
         messages = construct_prompt_messages(website, skills_file_path, trajectory, no_goal)
         response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)

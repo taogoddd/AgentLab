@@ -165,7 +165,8 @@ def retry_with_config_rotation(  # type: ignore
                 time.sleep(1)
             except Exception as e:
                 # Raise exceptions for any other errors
-                raise e
+                print(f"Error occurred: {e}.")
+                time.sleep(1)
 
     return wrapper
 

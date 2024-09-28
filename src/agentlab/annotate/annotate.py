@@ -73,14 +73,13 @@ def parse_args():
     parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
-    parser.add_argument("--exploration_temp", type=float, default=0.1, help="Temperature for exploration")
     return parser.parse_args()
 
 def main():
     args = parse_args()
 
     if args.result_dir_id == "":
-        result_dir_id = f"streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints{'_not_ldff' if not args.learn_dynamics_from_failure else ''}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+        result_dir_id = f"annotations_"+time.strftime("%Y%m%d%H%M%S", time.localtime())
     else:
         result_dir_id = args.result_dir_id
 
@@ -103,16 +102,16 @@ def main():
     start_task_id = get_start_task_id(args.website)
     for i in range(args.num_samples):
         process = Popen([
-            "python", "src/agentlab/explore.py",
+            "python", "src/agentlab/annotate/run.py",
             "--task", f"webarena.{start_task_id}",
             "--result_dir", f"results/{result_dir_id}/webarena.{start_task_id}",
             "--model_name", "azureopenai/"+args.model,
             "--id", str(i),
             "--max_steps", str(args.max_exploration_steps),
-            "--use_screenshot", "1",
-            "--temperature", str(args.exploration_temp)
+            "--use_screenshot", "1"
         ])
         process.wait()
+        pass
     
     # distill the skills from the random exploration
     for i in range(args.num_samples):
@@ -125,8 +124,65 @@ def main():
         print("*"*50, f"Extracted skills from task", "*"*50)
         print(general_skills)
         save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
-    
-    print(f"Result directory: {result_dir_id}")
 
+    # # get task id between start_id and end_id
+    # new_task_ids = [tid for tid in task_ids if args.start_id <= tid < args.end_id]
+    # for task_id in new_task_ids:
+    #     try:
+    #         # run only one sample for this setting
+    #         process = Popen([
+    #             "python", "src/agentlab/run.py", 
+    #             "--task", f"webarena.{task_id}",
+    #             "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
+    #             "--model_name", "azureopenai/"+args.model,
+    #             "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
+    #             "--id", "0",
+    #             "--max_steps", str(args.max_steps),
+    #             "--use_screenshot", "1" if args.use_screenshot else "0"
+    #         ])
+    #         process.wait()
+
+    #         # 0 here for later possible samplings
+    #         task_dir = f"results/{result_dir_id}/webarena.{task_id}/0"
+
+    #         # run autoeval if args.eval_metric is auto
+    #         if args.eval_metric == "auto":
+    #             process = Popen([
+    #                 "python", "-m", "agentlab.autoeval.evaluate_trajectory",
+    #                 "--result_dir", task_dir,
+    #                 "--model", "gpt-4o",
+    #             ])
+    #             process.wait()
+            
+    #         elif args.eval_metric == "num_steps":
+    #             with open(f"{task_dir}/summary_info.json", "r") as f:
+    #                 summary = json.load(f)
+    #             num_steps = summary["stats.cum_steps"]
+    #             if num_steps < 20:
+    #                 eval = True
+    #             else:
+    #                 eval = False
+    #         elif args.eval_metric == "gt":
+    #             eval = gt_evaluate(f"{task_dir}/summary_info.json")
+    #         else:
+    #             eval = auto_evaluate(task_dir)
+
+    #         if args.use_dynamics and (args.learn_dynamics_from_failure or eval):
+    #             # extract dynamics from all the tasks
+    #             navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+    #             print("*"*50, f"Extracted dynamics from task", "*"*50)
+    #             print(navi_skills)
+    #             save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
+
+    #         # extract general skills from the tasks that are solved
+    #         if eval:
+    #             general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+    #             print("*"*50, f"Extracted skills", "*"*50)
+    #             print(general_skills)
+        #         save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
+
+        # except Exception as e:
+        #     print(e)
+            # continue
 if __name__ == "__main__":
     main()

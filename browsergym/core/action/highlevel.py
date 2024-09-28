@@ -78,6 +78,7 @@ BID_ACTIONS = [
     clear,
     drag_and_drop,
     upload_file,
+    press,
 ]
 
 WA_BASE_ACTIONS = [
@@ -90,6 +91,7 @@ WA_BASE_ACTIONS = [
     go_back,
     go_forward,
     goto,
+    press,
 ]
 
 COORD_ACTIONS = [

@@ -43,8 +43,8 @@ def retry(
     n_retry,
     parser,
     log=True,
-    min_retry_wait_time=60,
-    rate_limit_max_wait_time=60 * 30,
+    min_retry_wait_time=15,
+    rate_limit_max_wait_time=15 * 30,
 ):
     """Retry querying the chat models with the response from the parser until it
     returns a valid value.
@@ -104,12 +104,12 @@ def retry(
                 chat.openai_api_version = current_config["version"]
             
             answer = chat.invoke(messages)
-        except RateLimitError as e:
+        except Exception as e:
             # Rotate to the next configuration
             config_index = (config_index + 1) % len(api_configs)
 
             wait_time = _extract_wait_time(e.args[0], min_retry_wait_time)
-            logging.warning(f"RateLimitError, waiting {wait_time}s before retrying.")
+            logging.warning(f"Error, waiting {wait_time}s before retrying.")
             time.sleep(wait_time)
             rate_limit_total_delay += wait_time
             if rate_limit_total_delay >= rate_limit_max_wait_time:
@@ -118,12 +118,6 @@ def retry(
                 )
                 raise
             continue
-
-        # resume chat with initial configuration
-        chat.openai_api_key = api_configs[0]["api_key"]
-        if isinstance(chat, AzureChatOpenAI):
-            chat.azure_endpoint = api_configs[0]["endpoint"]
-            chat.openai_api_version = api_configs[0]["version"]
 
         messages.append(answer)
 
@@ -136,6 +130,12 @@ def retry(
             msg = f"Query failed. Retrying {tries}/{n_retry}.\n[LLM]:\n{answer.content}\n[User]:\n{retry_message}"
             logging.info(msg)
         messages.append(HumanMessage(content=retry_message))
+        
+    # resume chat with initial configuration
+    chat.openai_api_key = api_configs[0]["api_key"]
+    if isinstance(chat, AzureChatOpenAI):
+        chat.azure_endpoint = api_configs[0]["endpoint"]
+        chat.openai_api_version = api_configs[0]["version"]
 
     raise RetryError(f"Could not parse a valid value after {n_retry} retries.")
 

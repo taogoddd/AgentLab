@@ -411,7 +411,7 @@ def calculate_tokens(path: str, model: str = "gpt-4o"):
         if (subdir / "0" / "summary_info.json").exists():
             with open(subdir / "0" / "summary_info.json", "r") as f:
                 summary_info = json.load(f)
-            tokens = summary_info["stats.cum_openai_total_tokens"] # prompt + completion
+            tokens = summary_info.get("stats.cum_openai_total_tokens", 0) # prompt + completion
             total_tokens += tokens
     if model == "gpt-4o":
         # $5 per 1M tokens
@@ -481,6 +481,66 @@ def get_sub_domain_cross_template_avg_score(path: str, sub_domain: str):
 def highlight_print(text: str):
     print("*"*50, text, "*"*50)
 
+def get_rest_avg_score(path: str):
+    print(f"Analyzing {path}")
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    records = {
+        "all_ids": [],
+        "successful_ids": [],
+        "failed_ids": [],
+    }
+
+    not_completed_ids = []
+
+    scores = []
+    # parse out the id from the subdirectory name, e.g. get 0 from 2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1
+    for subdir in subdirs:
+        # get all subdirectories of the subdir
+        subsubdirs = [x for x in subdir.iterdir() if x.is_dir()]
+        rest_subsubdir = [x for x in subsubdirs if x.name != "0"][0]
+        
+        rest_subdir_name = rest_subsubdir.name
+        id = int(su.split(".")[1])
+        # check whether file exists
+        if (subdir / "0" / "summary_info.json").exists():
+            with open(subdir / "0" / "summary_info.json", "r") as f:
+                summary_info = json.load(f)
+            score = summary_info["cum_reward"]
+            scores.append((id, score))
+        else:
+            not_completed_ids.append(id)
+    
+    # for subdir in subdirs:
+    #     with open(subdir / "summary_info.json", "r") as f:
+    #         summary_info = json.load(f)
+    #     score = summary_info["cum_reward"]
+    #     scores.append(score)
+    
+    avg_score = sum([score for id, score in scores]) / len(scores)
+    print(len(scores))
+    print(f"Average score: {avg_score}")
+
+    # get all indexes for avg_score = 1
+    successful_ids = [id for id, score in scores if score == 1]
+    # sort the ids
+    successful_ids.sort()
+    # stringfy the ids
+    successful_ids = [(id) for id in successful_ids]
+    print(f"Number of successful ids: {len(successful_ids)}")
+    print(f"Successful ids: {successful_ids}")
+
+    not_completed_ids.sort()
+    print(f"Number of not completed ids: {len(not_completed_ids)}")
+    print(f"Not completed ids: {not_completed_ids}")
+
+    records["all_ids"] = [id for id, score in scores]
+    records["successful_ids"] = successful_ids
+    # only keep completed but failed tasks
+    completed_ids = [id for id in records["all_ids"] if id not in not_completed_ids]
+    records["failed_ids"] = [id for id in completed_ids if id not in successful_ids]
+    
+    return avg_score, records
+
 # analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
 # get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
@@ -500,7 +560,9 @@ def highlight_print(text: str):
 # highlight_print("Reddit ablation")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
 highlight_print("Reddit offline w/ vision")
-new_get_avg_score("/home/ubuntu/github/AgentLab/results/offline_online_cer_rd_exploration_20240926223734")
+new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
+new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240927193737")
+# calculate_tokens("/home/ubuntu/github/AgentLab/results/offline_online_cer_rd_exploration_20240926223734")
 # get_sub_domain_avg_score("shopping_admin", "/home/ytliu/agentlab_results/agentlab_baseline")
 
 # highlight_print("baseline")
