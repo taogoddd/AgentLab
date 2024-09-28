@@ -9,7 +9,7 @@ from textwrap import dedent
 from typing import Literal
 from warnings import warn
 import os
-
+from io import BytesIO
 from browsergym.core.action.base import AbstractActionSet
 from browsergym.core.action.highlevel import HighLevelActionSet
 from browsergym.core.action.python import PythonActionSet
@@ -293,6 +293,7 @@ class AXTree(Trunkater):
         visible: bool = True,
         coord_type=None,
         visible_tag=True,
+        screenshot_reminder=True,
         prefix="",
     ) -> None:
         super().__init__(visible=visible, start_trunkate_iteration=10)
@@ -325,10 +326,16 @@ Note: only elements that are visible in the viewport are presented. You might ne
 Note: You can only interact with visible elements. If the "visible" tag is not
 present, the element is not visible on the page.
 
-"""
+"""     
         else:
             vsible_tag_note = ""
-        self._prompt = f"\n{prefix}AXTree:\n{bid_info}{coord_note}{visible_elements_note}{vsible_tag_note}{ax_tree}\n"
+        if screenshot_reminder:
+            screenshot_note = """\
+Note: Elements here are all in the screenshot of the current webpage with same bid marked on them. Image elements are not shown here, refer to the screenshot for them.
+"""
+        else:
+            screenshot_note = ""
+        self._prompt = f"\n{prefix}AXTree:\n{bid_info}{coord_note}{visible_elements_note}{vsible_tag_note}{screenshot_note}{ax_tree}\n"
 
 
 class Error(PromptElement):
@@ -441,11 +448,11 @@ class Observation(Shrinkable):
             visible_tag=flags.extract_visible_tag,
             prefix="## ",
         )
-        self.som_axtree = SoMAXTree(
-            obs["som_axtree_str"],
-            visible=lambda: flags.use_som, # true by default if use_som is true
-            prefix="",
-        )
+        # self.som_axtree = SoMAXTree(
+        #     obs["som_axtree_str"],
+        #     visible=lambda: flags.use_som, # true by default if use_som is true
+        #     prefix="",
+        # )
         self.error = Error(
             obs["last_action_error"],
             visible=lambda: flags.use_error_logs and obs["last_action_error"],
@@ -488,7 +495,21 @@ class Observation(Shrinkable):
                 # get the Image object from the goal_image_urls
                 for url in goal_image_urls:
                     if url.startswith("http"):
-                        input_image = Image.open(requests.get(url, stream=True).raw)
+                        headers = {
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                        }
+
+                        response = requests.get(url, headers=headers, stream=True)
+
+                        # Ensure the request was successful
+                        if response.status_code == 200:
+                            input_image = Image.open(BytesIO(response.content))
+                            # input_image.show()  # This will display the image if valid
+                            # save the image
+                            # input_image.save("test.jpg")
+                        else:
+                            print(f"Failed to retrieve the image. Status code: {response.status_code}")
+                            continue
                     else:
                         input_image = Image.open(url)
                 

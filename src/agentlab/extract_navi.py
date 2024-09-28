@@ -13,6 +13,7 @@ from agentlab.llm.llm_utils import (
     parse_html_tags_raise,
     extract_code_blocks,
 )
+from io import BytesIO
 
 EXCLUDED_URLS = {
     "shopping_admin": [],
@@ -22,21 +23,21 @@ EXCLUDED_URLS = {
     "map": [],
     "classifieds": [],
 }
-website_base_depth = {
-    "shopping_admin": 3,
-    "shopping": 2,
-    "reddit": 2,
-    "gitlab": 2,
-    "map": 2,
-    "classifieds": 2,
-}
+# website_base_depth = {
+#     "shopping_admin": 3,
+#     "shopping": 2,
+#     "reddit": 2,
+#     "gitlab": 2,
+#     "map": 2,
+#     "classifieds": 2,
+# }
 website_max_depth = {
     "shopping_admin": 4,
     "shopping": 3,
     "reddit": 3,
     "gitlab": 3,
     "map": 3,
-    "classifieds": 3,
+    "classifieds": 4,
 }
 def eval_URL(url: str, website: str) -> bool:
     if url in EXCLUDED_URLS[website]:
@@ -93,7 +94,18 @@ def construct_prompt_messages(
     if goal_image_urls:
         for url in goal_image_urls:
             if url.startswith("http"):
-                input_image = Image.open(requests.get(url, stream=True).raw)
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                }
+
+                response = requests.get(url, headers=headers, stream=True)
+
+                # Ensure the request was successful
+                if response.status_code == 200:
+                    input_image = Image.open(BytesIO(response.content))
+                else:
+                    print(f"Failed to retrieve the image. Status code: {response.status_code}")
+                    continue
             else:
                 input_image = Image.open(url)
             img_urls.append(image_to_jpg_base64_url(input_image))

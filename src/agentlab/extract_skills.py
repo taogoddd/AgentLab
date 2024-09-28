@@ -14,6 +14,7 @@ from agentlab.llm.llm_utils import (
     parse_html_tags_raise,
     extract_code_blocks,
 )
+from io import BytesIO
 
 # def extract_skill(traj_path: str, skill_root_path: str, website: str):
 #     trajectory = get_trajectory_from_annotation(traj_path)
@@ -93,7 +94,21 @@ def construct_prompt_messages(
     if goal_image_urls:
         for url in goal_image_urls:
             if url.startswith("http"):
-                input_image = Image.open(requests.get(url, stream=True).raw)
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                }
+
+                response = requests.get(url, headers=headers, stream=True)
+
+                # Ensure the request was successful
+                if response.status_code == 200:
+                    input_image = Image.open(BytesIO(response.content))
+                    # input_image.show()  # This will display the image if valid
+                    # save the image
+                    # input_image.save("test.jpg")
+                else:
+                    print(f"Failed to retrieve the image. Status code: {response.status_code}")
+                    continue
             else:
                 input_image = Image.open(url)
             img_urls.append(image_to_jpg_base64_url(input_image))

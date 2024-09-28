@@ -7,6 +7,7 @@ from PIL import Image
 import requests
 import json
 import numpy as np
+from io import BytesIO
 from agentlab.llm.llm_utils import (
     ParseError,
     count_tokens,
@@ -45,13 +46,30 @@ def select_navi_skills(intent: str, goal_image_urls: str, website: str, navi_ski
     def construct_prompt_messages(intent: str, website: str, navi_skills, max_skills: int = 5):
         navi_skill_str = ""
         img_urls = []
-        if goal_image_urls:
-            for url in goal_image_urls:
-                if url.startswith("http"):
-                    input_image = Image.open(requests.get(url, stream=True).raw)
-                else:
-                    input_image = Image.open(url)
-                img_urls.append(image_to_jpg_base64_url(input_image))
+        try:
+            if goal_image_urls:
+                for url in goal_image_urls:
+                    if url.startswith("http"):
+                        headers = {
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                        }
+
+                        response = requests.get(url, headers=headers, stream=True)
+
+                        # Ensure the request was successful
+                        if response.status_code == 200:
+                            input_image = Image.open(BytesIO(response.content))
+                            # input_image.show()  # This will display the image if valid
+                            # save the image
+                            # input_image.save("test.jpg")
+                        else:
+                            print(f"Failed to retrieve the image. Status code: {response.status_code}")
+                            continue
+                    else:
+                        input_image = Image.open(url)
+                    img_urls.append(image_to_jpg_base64_url(input_image))
+        except Exception as e:
+            print(f"Error: {e}")
         for i, skill in enumerate(navi_skills):
             URL = skill["URL"]
             name = skill["name"]
@@ -164,13 +182,30 @@ def select_general_skills(intent: str, goal_image_urls: str, website: str, gener
     def construct_prompt_messages(intent: str, goal_image_urls: str, website: str, general_skills, max_skills: int = 5):
         general_skill_str = ""
         img_urls = []
-        if goal_image_urls:
-            for url in goal_image_urls:
-                if url.startswith("http"):
-                    input_image = Image.open(requests.get(url, stream=True).raw)
-                else:
-                    input_image = Image.open(url)
-                img_urls.append(image_to_jpg_base64_url(input_image))
+        try:
+            if goal_image_urls:
+                for url in goal_image_urls:
+                    if url.startswith("http"):
+                        headers = {
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                        }
+
+                        response = requests.get(url, headers=headers, stream=True)
+
+                        # Ensure the request was successful
+                        if response.status_code == 200:
+                            input_image = Image.open(BytesIO(response.content))
+                            # input_image.show()  # This will display the image if valid
+                            # save the image
+                            # input_image.save("test.jpg")
+                        else:
+                            print(f"Failed to retrieve the image. Status code: {response.status_code}")
+                            continue
+                    else:
+                        input_image = Image.open(url)
+                    img_urls.append(image_to_jpg_base64_url(input_image))
+        except Exception as e:
+            print(f"Error: {e}")
         for i, skill in enumerate(general_skills):
             skill_name = skill["skill"]
             steps = skill["steps"]
@@ -246,7 +281,9 @@ Skills to choose from:
         for img_url in img_urls:
             human_prompt.append({
                 "type": "image_url",
-                "image_url": img_url
+                "image_url": {
+                    "url": img_url
+                }
             })
         human_prompt.append({
             "type": "text",

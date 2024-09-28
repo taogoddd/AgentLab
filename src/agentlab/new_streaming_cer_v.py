@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 from visualwebarena.evaluation_harness import image_utils
 from agentlab.new_run_v import run as run_v_run
+import requests
 
 eval_captioning_model = "Salesforce/blip2-flan-t5-xl"
 eval_captioning_model_device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -118,6 +119,21 @@ def main():
                     subprocess.run(["src/agentlab/v_reset_scripts/reset_shopping.sh"])
                 elif args.website == "reddit":
                     subprocess.run(["src/agentlab/v_reset_scripts/reset_reddit.sh"])
+                elif args.website == "classifieds":
+                    # Send POST request to __CLASSIFIEDS__/index.php?page=reset with token=CLASSIFIEDS_TOKEN
+                    response = requests.post(
+                        f"{os.environ.get("CLASSIFIEDS")}/index.php?page=reset",
+                        data={"token": os.environ.get("CLASSIFIEDS_RESET_TOKEN")},
+                    )
+
+                    # Check if the request was successful
+                    if response.status_code == 200:
+                        print("Reset Classifieds site.")
+                    else:
+                        print(
+                            "Failed to reset Classifieds site:",
+                            response.status_code,
+                        )
 
             # Prepare arguments for run_v.py
             args_run_v = argparse.Namespace()
@@ -143,7 +159,7 @@ def main():
             args_run_v.max_skills = 10  # Set based on your requirements
 
             if page_eval_flag:
-                args_run_v.max_steps = 20
+                args_run_v.max_steps = 30
 
             # Call the run function directly
             run_v_run(args_run_v, captioning_fn=captioning_fn)

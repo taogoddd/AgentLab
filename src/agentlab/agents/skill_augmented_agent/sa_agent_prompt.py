@@ -13,6 +13,7 @@ from agentlab.llm.llm_utils import (
 )
 from PIL import Image
 import requests
+from io import BytesIO
 
 @dataclass
 class SkillAugmentedPromptFlags(dp.Flags):
@@ -116,13 +117,27 @@ Images together with the goal are shown below. Make sure to refer to them when s
         if "goal_image_urls" in current_obs:
                 goal_image_urls = current_obs["goal_image_urls"]
                 # get the Image object from the goal_image_urls
-                for url in goal_image_urls:
-                    if url.startswith("http"):
-                        input_image = Image.open(requests.get(url, stream=True).raw)
-                    else:
-                        input_image = Image.open(url)
-                
-                    img_urls.append(image_to_jpg_base64_url(input_image))
+                try:
+                    for url in goal_image_urls:
+                        if url.startswith("http"):
+                            headers = {
+                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                            }
+
+                            response = requests.get(url, headers=headers, stream=True)
+
+                            # Ensure the request was successful
+                            if response.status_code == 200:
+                                input_image = Image.open(BytesIO(response.content))
+                            else:
+                                print(f"Failed to retrieve the image. Status code: {response.status_code}")
+                                continue
+                        else:
+                            input_image = Image.open(url)
+                    
+                        img_urls.append(image_to_jpg_base64_url(input_image))
+                except Exception as e:
+                    logging.warning(f"Failed to load image from url: {url}. Error: {e}")
         for i, img_url in enumerate(img_urls):
             prefix_messages.append(
                 {
@@ -150,16 +165,45 @@ Images together with the goal are shown below. Make sure to refer to them when s
                 }
             }
         )
-        suffix_obs_prompt = f"""\
-## Text observation:
-Note: 
--- This lists the bid ids of all interactable elements on the current web page with their text content if any, in the format [bid] [tagType] [text content]. tagType is the type of the element, such as button, link, or textbox. text content is the text content of the element. For example, [1234] [BUTTON] ['Add to Cart'] means that there is a button with id 1234 and text content 'Add to Cart' on the current web page. [] [StaticText] [text] means that the element is of some text that is not interactable.
--- [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
--- Elements here are all in the screenshot of the current webpage with same bid marked on them.
+#         suffix_obs_prompt = f"""\
+# ## Text observation:
+# Note: 
+# -- This lists the bid ids of all interactable elements on the current web page with their text content if any, in the format [bid] [tagType] [text content]. tagType is the type of the element, such as button, link, or textbox. text content is the text content of the element. For example, [1234] [BUTTON] ['Add to Cart'] means that there is a button with id 1234 and text content 'Add to Cart' on the current web page. [] [StaticText] [text] means that the element is of some text that is not interactable.
+# -- [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
+# -- Elements here are all in the screenshot of the current webpage with same bid marked on them.
 
+# """
+        axtree_str = current_obs["axtree_txt"]
+        obs_flags = self.flags.obs
+        ax_tree = dp.AXTree(
+            current_obs["axtree_txt"],
+            visible_elements_only=obs_flags.filter_visible_elements_only,
+            visible=lambda: obs_flags.use_ax_tree,
+            coord_type=obs_flags.extract_coords,
+            visible_tag=obs_flags.extract_visible_tag,
+            screenshot_reminder=True,
+            prefix="## ",
+        )
+        error = dp.Error(
+            current_obs["last_action_error"],
+            visible=lambda: obs_flags.use_error_logs and current_obs["last_action_error"],
+            prefix="## ",
+        )
+        result = dp.Result(
+            current_obs["last_action_result"],
+            visible=lambda: obs_flags.use_error_logs and current_obs["last_action_result"],
+            prefix="## ",
+        )
+        focused_element = dp.FocusedElement(
+            current_obs["focused_element_bid"],
+            visible=obs_flags.use_focused_element,
+            prefix="## ",
+        )
+        suffix_obs_prompt = f"""\
+{ax_tree.prompt}{focused_element.prompt}{error.prompt}{result.prompt}
 """
-        som_axtree = current_obs["som_axtree_str"]
-        suffix_obs_prompt += som_axtree
+        # som_axtree = current_obs
+        # suffix_obs_prompt += som_axtree
 
         obs_messages.append(
             {

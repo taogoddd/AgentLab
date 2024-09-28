@@ -227,7 +227,8 @@ def run(args, captioning_fn=None):
         task_seed=None,
         max_steps=args.max_steps,
         headless=args.headless,
-        viewport={"width": 1280, "height": 2048},
+        # viewport={"width": 1280, "height": 2048},
+        viewport={"width": 1500, "height": 1280},
         slow_mo=args.slow_mo,
     )
 

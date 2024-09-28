@@ -23,6 +23,7 @@ from .observation import (
     extract_merged_axtree,
     extract_focused_element_bid,
     MarkingError,
+    get_page_bboxes
 )
 from .action.base import execute_python_code
 from .action.highlevel import HighLevelActionSet
@@ -34,6 +35,10 @@ from browsergym.utils.obs import (
     search_keyword_from_tree_str,
     format_function_call_str,
 )
+
+import pandas as pd
+from io import StringIO
+
 import os
 
 from PIL import Image, ImageDraw, ImageFont
@@ -769,6 +774,61 @@ document.addEventListener("visibilitychange", () => {
                 """ % json.dumps(image_updates)
                 page.evaluate(js_code)
                 content = ""  # Not used for SoM
+    def draw_bounding_boxes(
+        self,
+        data_string,
+        screenshot_img,
+        viewport_size=None,
+        add_ids=True,
+        bbox_color=None,
+        min_width=8,
+        min_height=8,
+        bbox_padding=0,
+        bbox_border=2,
+        plot_ids=None,
+    ):
+        df = pd.read_csv(StringIO(data_string), delimiter=",", quotechar='"')
+
+        # Provide [id] textContent inputs to the model as text.
+        text_content_elements = []
+        text_content_text = set()  # Store text of interactable elements
+        id2semantic = {}
+        index = 0
+        bbox_id2visid = {}
+
+        for _, row in df.iterrows():
+            if not row["Interactable"]:
+                content = ""
+                # Add image alt-text to the text representation.
+                if row["Element"] == "IMG" and pd.notna(row["Alt"]):
+                    content += row["Alt"]
+                # Add HTML textContent (if any) to the text representation.
+                if pd.notna(row["TextContent"]):
+                    content += (
+                        row["TextContent"]
+                        .strip()
+                        .replace("\n", "")
+                        .replace("\t", "")
+                    )[
+                        :200
+                    ]  # Limit to 200 characters to avoid having too much text
+
+                # Check if the text is a CSS selector
+                if content and not (
+                    content.startswith(".") and "{" in content
+                ):
+                    # Add elements which are not interactable as StaticText
+                    if content not in text_content_text:
+                        text_content_elements.append(
+                            f"[] [StaticText] [{content}]"
+                        )
+                        text_content_text.add(content)
+                continue
+            unique_id = str(index + 1)
+            bbox_id2visid[
+                row["ID"]
+            ] = unique_id  # map the bounding box ID to the unique character ID
+
 
     def _get_obs(self):
 
@@ -779,8 +839,24 @@ document.addEventListener("visibilitychange", () => {
 
                 dom = extract_dom_snapshot(self.page)
                 axtree = extract_merged_axtree(self.page)
+                # som_bboxes = get_page_bboxes(self.page)
+                # screenshot = extract_screenshot(self.page)
+                # def override_property(task, env, property):
+                #     """Extract property value from env if not None, otherwise from task."""
+                #     env_value = getattr(env, property)
+                #     task_value = getattr(task, property)
+                #     if env_value is None:
+                #         return task_value
+                #     else:
+                #         logger.warning(
+                #             f"Overriding the task's {property} parameter ({repr(task_value)} => {repr(env_value)}). This might change the task's behaviour and difficulty."
+                #         )
+                #         return env_value
+                # viewport = override_property(self.task, self, "viewport")
+                # content_str = self.draw_bounding_boxes(som_bboxes=som_bboxes, screenshot_img=screenshot, viewport_size=viewport)
                 focused_element_bid = extract_focused_element_bid(self.page)
-                extra_properties, som_axtree_str = extract_dom_extra_properties(dom)
+                # extra_properties, som_axtree_str = extract_dom_extra_properties(dom)
+                extra_properties = extract_dom_extra_properties(dom)
             except (playwright.sync_api.Error, MarkingError) as e:
                 err_msg = str(e)
                 # try to add robustness to async events (detached / deleted frames)
@@ -837,7 +913,7 @@ document.addEventListener("visibilitychange", () => {
             "last_action_error": self.last_action_error,
             "last_action_result": self.last_action_result,
             "elapsed_time": np.asarray([time.time() - self.start_time]),
-            "som_axtree_str": som_axtree_str, # program drafted axtree
+            # "som_axtree_str": som_axtree_str, # program drafted axtree
         }
 
         return obs

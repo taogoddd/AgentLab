@@ -112,7 +112,7 @@ def retry_with_exponential_backoff(  # type: ignore
 
 def retry_with_config_rotation(  # type: ignore
     func,
-    max_retries: int = 3,
+    max_retries: int = 5,
     errors: tuple[Any] = (openai.RateLimitError, openai.NotFoundError),
 ):
     """Retry a function by rotating API configurations (endpoint, key, version) on failure."""

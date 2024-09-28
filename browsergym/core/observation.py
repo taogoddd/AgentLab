@@ -155,6 +155,59 @@ def extract_data_items_from_aria(string):
     original_aria = groups[-1]
     return data_items, original_aria
 
+def get_page_bboxes(self, page: playwright.sync_api.Page) -> list[list[float]]:
+    """JavaScript code to return bounding boxes and other metadata from HTML elements."""
+    js_script = """
+    (() => {
+        const interactableSelectors = [
+            'a[href]:not(:has(img))', 'a[href] img', 'button', 'input:not([type="hidden"])', 'textarea', 'select',
+            '[tabindex]:not([tabindex="-1"])', '[contenteditable="true"]', '[role="button"]', '[role="link"]',
+            '[role="checkbox"]', '[role="menuitem"]', '[role="tab"]', '[draggable="true"]',
+            '.btn', 'option', 'a[href="/notifications"]', 'a[href="/submit"]', '.fa.fa-star.is-rating-item', 'input[type="checkbox"]'
+        ];
+
+        const textSelectors = ['p', 'span', 'div:not(:has(*))', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'article'];
+        const modifiedTextSelectors = textSelectors.map(selector =>
+            `:not(${interactableSelectors.join(', ')}):not(style) > ${selector}`
+        );
+
+        const combinedSelectors = [...interactableSelectors, ...modifiedTextSelectors];
+        const elements = document.querySelectorAll(combinedSelectors.join(', '));
+
+        const pixelRatio = window.devicePixelRatio;
+        let csvContent = "ID,Element,Top,Right,Bottom,Left,Width,Height,Alt,Class,Id,TextContent,Interactable\\n";
+        let counter = 1;
+
+        elements.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+            let altText = element.getAttribute('alt') || '';
+            altText = altText.replace(/"/g, ''); // Escape double quotes in alt text
+            const classList = element.className || '';
+            const id = element.id || '';
+            let textContent = element.textContent || '';
+            textContent = textContent.replace(/"/g, ''); // Escape double quotes in textContent
+
+            // Determine if the element is interactable
+            const isInteractable = interactableSelectors.some(selector => element.matches(selector));
+
+            const dataString = [
+                counter, element.tagName, (rect.top + window.scrollY) * pixelRatio,
+                (rect.right + window.scrollX) * pixelRatio, (rect.bottom + window.scrollY) * pixelRatio,
+                (rect.left + window.scrollX) * pixelRatio, rect.width * pixelRatio, rect.height * pixelRatio,
+                altText, classList, id, textContent, isInteractable
+            ].map(value => `"${value}"`).join(",");
+
+            csvContent += dataString + "\\n";
+            counter++;
+        });
+
+        return csvContent;
+    })();
+    """
+    # Save the bbox as a CSV
+    csv_content = page.evaluate(js_script)
+    return csv_content
 
 def extract_dom_snapshot(
     page: playwright.sync_api.Page,
@@ -227,8 +280,170 @@ def extract_dom_snapshot(
 
     return dom_snapshot
 
-
 def extract_dom_extra_properties(dom_snapshot):
+    def to_string(idx):
+        if idx == -1:
+            return None
+        else:
+            return dom_snapshot["strings"][idx]
+
+    # pre-locate important string ids
+    try:
+        bid_string_id = dom_snapshot["strings"].index(BID_ATTR)
+    except ValueError:
+        bid_string_id = -1
+    try:
+        vis_string_id = dom_snapshot["strings"].index(VIS_ATTR)
+    except ValueError:
+        vis_string_id = -1
+    try:
+        som_string_id = dom_snapshot["strings"].index(SOM_ATTR)
+    except ValueError:
+        som_string_id = -1
+
+    # build the iframe tree (DFS from the first frame)
+    doc_properties = {
+        0: {
+            "parent": None,
+        }
+    }
+
+    docs_to_process = [0]
+    while docs_to_process:
+        doc = docs_to_process.pop(-1)  # DFS
+
+        children = dom_snapshot["documents"][doc]["nodes"]["contentDocumentIndex"]
+        for node, child_doc in zip(children["index"], children["value"]):
+            doc_properties[child_doc] = {
+                "parent": {
+                    "doc": doc,  # parent frame index
+                    "node": node,  # node index within the parent frame
+                }
+            }
+            docs_to_process.append(child_doc)
+
+        # recover the absolute x and y position of the frame node in the parent (if any)
+        parent = doc_properties[doc]["parent"]
+        if parent:
+            parent_doc = parent["doc"]
+            parent_node = parent["node"]
+            try:
+                node_layout_idx = dom_snapshot["documents"][parent_doc]["layout"][
+                    "nodeIndex"
+                ].index(parent_node)
+            except ValueError:
+                node_layout_idx = -1
+            if node_layout_idx >= 0:
+                node_bounds = dom_snapshot["documents"][parent_doc]["layout"]["bounds"][
+                    node_layout_idx
+                ]  # can be empty?
+                # absolute position of parent + relative position of frame node within parent
+                parent_node_abs_x = doc_properties[parent_doc]["abs_pos"]["x"] + node_bounds[0]
+                parent_node_abs_y = doc_properties[parent_doc]["abs_pos"]["y"] + node_bounds[1]
+            else:
+                parent_node_abs_x = 0
+                parent_node_abs_y = 0
+        else:
+            parent_node_abs_x = 0
+            parent_node_abs_y = 0
+
+        # get the frame's absolute position, by adding any scrolling offset if any
+        doc_properties[doc]["abs_pos"] = {
+            "x": parent_node_abs_x - dom_snapshot["documents"][doc]["scrollOffsetX"],
+            "y": parent_node_abs_y - dom_snapshot["documents"][doc]["scrollOffsetY"],
+        }
+
+        document = dom_snapshot["documents"][doc]
+        doc_properties[doc]["nodes"] = [
+            {
+                "bid": None,  # default value, to be filled (str)
+                "visibility": None,  # default value, to be filled (float)
+                "bbox": None,  # default value, to be filled (list)
+                "clickable": False,  # default value, to be filled (bool)
+                "set_of_marks": None,  # default value, to be filled (bool)
+            }
+            for _ in enumerate(document["nodes"]["parentIndex"])
+        ]  # all nodes in document
+
+        # extract clickable property
+        for node_idx in document["nodes"]["isClickable"]["index"]:
+            doc_properties[doc]["nodes"][node_idx]["clickable"] = True
+
+        # extract bid and visibility properties (attribute-based)
+        for node_idx, node_attrs in enumerate(document["nodes"]["attributes"]):
+            i = 0
+            # loop over all attributes
+            for i in range(0, len(node_attrs), 2):
+                name_string_id = node_attrs[i]
+                value_string_id = node_attrs[i + 1]
+                if name_string_id == bid_string_id:
+                    doc_properties[doc]["nodes"][node_idx]["bid"] = to_string(value_string_id)
+                if name_string_id == vis_string_id:
+                    doc_properties[doc]["nodes"][node_idx]["visibility"] = float(
+                        to_string(value_string_id)
+                    )
+                if name_string_id == som_string_id:
+                    doc_properties[doc]["nodes"][node_idx]["set_of_marks"] = (
+                        to_string(value_string_id) == "1"
+                    )
+
+        # extract bbox property (in absolute coordinates)
+        for node_idx, bounds, client_rect in zip(
+            document["layout"]["nodeIndex"],
+            document["layout"]["bounds"],
+            document["layout"]["clientRects"],
+        ):
+            # empty clientRect means element is not actually rendered
+            if not client_rect:
+                doc_properties[doc]["nodes"][node_idx]["bbox"] = None
+            else:
+                # bounds gives the relative position within the document
+                doc_properties[doc]["nodes"][node_idx]["bbox"] = bounds.copy()
+                # adjust for absolute document position
+                doc_properties[doc]["nodes"][node_idx]["bbox"][0] += doc_properties[doc]["abs_pos"][
+                    "x"
+                ]
+                doc_properties[doc]["nodes"][node_idx]["bbox"][1] += doc_properties[doc]["abs_pos"][
+                    "y"
+                ]
+
+        # Note: other interesting fields
+        # document["nodes"]["parentIndex"]  # parent node
+        # document["nodes"]["nodeType"]
+        # document["nodes"]["nodeName"]
+        # document["nodes"]["nodeValue"]
+        # document["nodes"]["textValue"]
+        # document["nodes"]["inputValue"]
+        # document["nodes"]["inputChecked"]
+        # document["nodes"]["optionSelected"]
+        # document["nodes"]["pseudoType"]
+        # document["nodes"]["pseudoIdentifier"]
+        # document["nodes"]["isClickable"]
+        # document["textBoxes"]
+        # document["layout"]["nodeIndex"]
+        # document["layout"]["bounds"]
+        # document["layout"]["offsetRects"]
+        # document["layout"]["scrollRects"]
+        # document["layout"]["clientRects"]
+        # document["layout"]["paintOrders"]
+
+    # collect the extra properties of all nodes with a browsergym_id attribute
+    extra_properties = {}
+    for doc in doc_properties.keys():
+        for node in doc_properties[doc]["nodes"]:
+            bid = node["bid"]
+            if bid:
+                if bid in extra_properties:
+                    logger.warning(f"duplicate {BID_ATTR}={repr(bid)} attribute detected")
+                extra_properties[bid] = {
+                    extra_prop: node[extra_prop]
+                    for extra_prop in ("visibility", "bbox", "clickable", "set_of_marks")
+                }
+
+    return extra_properties
+
+# this will also construct axtree str as in vwa
+def old_extract_dom_extra_properties(dom_snapshot):
     def build_parent_to_children_map(parent_indices):
         parent_to_children = {}
         for child_idx, parent_idx in enumerate(parent_indices):
