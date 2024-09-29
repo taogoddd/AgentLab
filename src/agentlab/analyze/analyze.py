@@ -500,10 +500,10 @@ def get_rest_avg_score(path: str):
         rest_subsubdir = [x for x in subsubdirs if x.name != "0"][0]
         
         rest_subdir_name = rest_subsubdir.name
-        id = int(su.split(".")[1])
+        id = int(subdir.name.split(".")[1])
         # check whether file exists
-        if (subdir / "0" / "summary_info.json").exists():
-            with open(subdir / "0" / "summary_info.json", "r") as f:
+        if (rest_subsubdir / "summary_info.json").exists():
+            with open(rest_subsubdir / "summary_info.json", "r") as f:
                 summary_info = json.load(f)
             score = summary_info["cum_reward"]
             scores.append((id, score))
