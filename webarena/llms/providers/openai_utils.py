@@ -381,6 +381,7 @@ def full_generate_from_openai_chat_completion_with_key_pool(
     top_p: float | None = None,
     context_length: int | None = None,
     stop_token: str | None = None,
+    n: int | None = None,
 ) -> str:
     client = get_openai_client()
     # this is for Azure OpenAI API
@@ -402,6 +403,8 @@ def full_generate_from_openai_chat_completion_with_key_pool(
         params["top_p"] = top_p
     if stop_token is not None:
         params["stop"] = [stop_token]
+    if n is not None:
+        params["n"] = n
 
     response = client.chat.completions.create(**params)  # type: ignore
     return response

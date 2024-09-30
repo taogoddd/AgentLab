@@ -82,10 +82,12 @@ def get_trajectory_from_annotation(dir_path: str):
                 obs = step_info.obs
                 action = step_info.action # e.g. click('339')
                 reward = step_info.reward
+                agent_info = step_info.agent_info
 
                 processed_obs = obs_preprocessor(obs)
                 screenshot_array = processed_obs["screenshot"]
                 som_screenshot_array = processed_obs["screenshot_som"]
+                think = agent_info.get("think", "")
 
                 axtree_str = processed_obs["axtree_txt"]
             except Exception as e:
@@ -95,6 +97,7 @@ def get_trajectory_from_annotation(dir_path: str):
         trajectory.append({
             "obs": obs, # the original observation dict
             "processed_obs": processed_obs, # the processed observation dict
+            "think": think,
             "action": action, # e.g. click('339')
             "reward": reward,
         })
