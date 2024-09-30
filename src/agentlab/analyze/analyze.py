@@ -73,7 +73,7 @@ def new_get_avg_score(path: str):
     #     score = summary_info["cum_reward"]
     #     scores.append(score)
     
-    avg_score = sum([score for id, score in scores]) / len(scores)
+    avg_score = sum([score for id, score in scores]) / len(scores) if len(scores) > 0 else 0
     print(len(scores))
     print(f"Average score: {avg_score}")
 
@@ -559,9 +559,13 @@ def get_rest_avg_score(path: str):
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
 # highlight_print("Reddit ablation")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
-highlight_print("Reddit offline w/ vision")
-new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
-new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240927193737")
+highlight_print("Reddit samping 3 times w/ vision")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240929170414")
+highlight_print("Shopping admin sampling 3 times w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930024415")
+highlight_print("Gitlab sampling 3 times w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930023625")
 # calculate_tokens("/home/ubuntu/github/AgentLab/results/offline_online_cer_rd_exploration_20240926223734")
 # get_sub_domain_avg_score("shopping_admin", "/home/ytliu/agentlab_results/agentlab_baseline")
 

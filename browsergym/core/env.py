@@ -5,11 +5,12 @@ import numpy as np
 import playwright.sync_api
 import time
 import re
-
+import threading
+import signal
 from abc import ABC
 from pathlib import Path
 from typing import Optional
-
+import asyncio
 from .chat import Chat
 from .task import AbstractBrowserTask
 from .spaces import Unicode, AnyDict, AnyBox
@@ -37,6 +38,8 @@ from browsergym.utils.obs import (
 
 logger = logging.getLogger(__name__)
 
+class TimeoutException(Exception):
+    pass
 
 class BrowserEnv(gym.Env, ABC):
     """The main BrowserGym class, which encapsulates instruction-following Web browsing into a Gymnasium environment."""
@@ -149,17 +152,82 @@ class BrowserEnv(gym.Env, ABC):
         # page recovery count
         self.page_recovery_count = 0
 
+    # def close(self):
+    #     def close_all():
+    #         try:
+    #             if self.task:
+    #                 # stop the task
+    #                 self.task.teardown()
+    #                 # close the chat
+    #                 self.chat.close()
+    #                 # close the browser context
+    #                 self.context.close()
+    #                 # close the browser
+    #                 self.browser.close()
+    #                 self.task = None
+    #         except Exception as e:
+    #             logger.error(f"Exception during close: {e}")
+    #     close_thread = threading.Thread(target=close_all)
+    #     close_thread.start()
+    #     close_thread.join(timeout=5)  # Wait 5 seconds for the close operation
+
+    #     if close_thread.is_alive():
+    #         logger.warning("Close operation timed out after 5 seconds.")
+    #         # Optionally, you can forcefully terminate the browser process here
+    #     else:
+    #         logger.info("Close operation completed successfully.")
+
+    
+    # async def close(self):
+    #     try:
+    #         if self.task:
+    #             # stop the task
+    #             await self.task.teardown()
+    #             # close the chat
+    #             await self.chat.close()
+    #             # close the browser context
+    #             await self.context.close()
+    #             # close the browser
+    #             await self.browser.close()
+    #             self.task = None
+    #         logger.info("Close operation completed successfully.")
+    #     except Exception as e:
+    #         logger.error(f"Exception during close: {e}")
+
+    # async def close_with_timeout(self, timeout=5):
+    #     try:
+    #         await asyncio.wait_for(self.close(), timeout=timeout)
+    #     except asyncio.TimeoutError:
+    #         logger.warning("Close operation timed out after 5 seconds.")
+    #         # Optionally, you can forcefully terminate the browser process here\
+
     def close(self):
-        if self.task:
-            # stop the task
-            self.task.teardown()
-            # close the chat
-            self.chat.close()
-            # close the browser context
-            self.context.close()
-            # close the browser
-            self.browser.close()
-            self.task = None
+        def timeout_handler(signum, frame):
+            raise TimeoutException("Close operation timed out")
+
+        # Set a timeout signal for 5 seconds
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(5)
+
+        try:
+            if self.task:
+                # stop the task
+                self.task.teardown()
+                # close the chat
+                self.chat.close()
+                # close the browser context
+                self.context.close()
+                # close the browser
+                self.browser.close()
+                self.task = None
+            signal.alarm(0)  # Disable the alarm if close operation succeeded
+            logger.info("Close operation completed successfully.")
+        except TimeoutException:
+            logger.warning("Close operation timed out after 5 seconds.")
+            # Optionally, you can forcefully terminate the browser process here
+        except Exception as e:
+            logger.error(f"Exception during close: {e}")
+            signal.alarm(0)  # Disable the alarm in case of exception
 
     def reset(self, seed=None, *args, **kwargs):
         super().reset(seed=seed, *args, **kwargs)
