@@ -34,7 +34,7 @@ def count_multimodal_messages_tokens(messages, model="gpt-4") -> int:
     return token_count
 
 # for a 1500*1280 image, 765 each high detailed image and 85 each low detailed image
-def truncate_trajectory_by_tokens(trajectory: list, max_tokens: int = 128000-20000, model="gpt-4") -> list:
+def truncate_trajectory_by_tokens(trajectory: list, max_tokens: int = 128000-30000, model="gpt-4") -> list:
     truncated_trajectory = []
     token_count = 0
     # from back to front

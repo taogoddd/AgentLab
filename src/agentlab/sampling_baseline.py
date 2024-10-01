@@ -91,7 +91,7 @@ def main():
                 sample_id = i+1 # sample_id starts from 1
                 try:
                     process = Popen([
-                        "python", "src/agentlab/run.py", 
+                        "python", "src/agentlab/baseline_run.py", 
                         "--task", f"webarena.{task_id}",
                         "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
                         "--model_name", "azureopenai/"+args.model,

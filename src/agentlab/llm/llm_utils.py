@@ -99,9 +99,11 @@ def retry(
             
             # modify the chat object to use the new configuration
             chat.openai_api_key = current_config["api_key"]
-            if isinstance(chat, AzureChatOpenAI):
-                chat.azure_endpoint = current_config["endpoint"]
-                chat.openai_api_version = current_config["version"]
+            # if isinstance(chat, AzureChatOpenAI):
+            # check the type of chat object
+            print(type(chat))
+            chat.azure_endpoint = current_config["endpoint"]
+            chat.openai_api_version = current_config["version"]
             
             answer = chat.invoke(messages)
         except Exception as e:
@@ -133,9 +135,9 @@ def retry(
         
     # resume chat with initial configuration
     chat.openai_api_key = api_configs[0]["api_key"]
-    if isinstance(chat, AzureChatOpenAI):
-        chat.azure_endpoint = api_configs[0]["endpoint"]
-        chat.openai_api_version = api_configs[0]["version"]
+    # if isinstance(chat, AzureChatOpenAI):
+    chat.azure_endpoint = api_configs[0]["endpoint"]
+    chat.openai_api_version = api_configs[0]["version"]
 
     raise RetryError(f"Could not parse a valid value after {n_retry} retries.")
 
