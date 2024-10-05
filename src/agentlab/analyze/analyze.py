@@ -333,7 +333,7 @@ def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     include_multi_sites: bool - whether to include tasks with multiple sites
     '''
     sub_domain_ids = []
-    with open("/home/ubuntu/github/AgentLab/webarena/test.raw.json", "r") as f:
+    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         for task in data:
             if task["sites"][0] == sub_domain and (include_multi_sites or len(task["sites"]) == 1):
@@ -341,15 +341,15 @@ def get_sub_domain_ids(sub_domain: str, include_multi_sites: bool = False):
     return sub_domain_ids
 
 def dump_sub_domain_data(sub_domain: str):
-    with open("/home/ubuntu/github/AgentLab/webarena/test.raw.json", "r") as f:
+    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         # only keep the task whose sites have reddit
         new_data = [task for task in data if sub_domain in task["sites"]]
 
-    with open(f"/home/ubuntu/github/AgentLab/webarena/test.{sub_domain}.json", "w") as f:
+    with open(f"/home/ytliu/github/AgentLab/webarena/test.{sub_domain}.json", "w") as f:
         json.dump(new_data, f, indent=4)
 
-def analyze_step(step_result_dir: str = "/home/ubuntu/agentlab_results/2405_all_tasks_step_webarena_bugfix"):
+def analyze_step(step_result_dir: str = "/home/ytliu/agentlab_results/2405_all_tasks_step_webarena_bugfix"):
     # Load the CSV file
     df = pd.read_csv(f'{step_result_dir}/summary.csv')
 
@@ -374,7 +374,7 @@ def analyze_step(step_result_dir: str = "/home/ubuntu/agentlab_results/2405_all_
     print(f"Successful Reddit tasks: {successful_reddit_tasks}")
 
 def get_task_template_id_mapping():
-    with open("/home/ubuntu/github/AgentLab/webarena/test.raw.json", "r") as f:
+    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
         data = json.load(f)
         task_template_mapping: dict[str, list] = {}
         for task in data:
@@ -515,44 +515,54 @@ def get_sub_domain_cross_template_avg_score(path: str, sub_domain: str):
 def highlight_print(text: str):
     print("*"*50, text, "*"*50)
 
-# order_vwa_task_ids("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa.json")
-# print(get_task_id_splits("/home/ubuntu/github/AgentLab/visualwebarena/test_raw_vwa_ordered.json"))
-# analyze_steps("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
-# get_avg_score("/home/ubuntu/agentlab_results/agentlab_baseline")
+# order_vwa_task_ids("/home/ytliu/github/AgentLab/visualwebarena/test_raw_vwa.json")
+# print(get_task_id_splits("/home/ytliu/github/AgentLab/visualwebarena/test_raw_vwa_ordered.json"))
+# analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
+# get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436")
 
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
-# calculate_tokens("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923141347")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240922075010")
-# print(new_get_binary_scores("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436"))
-# get_merged_avg_score(["/home/ubuntu/agentlab_results/agentlab_baseline", "/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline"])
-# get_merged_avg_template_score(["/home/ubuntu/agentlab_results/agentlab_baseline", "/home/ubuntu/agentlab_results/2024-09-11_02-01-51_baseline"])
-# get_sub_domain_avg_score("shopping", "/home/ubuntu/agentlab_results/2024-08-15_03-45-52_offline_learning")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
+# calculate_tokens("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922153051")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923133610")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923141347")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240922075010")
+# print(new_get_binary_scores("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436"))
+# get_merged_avg_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
+# get_merged_avg_template_score(["/home/ytliu/agentlab_results/agentlab_baseline", "/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline"])
+# get_sub_domain_avg_score("shopping", "/home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning")
 # print(get_sub_domain_ids("reddit", True))
-# /home/ubuntu/agentlab_results/2024-08-15_03-45-52_offline_learning
+# /home/ytliu/agentlab_results/2024-08-15_03-45-52_offline_learning
 
 # highlight_print("Shopping VWA before")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240926175707")
 # highlight_print("Reddit VWA before")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240926175713")
-highlight_print("Shopping WA w/ vision")
+highlight_print("SA baseline")
+get_sub_domain_avg_score("shopping_admin","/home/ytliu/agentlab_results/agentlab_baseline")
+highlight_print("SA WA")
 new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
-highlight_print("Reddit VWA after")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240927024454")
-highlight_print("Classifieds after")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240927040344")
-# get_sub_domain_avg_score("gitlab", "/home/ubuntu/agentlab_results/agentlab_baseline")
-# check_num_steps_eval_accuracy("/home/ubuntu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
+highlight_print("Reddit baseline")
+get_sub_domain_avg_score("reddit","/home/ytliu/agentlab_results/agentlab_baseline")
+highlight_print("Reddit WA")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171257")
+highlight_print("Shopping VWA baseline")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/v_baseline20240930210924")
+highlight_print("Reddit VWA baseline")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/v_baseline20240930211909")
+highlight_print("Classifieds VWA baseline")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/v_baseline20241001165241")
+# highlight_print("Classifieds after")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240927040344")
+# get_sub_domain_avg_score("gitlab", "/home/ytliu/agentlab_results/agentlab_baseline")
+# check_num_steps_eval_accuracy("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240922111436", 20)
 # analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923012050", 20)
 # get_sub_domain_ids("gitlab", include_multi_sites=False)
 
-# with open("/home/ubuntu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
+# with open("/home/ytliu/github/AgentLab/src/agentlab/skills/shopping_admin/skills.json", "r") as f:
 #     skills = json.load(f)
 
 # for skill in skills:
@@ -565,15 +575,15 @@ new_get_avg_score("/home/ytliu/github/AgentLab/results/v_streaming_single_action
 #         skill["description"] = description
 #         skill["usages"] = usages
 
-# with open("/home/ubuntu/github/AgentLab/src/agentlab/skills/shopping_admin/skills_1.json", "w") as f:
+# with open("/home/ytliu/github/AgentLab/src/agentlab/skills/shopping_admin/skills_1.json", "w") as f:
 #     json.dump(skills, f, indent=2)
 
-# with open("/home/ubuntu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/exp_args.pkl", "rb") as f:
+# with open("/home/ytliu/agentlab_results/agentlab_baseline/2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1/exp_args.pkl", "rb") as f:
 #     import pickle
 #     exp_args = pickle.load(f)
 #     print(exp_args)
 
-# print(get_exp_args("/home/ubuntu/agentlab_results/agentlab_baseline"))
+# print(get_exp_args("/home/ytliu/agentlab_results/agentlab_baseline"))
 
 # import subprocess
 # subprocess.run(["src/agentlab/v_reset_scripts/reset_shopping.sh"])
