@@ -547,10 +547,10 @@ def get_rest_avg_score(path: str):
         rest_subsubdir = [x for x in subsubdirs if x.name != "0"][0]
         
         rest_subdir_name = rest_subsubdir.name
-        id = int(su.split(".")[1])
+        id = int(subdir.name.split(".")[1])
         # check whether file exists
-        if (subdir / "0" / "summary_info.json").exists():
-            with open(subdir / "0" / "summary_info.json", "r") as f:
+        if (rest_subsubdir / "summary_info.json").exists():
+            with open(rest_subsubdir / "summary_info.json", "r") as f:
                 summary_info = json.load(f)
             score = summary_info["cum_reward"]
             scores.append((id, score))
@@ -645,33 +645,13 @@ def calculate_token_cost(width, height):
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
 # highlight_print("Reddit ablation")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
-# highlight_print("Reddit samping 3 times w/ vision")
-# # new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240929170414")
+highlight_print("Reddit samping 3 times w/ vision")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
+new_get_avg_score("/home/ubuntu/github/AgentLab/results/sampling_baseline_20240930223713")
 # highlight_print("Shopping admin sampling 3 times w/ vision")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930024415")
-highlight_print("Shopping CER")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
-highlight_print("Shopping CER w/ vision")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171731")
-highlight_print("Shopping sampling 3 times w/ vision")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006175022")
-highlight_print("Gitlab sampling 3 times w/ vision")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006160058")
-highlight_print("Shopping max avg score")
-get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006175022")
-highlight_print("Gitlab max avg score")
-get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006160058")
-
-# from PIL import Image
-
-# # Open an image file
-# with Image.open('/home/ytliu/github/AgentLab/results/sampling_20241006175022/webarena.49/2/screenshot_step_0.jpg') as img:
-#     width, height = img.size
-
-# print(f"Width: {width} pixels, Height: {height} pixels")
-# print(f"Token cost: {calculate_token_cost(width, height)}")
-
+# highlight_print("Gitlab sampling 3 times w/ vision")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930023625")
 # calculate_tokens("/home/ubuntu/github/AgentLab/results/offline_online_cer_rd_exploration_20240926223734")
 # get_sub_domain_avg_score("shopping_admin", "/home/ytliu/agentlab_results/agentlab_baseline")
 
