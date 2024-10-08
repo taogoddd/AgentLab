@@ -4,6 +4,44 @@ from webarena.llms.providers.openai_utils import full_generate_from_openai_chat_
 import re
 import numpy as np
 from browsergym.experiments.utils import count_tokens, count_messages_token
+import math
+
+def calculate_token_cost(width, height):
+    """
+    Calculate the token cost for an image in detail: high mode.
+
+    Parameters:
+    - width (float): Original width of the image in pixels.
+    - height (float): Original height of the image in pixels.
+
+    Returns:
+    - total_cost (int): The total token cost for the image.
+    """
+    # Step 1: Scale the image to fit within a 2048 x 2048 square
+    max_dimension = max(width, height)
+    if max_dimension > 2048:
+        scaling_factor1 = 2048 / max_dimension
+        width1 = width * scaling_factor1
+        height1 = height * scaling_factor1
+    else:
+        width1 = width
+        height1 = height
+
+    # Step 2: Scale such that the shortest side is 768px long
+    min_dimension = min(width1, height1)
+    scaling_factor2 = 768 / min_dimension
+    width2 = width1 * scaling_factor2
+    height2 = height1 * scaling_factor2
+
+    # Step 3: Count how many 512px squares the image consists of
+    num_tiles_width = math.ceil(width2 / 512)
+    num_tiles_height = math.ceil(height2 / 512)
+    num_tiles = num_tiles_width * num_tiles_height
+
+    # Step 4: Calculate the total token cost
+    total_cost = num_tiles * 170 + 85
+
+    return total_cost
 
 def count_multimodal_messages_tokens(messages, model="gpt-4") -> int:
     token_count = 0
@@ -34,7 +72,7 @@ def count_multimodal_messages_tokens(messages, model="gpt-4") -> int:
     return token_count
 
 # for a 1500*1280 image, 765 each high detailed image and 85 each low detailed image
-def truncate_trajectory_by_tokens(trajectory: list, max_tokens: int = 128000-20000, model="gpt-4") -> list:
+def truncate_trajectory_by_tokens(trajectory: list, max_tokens: int = 128000-10000, model="gpt-4") -> list:
     truncated_trajectory = []
     token_count = 0
     # from back to front
@@ -112,20 +150,20 @@ def evaluate_success(trajectory, models: list[str] = ["gpt-4o" for _ in range(4)
         #     "type": "text",
         #     "text": f"Action: {action}"
         # })
-        content.append({
-            "type": "text",
-            "text": f"""User Intent: {intent}
+    content.append({
+        "type": "text",
+        "text": f"""User Intent: {intent}
 Think and Action History: {last_think_action_str}
 Bot response to the user: {trajectory[-1]["action"]}
 Current URL: {current_url}
 The last {len(trajectory)} snapshots of the agent's trajectory are shown in the {len(trajectory)} images. The LAST IMAGE represents the current state of the webpage.
 """
-        })
-        # 650 tokens of system messages
-        messages = [
-        {
-            "role": "system",
-            "content": f"""
+    })
+    # 650 tokens of system messages
+    messages = [
+    {
+        "role": "system",
+        "content": f"""
 You are an expert in evaluating the performance of a web navigation agent. The agent is designed to help a human user navigate a website to complete a task. Given the user's intent, the agent's action history, the final state of the webpage, and the agent's response to the user, your goal is to decide whether the agent's execution is successful or not. If the current state is a failure but it looks like the agent is on the right track towards success, you should also output as such.
 
 There are three types of tasks:
@@ -140,12 +178,12 @@ Thoughts: <your thoughts and reasoning process>
 Status: "success" or "failure"
 On the right track to success: "yes" or "no"
 """
-        },
-        {
-            "role": "user",
-            "content": content
-        }
-    ]
+    },
+    {
+        "role": "user",
+        "content": content
+    }
+]
     all_responses = []
     for model in models:
         response = full_generate_from_openai_chat_completion_with_key_pool(

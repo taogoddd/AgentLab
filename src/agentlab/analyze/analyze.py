@@ -42,6 +42,53 @@ def get_exp_args(path: str):
         exp_args = pickle.load(f)
     return exp_args
 
+def get_max_avg_score(path: str):
+    # consider it correct if any of the samples is correct
+    print(f"Analyzing {path}")
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+    records = {
+        "all_ids": [],
+        "successful_ids": [],
+        "failed_ids": [],
+    }
+
+    not_completed_ids = []
+
+    scores = []
+    # parse out the id from the subdirectory name, e.g. get 0 from 2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1
+    for subdir in subdirs:
+        subdir_name = subdir.name
+        id = int(subdir_name.split(".")[1])
+        # check whether file exists
+        available_sample_ids = [i for i in range(4)]
+        for sample_id in available_sample_ids:
+            if (subdir / str(sample_id) / "summary_info.json").exists():
+                with open(subdir / str(sample_id) / "summary_info.json", "r") as f:
+                    summary_info = json.load(f)
+                score = summary_info["cum_reward"]
+                if score == 1:
+                    scores.append((id, score))
+                    break
+                elif sample_id != available_sample_ids[-1] and score != 1:
+                    continue
+                # if it is the last sample and the score is still not 1, then still append the score
+                elif sample_id == available_sample_ids[-1]:
+                    scores.append((id, score))
+    avg_score = sum([score for id, score in scores]) / len(scores)
+    print(len(scores))
+    print(f"Average score: {avg_score}")
+
+    # get all indexes for avg_score = 1
+    successful_ids = [id for id, score in scores if score == 1]
+    # sort the ids
+    successful_ids.sort()
+    # stringfy the ids
+    successful_ids = [(id) for id in successful_ids]
+    print(f"Number of successful ids: {len(successful_ids)}")
+    print(f"Successful ids: {successful_ids}")
+
+    return avg_score
+
 def new_get_avg_score(path: str):
     print(f"Analyzing {path}")
     subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
@@ -541,6 +588,45 @@ def get_rest_avg_score(path: str):
     
     return avg_score, records
 
+import math
+
+def calculate_token_cost(width, height):
+    """
+    Calculate the token cost for an image in detail: high mode.
+
+    Parameters:
+    - width (float): Original width of the image in pixels.
+    - height (float): Original height of the image in pixels.
+
+    Returns:
+    - total_cost (int): The total token cost for the image.
+    """
+    # Step 1: Scale the image to fit within a 2048 x 2048 square
+    max_dimension = max(width, height)
+    if max_dimension > 2048:
+        scaling_factor1 = 2048 / max_dimension
+        width1 = width * scaling_factor1
+        height1 = height * scaling_factor1
+    else:
+        width1 = width
+        height1 = height
+
+    # Step 2: Scale such that the shortest side is 768px long
+    min_dimension = min(width1, height1)
+    scaling_factor2 = 768 / min_dimension
+    width2 = width1 * scaling_factor2
+    height2 = height1 * scaling_factor2
+
+    # Step 3: Count how many 512px squares the image consists of
+    num_tiles_width = math.ceil(width2 / 512)
+    num_tiles_height = math.ceil(height2 / 512)
+    num_tiles = num_tiles_width * num_tiles_height
+
+    # Step 4: Calculate the total token cost
+    total_cost = num_tiles * 170 + 85
+
+    return total_cost
+
 # analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
 # get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
@@ -559,13 +645,33 @@ def get_rest_avg_score(path: str):
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
 # highlight_print("Reddit ablation")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
-highlight_print("Reddit samping 3 times w/ vision")
-# new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240929170414")
-highlight_print("Shopping admin sampling 3 times w/ vision")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930024415")
+# highlight_print("Reddit samping 3 times w/ vision")
+# # new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240929170414")
+# highlight_print("Shopping admin sampling 3 times w/ vision")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930024415")
+highlight_print("Shopping CER")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923134859")
+highlight_print("Shopping CER w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171731")
+highlight_print("Shopping sampling 3 times w/ vision")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006175022")
 highlight_print("Gitlab sampling 3 times w/ vision")
-new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930023625")
+new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006160058")
+highlight_print("Shopping max avg score")
+get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006175022")
+highlight_print("Gitlab max avg score")
+get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006160058")
+
+# from PIL import Image
+
+# # Open an image file
+# with Image.open('/home/ytliu/github/AgentLab/results/sampling_20241006175022/webarena.49/2/screenshot_step_0.jpg') as img:
+#     width, height = img.size
+
+# print(f"Width: {width} pixels, Height: {height} pixels")
+# print(f"Token cost: {calculate_token_cost(width, height)}")
+
 # calculate_tokens("/home/ubuntu/github/AgentLab/results/offline_online_cer_rd_exploration_20240926223734")
 # get_sub_domain_avg_score("shopping_admin", "/home/ytliu/agentlab_results/agentlab_baseline")
 

@@ -112,7 +112,7 @@ def retry_with_exponential_backoff(  # type: ignore
 
 def retry_with_config_rotation(  # type: ignore
     func,
-    max_retries: int = 5,
+    max_retries: int = 10,
     errors: tuple[Any] = (openai.RateLimitError, openai.NotFoundError),
 ):
     """Retry a function by rotating API configurations (endpoint, key, version) on failure."""
@@ -149,7 +149,7 @@ def retry_with_config_rotation(  # type: ignore
                 os.environ["OPENAI_API_KEY"] = current_config["api_key"]
             try:
                 return func(*args, **kwargs)
-            except errors as e:
+            except Exception as e:
                 # Increment retries
                 num_retries += 1
                 print(f"Error occurred: {e}. Retrying with a new API configuration.")
@@ -159,14 +159,14 @@ def retry_with_config_rotation(  # type: ignore
                 
                 # Check if max retries have been reached
                 if num_retries > max_retries:
-                    raise Exception(f"Maximum number of retries ({max_retries}) exceeded.")
+                    logging.warning("Maximum number of retries exceeded.")
                 
                 # Sleep before retrying
                 time.sleep(1)
-            except Exception as e:
-                # Raise exceptions for any other errors
-                print(f"Error occurred: {e}.")
-                time.sleep(1)
+            # except Exception as e:
+            #     # Raise exceptions for any other errors
+            #     print(f"Error occurred: {e}.")
+            #     time.sleep(1)
 
     return wrapper
 

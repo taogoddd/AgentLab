@@ -23,6 +23,7 @@ import base64
 from PIL import Image
 from openai import RateLimitError
 from webarena.llms.providers.openai_utils import get_api_configs_from_env
+from agentlab.llm.chat_api import AzureOpenAIChatModelArgs, OpenAIChatModelArgs
 
 
 def _extract_wait_time(error_message, min_retry_wait_time=60):
@@ -38,7 +39,7 @@ class RetryError(ValueError):
 
 
 def retry(
-    chat: ChatOpenAI | AzureChatOpenAI,
+    chat_class: ChatOpenAI | AzureChatOpenAI,
     messages,
     n_retry,
     parser,
@@ -75,6 +76,37 @@ def retry(
     --------
         value: the parsed value
     """
+    chat_model_args = AzureOpenAIChatModelArgs(
+            model_name="azureopenai/gpt-4o-2024-05-13",
+            max_total_tokens=128_000,
+            max_input_tokens=126_000,
+            max_new_tokens=2_000,
+            temperature=0.1,
+            vision_support=True,
+        )
+    def reinit_chat_with_configs(api_key, endpoint, version, old_chat):
+        # model_name = old_chat.get_model_name()
+        # max_tokens = old_chat.get_max_new_tokens()
+        # temperature = old_chat.get_temperature()
+        # if isinstance(old_chat, OpenAIChatModelArgs):
+        #     chat = OpenAIChatModelArgs(
+        #         model_name=model_name,
+        #         max_new_tokens=max_tokens,
+        #         temperature=temperature,
+        #         openai_api_key=api_key,                
+        #     )
+        # elif isinstance(old_chat, AzureOpenAIChatModelArgs):
+        #     chat = AzureOpenAIChatModelArgs(
+        #         model_name=model_name,
+        #         max_new_tokens=max_tokens,
+        #         temperature=temperature,
+        #         openai_api_key=api_key,
+        #         azure_endpoint=endpoint,
+        #         openai_api_version=version
+        #     )
+        chat = chat_model_args.make_chat_model(api_key, endpoint, version)
+        return chat
+
     tries = 0
     rate_limit_total_delay = 0
     api_configs = get_api_configs_from_env()
@@ -98,18 +130,18 @@ def retry(
             #     os.environ["OPENAI_API_KEY"] = current_config["api_key"]
             
             # modify the chat object to use the new configuration
-            chat.openai_api_key = current_config["api_key"]
-            if isinstance(chat, AzureChatOpenAI):
-                chat.azure_endpoint = current_config["endpoint"]
-                chat.openai_api_version = current_config["version"]
+            chat = reinit_chat_with_configs(current_config["api_key"], current_config["endpoint"], current_config["version"], chat_class)
+            # chat.openai_api_key = current_config["api_key"]
+            # chat.azure_endpoint = current_config["endpoint"]
+            # chat.openai_api_version = current_config["version"]
             
             answer = chat.invoke(messages)
-        except Exception as e:
+        except RateLimitError as e:
             # Rotate to the next configuration
             config_index = (config_index + 1) % len(api_configs)
 
             wait_time = _extract_wait_time(e.args[0], min_retry_wait_time)
-            logging.warning(f"Error, waiting {wait_time}s before retrying.")
+            logging.warning(f"RateLimitError, waiting {wait_time}s before retrying.")
             time.sleep(wait_time)
             rate_limit_total_delay += wait_time
             if rate_limit_total_delay >= rate_limit_max_wait_time:
@@ -118,7 +150,20 @@ def retry(
                 )
                 raise
             continue
+        except Exception as e:
+            # Rotate to the next configuration
+            config_index = (config_index + 1) % len(api_configs)
 
+            logging.warning(f"Error {e}, waiting 5s before retrying.")
+            time.sleep(5)
+            tries += 1
+            if tries > n_retry:
+                logging.warning(
+                    f"Exceeded maximum number of retries. Tried {n_retry} times."
+                )
+                raise
+            continue
+        
         messages.append(answer)
 
         value, valid, retry_message = parser(answer.content)
@@ -132,10 +177,11 @@ def retry(
         messages.append(HumanMessage(content=retry_message))
         
     # resume chat with initial configuration
-    chat.openai_api_key = api_configs[0]["api_key"]
-    if isinstance(chat, AzureChatOpenAI):
-        chat.azure_endpoint = api_configs[0]["endpoint"]
-        chat.openai_api_version = api_configs[0]["version"]
+    # chat.openai_api_key = api_configs[0]["api_key"]
+    # if isinstance(chat, AzureChatOpenAI):
+    #     chat.azure_endpoint = api_configs[0]["endpoint"]
+    #     chat.openai_api_version = api_configs[0]["version"]
+    
 
     raise RetryError(f"Could not parse a valid value after {n_retry} retries.")
 

@@ -91,12 +91,21 @@ class ChatModelArgs(ABC):
 class OpenAIChatModelArgs(ChatModelArgs):
     vision_support: bool = False
 
-    def make_chat_model(self):
+    def make_chat_model(self, api_key: str | None = None, endpoint: str | None = None, version: str | None = None):
         model_name = self.model_name.split("/")[-1]
+        params={
+            "model_name": model_name,
+            "temperature": self.temperature,
+            "max_tokens": self.max_new_tokens,
+        }
+        # if api_key:
+        #     params["api_key"] = api_key
+        # if endpoint:
+        #     params["endpoint"] = endpoint
+        # if version:
+        #     params["version"] = version
         return ChatOpenAI(
-            model_name=model_name,
-            temperature=self.temperature,
-            max_tokens=self.max_new_tokens,
+            **params
         )
 
     def prepare_server(self, registry):
@@ -109,13 +118,31 @@ class OpenAIChatModelArgs(ChatModelArgs):
 class AzureOpenAIChatModelArgs(ChatModelArgs):
     vision_support: bool = False
 
-    def make_chat_model(self):
+    def make_chat_model(self, api_key: str | None = None, endpoint: str | None = None, version: str | None = None):
         model_name = self.model_name.split("/")[-1]
+        params={
+            "model_name": model_name,
+            "temperature": self.temperature,
+            "max_tokens": self.max_new_tokens,
+        }
+        if api_key:
+            params["openai_api_key"] = api_key
+        if endpoint:
+            params["azure_endpoint"] = endpoint
+        if version:
+            params["openai_api_version"] = version
         return AzureChatOpenAI(
-            model_name=model_name,
-            temperature=self.temperature,
-            max_tokens=self.max_new_tokens,
+            **params
         )
+    
+    def get_max_new_tokens(self):
+        return self.max_new_tokens
+
+    def get_model_name(self):
+        return self.model_name
+    
+    def get_temperature(self):
+        return self.temperature
 
     def prepare_server(self, registry):
         pass
