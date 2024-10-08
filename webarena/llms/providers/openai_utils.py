@@ -160,6 +160,7 @@ def retry_with_config_rotation(  # type: ignore
                 # Check if max retries have been reached
                 if num_retries > max_retries:
                     logging.warning("Maximum number of retries exceeded.")
+                    break
                 
                 # Sleep before retrying
                 time.sleep(1)
