@@ -271,7 +271,7 @@ def main():
                 action=dp.ActionFlags(
                     multi_actions=False,
                     # change action space here
-                    action_set="wa_base",
+                    action_set="explore",
                     long_description=True,
                     individual_examples=True,
                 ),

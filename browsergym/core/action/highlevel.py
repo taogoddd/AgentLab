@@ -94,6 +94,16 @@ WA_BASE_ACTIONS = [
     press,
 ]
 
+EXPLORATION_ACTIONS = [
+    scroll,
+    fill,
+    select_option,
+    click,
+    clear,
+    hover,
+    press,
+]
+
 COORD_ACTIONS = [
     scroll,
     mouse_move,
@@ -167,6 +177,8 @@ class HighLevelActionSet(AbstractActionSet):
                     # bid actions for webarena, delete the unnecessary actions
                     case "wa_base":
                         allowed_actions.extend(WA_BASE_ACTIONS)
+                    case "explore":
+                        allowed_actions.extend(EXPLORATION_ACTIONS)
                     case "bid":
                         allowed_actions.extend(BID_ACTIONS)
                     case "coord":
