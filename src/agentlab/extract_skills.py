@@ -73,17 +73,18 @@ def construct_prompt_messages(
         website: str,
         skills_file_path: str,
         trajectory: list[TrajectoryStep],
-        no_goal: bool = False
+        goal: str = "",
     ):
     existing_skills_str = get_skills_desc(skills_path=skills_file_path)
-    goal = trajectory[0]["obs"]["goal"]
-    goal_str = f"Overall goal of the trajectory: {goal}" if not no_goal else ""
+    # goal = trajectory[0]["obs"]["goal"]
+    goal_str = f"Overall goal of the trajectory: {goal}" if goal else ""
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
 You need to summarize skills from the trajectory.
 Skills are a subset of actions that the user takes to achieve a sub-goal.
 You should break the overall goal into sub-goals and summarize each sub-goal as a skill.
 Represent the non-fixed elements (input text, button strings) and non-fixed words (e.g. a specific forum name / user name; an option) with descriptive variable names as shown in the example.
+Also for these elements, you should consider the abstract version of it to make the skill more general. e.g. "filter posts by hottest" -> "filter posts by {{sort criterion}}".
 
 Output format:
 <think>
@@ -256,13 +257,13 @@ def extract_skills(
         model: str = "gpt-4o",
         skill_root_path: str = "src/agentlab/skills",
         id: str = "",
-        no_goal: bool = False,
+        goal: str = "",
         max_steps: int = 30
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)[:max_steps]
         skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
-        messages = construct_prompt_messages(website, skills_file_path, trajectory, no_goal)
+        messages = construct_prompt_messages(website, skills_file_path, trajectory, goal)
         response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting general skills", "*"*50)
         print(response)

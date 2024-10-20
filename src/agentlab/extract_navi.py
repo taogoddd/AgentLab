@@ -79,11 +79,11 @@ def construct_prompt_messages(
         website: str,
         skill_file_path: str,
         trajectory: list[TrajectoryStep],
-        no_goal: bool = False
+        goal: str = "",
     ):
     existing_pages_str = get_skills_desc(skill_file_path)
-    goal = trajectory[0]["obs"]["goal"]
-    goal_str = f"Overall goal of the trajectory: {goal}" if not no_goal else ""
+    # goal = trajectory[0]["obs"]["goal"]
+    goal_str = f"Overall goal of the trajectory: {goal}" if goal else ""
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
 You need to summarize the useful pages and pair it up with the corresponding URLs.
@@ -202,13 +202,13 @@ def extract_navi_skill(
         model: str = "gpt-4o",
         skill_root_path: str = "src/agentlab/skills",
         id: str = "",
-        no_goal: bool = False,
+        goal: str = "",
         max_steps: int = 30
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)[:max_steps]
         skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
-        messages = construct_prompt_messages(website, skills_file_path, trajectory, no_goal)
+        messages = construct_prompt_messages(website, skills_file_path, trajectory, goal)
         response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting dynamics", "*"*50)
         print(response)

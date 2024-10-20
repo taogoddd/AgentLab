@@ -156,6 +156,8 @@ def fill(bid: str, value: str):
         elem.type(value, delay=delay)
     else:
         elem.fill(value, timeout=500)
+        if value.endswith("\n"):
+            elem.press("Enter", timeout=500)
 
 
 # https://playwright.dev/python/docs/api/class-locator#locator-check

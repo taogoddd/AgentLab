@@ -15,8 +15,8 @@ Tell me the count of comments that have received more downvotes than upvotes for
 # Observation of current step:
 
 ## URL of the page:
-http://localhost:9999/wiki
-Note: This is the subpage '/wiki' of reddit website.
+http://localhost:9999/f/gaming/126128/it-s-the-only-logical-explanation/comment/1
+Note: This is the subpage '/f/gaming/126128/it-s-the-only-logical-explanation/comment/1' of reddit website.
 
 ## AXTree:
 Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
@@ -24,53 +24,150 @@ Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for
 Note: You can only interact with visible elements. If the "visible" tag is not
 present, the element is not visible on the page.
 
-RootWebArea 'Page not found', focused, url='http://localhost:9999/wiki'
-	[18] navigation '', visible
-		[19] link 'Jump to main content', clickable, url='http://localhost:9999/wiki#main'
-		[20] link 'Jump to sidebar', clickable, url='http://localhost:9999/wiki#sidebar'
-	[21] navigation '', visible
-		[23] sectionheader '', visible
-			[24] link 'Home', clickable, visible, url='http://localhost:9999/'
+RootWebArea "It's the only logical explanation", focused
+	[19] navigation '', visible
+		[20] link 'Jump to main content', clickable
+		[21] link 'Jump to sidebar', clickable
+	[22] navigation '', visible
+		[24] HeaderAsNonLandmark '', visible
+			[25] link 'Home', clickable, visible
 				StaticText 'Postmill'
-		[34] list '', visible
-			[35] listitem '', visible
-				[36] link 'Forums', clickable, visible, url='http://localhost:9999/forums'
-			[37] listitem '', visible
-				[38] link 'Wiki', clickable, visible, url='http://localhost:9999/wiki'
-		[48] searchbox 'Search query' value='books', clickable, visible, focused
-		[49] list '', visible
-			[50] listitem '', visible
-				[51] link 'Notifications (0)', clickable, visible, url='http://localhost:9999/notifications'
-					[54] image '', visible
-			[55] listitem '', visible
-				[56] link 'Submit', clickable, visible, url='http://localhost:9999/submit'
-					[59] image '', visible
-			[61] listitem '', visible
-				[62] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
-					[65] image '', visible
-					[66] strong '', visible
-	[107] main '', visible
-		[108] heading 'Page not found', visible
-		[109] paragraph '', visible
-			StaticText 'The requested page was not found.'
-		[110] paragraph '', visible
-			[111] link 'Create this page', clickable, visible, url='http://localhost:9999/wiki/_create/index'
-	[112] complementary '', visible
-		[114] heading 'Navigation', visible
-		[115] list '', visible
-			[116] listitem '', visible
-				[117] link 'All pages', clickable, visible, url='http://localhost:9999/wiki/_all'
-			[118] listitem '', visible
-				[119] link 'Recent changes', clickable, visible, url='http://localhost:9999/wiki/_recent'
-			[120] listitem '', visible
-				[121] link 'Create new page', clickable, visible, url='http://localhost:9999/wiki/_create'
-	[122] contentinfo '', visible
-		[123] paragraph '', visible
+		[35] list '', visible
+			[36] listitem '', visible
+				[37] link 'Forums', clickable, visible
+			[38] listitem '', visible
+				[39] link 'Wiki', clickable, visible
+		[40] Section '', visible
+			[49] searchbox 'Search query', clickable, visible
+		[50] list '', visible
+			[51] listitem '', visible
+				[52] link 'Notifications (0)', clickable, visible
+					[55] image '', visible
+			[56] listitem '', visible
+				[57] link 'Submit', clickable, visible
+					[60] image '', visible
+			[62] listitem '', visible
+				[63] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
+					[66] image '', visible
+					[67] strong '', visible
+	[108] main '', visible
+		[109] navigation '', visible
+			[110] list '', visible
+				[111] listitem '', visible
+					[112] link '/f/gaming', clickable, visible
+						[114] image '', visible
+						[116] strong '', visible
+		[117] article '', visible
+			[120] HeaderAsNonLandmark '', visible
+				[122] heading "It's the only logical explanation", visible
+					[123] link "It's the only logical explanation", clickable, visible
+				[125] paragraph '', visible
+					StaticText 'Submitted by'
+					[127] link 'EeK09', clickable, visible, expanded=False
+						[128] strong '', visible
+					StaticText 't3_125q8o6'
+					[130] time 'March 29, 2023 at 10:43:03 AM EDT', visible
+						StaticText '2 years ago'
+					StaticText 'in'
+					[131] link 'gaming', clickable, visible
+						[132] strong '', visible
+			[133] navigation '', visible
+				[134] list '', visible
+					[135] listitem '', visible
+						[136] link '121 comments', clickable, visible
+							[137] strong '', visible
+						StaticText '(1 new)'
+			[140] Section '', visible
+				[142] button 'Upvote', clickable, visible
+				StaticText '6828'
+				[152] button 'Downvote', clickable, visible
+		[162] paragraph '', visible
+			StaticText 'Viewing a single comment thread.'
+			[163] link 'View all comments', clickable, visible
+		[164] article '', visible
+			[165] checkbox 'Hide −', clickable, visible, checked='true'
+			[168] HeaderAsNonLandmark '', visible
+				[169] heading 'MarvelsGrantMan136 wrote 1 second ago', visible
+					[171] link 'MarvelsGrantMan136', clickable, visible, expanded=False
+						[172] strong '', visible
+					[173] time 'October 15, 2024 at 12:11:36 PM EDT', visible
+						StaticText '1 second ago'
+				[174] list '', visible
+					[175] listitem '', visible
+						[176] LabelText '', clickable, visible
+							StaticText 'Hide −'
+			[181] image '', visible
+			[182] paragraph '', visible
+				StaticText 'Reply to comment by'
+				[183] link 'TheMCDemon0508', clickable, visible, expanded=False
+					[184] strong '', visible
+				[185] link "It's the only logical explanation", clickable, visible
+					[186] strong '', visible
+				StaticText 'by'
+				[187] link 'EeK09', clickable, visible, expanded=False
+					[188] strong '', visible
+			[190] paragraph '', visible
+				StaticText 'lol'
+			[191] navigation '', visible
+				[192] list '', visible
+					[193] listitem '', visible
+						[194] link 'Reply', clickable, visible
+							[195] strong '', visible
+					[196] listitem '', visible
+						[197] link 'Permalink', clickable, visible
+					[198] listitem '', visible
+						[199] link 'Parent', clickable, visible
+					[200] listitem '', visible
+						[201] Section '', visible
+							[203] button 'Delete', clickable, visible
+					[204] listitem '', visible
+						[205] link 'Edit', clickable, visible
+			[357] Section '', visible
+				[359] button 'Retract upvote', clickable, visible
+				StaticText '1'
+				[369] button 'Downvote', clickable, visible
+	[374] complementary '', visible
+		[375] Section '', visible
+			[376] paragraph '', visible
+				[377] strong '', visible
+					StaticText '0 points'
+				StaticText '(+0, −0)'
+			[380] heading 'Short URL:', visible
+			[381] paragraph '', visible
+				StaticText 'http://localhost:9999/126128'
+		[383] Section '', visible
+			[384] heading 'gaming', visible
+				[385] link 'gaming', clickable, visible
+			[386] Section '', visible
+				[389] button 'Subscribe No subscribers', clickable, visible
+					StaticText '0'
+			[396] paragraph '', visible
+				StaticText 't5_2qh03'
+			[397] separator '', visible, orientation='horizontal'
+			[398] list '', visible
+				[399] listitem '', visible
+					StaticText 'Created'
+					[400] time 'September 30, 2022 at 8:26:58 PM EDT', visible
+						StaticText '2 years ago'
+				[401] listitem '', visible
+					[402] link 'Subscribe via RSS', clickable, visible
+						[404] image '', visible
+		[406] Details '', visible
+			[407] DisclosureTriangle 'Hide this forum', clickable, visible, expanded=False
+		[413] Section '', visible
+			[414] heading 'Toolbox', visible
+			[415] list '', visible
+				[416] listitem '', visible
+					[417] link 'Bans', clickable, visible
+				[418] listitem '', visible
+					[419] link 'Moderation log', clickable, visible
+	[420] contentinfo '', visible
+		[421] paragraph '', visible
 			StaticText 'Running'
-			[125] link 'Postmill', clickable, visible, url='https://postmill.xyz/'
+			[423] link 'Postmill', clickable, visible
 
 ## Focused element:
-bid='48'
+bid='17'
 
 
 # History of last 5 interaction with the task:
@@ -82,7 +179,7 @@ None
 </think>
 
 <action>
-click('12')
+click('142')
 </action>
 
 ## step 1
@@ -92,7 +189,7 @@ None
 </think>
 
 <action>
-click('120')
+click('345')
 </action>
 
 ## step 2
@@ -102,7 +199,7 @@ None
 </think>
 
 <action>
-click('39')
+scroll(0, 500)
 </action>
 
 ## step 3
@@ -112,7 +209,7 @@ None
 </think>
 
 <action>
-fill('48', 'books')
+fill('5757', 'lol')
 </action>
 
 ## step 4
@@ -122,7 +219,7 @@ None
 </think>
 
 <action>
-fill('48', 'books\n')
+click('5897')
 </action>
 
 # Action space:
@@ -131,7 +228,7 @@ are python function executing playwright code. The primary way of referring to
 elements in the page is through bid which are specified in your observations.
 
 
-11 different types of actions are available.
+12 different types of actions are available.
 
 noop(wait_ms: float = 1000)
     Description: Do nothing, and optionally wait for the given time (in milliseconds).
@@ -139,6 +236,11 @@ noop(wait_ms: float = 1000)
         noop()
 
         noop(500)
+
+send_msg_to_user(text: str)
+    Description: Sends a message to the user.
+    Examples:
+        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
 
 scroll(delta_x: float, delta_y: float)
     Description: Scroll horizontally and vertically. Amounts in pixels, positive for right or down scrolling, negative for left or up scrolling. Dispatches a wheel event.
@@ -163,7 +265,7 @@ select_option(bid: str, options: str | list[str])
 
         select_option('c48', ['red', 'green', 'blue'])
 
-click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list = [])
+click(bid: str, button: Literal['left', 'middle', 'right'] = 'left', modifiers: list[typing.Literal['Alt', 'Control', 'Meta', 'Shift']] = [])
     Description: Click an element.
     Examples:
         click('a51')
@@ -197,10 +299,14 @@ goto(url: str)
     Examples:
         goto('http://www.example.com')
 
-send_msg_to_user(text: str)
-    Description: Sends a message to the user.
+press(bid: str, key_comb: str)
+    Description: Focus the matching element and press a combination of keys. It accepts the logical key names that are emitted in the keyboardEvent.key property of the keyboard events: Backquote, Minus, Equal, Backslash, Backspace, Tab, Delete, Escape, ArrowDown, End, Enter, Home, Insert, PageDown, PageUp, ArrowRight, ArrowUp, F1 - F12, Digit0 - Digit9, KeyA - KeyZ, etc. You can alternatively specify a single character you'd like to produce such as "a" or "#". Following modification shortcuts are also supported: Shift, Control, Alt, Meta.
     Examples:
-        send_msg_to_user('Based on the results of my search, the city was built in 1751.')
+        press('88', 'Backspace')
+
+        press('a26', 'Control+a')
+
+        press('a61', 'Meta+Shift+t')
 
 Only a single action can be provided at once. Example:
 fill('a12', 'example with "quotes"')

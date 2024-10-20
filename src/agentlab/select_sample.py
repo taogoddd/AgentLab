@@ -160,10 +160,34 @@ The last {len(trajectory)} snapshots of the agent's trajectory are shown in the 
 """
     })
     # 650 tokens of system messages
+#     messages = [
+#     {
+#         "role": "system",
+#         "content": f"""
+# You are an expert in evaluating the performance of a web navigation agent. The agent is designed to help a human user navigate a website to complete a task. Given the user's intent, the agent's action history, the final state of the webpage, and the agent's response to the user, your goal is to decide whether the agent's execution is successful or not. If the current state is a failure but it looks like the agent is on the right track towards success, you should also output as such.
+
+# There are three types of tasks:
+# 1. Information seeking: The user wants to obtain certain information from the webpage, such as the information of a product, reviews, the text in a comment or post, the date of a submission, etc. This may be formulated in the intent as "tell me", "what is", or "list out". The agent's response must contain the information the user wants, or explicitly state that the information is not available. Otherwise, e.g. the agent encounters an exception and respond with the error content, the task is considered to be a failure. It is VERY IMPORTANT that the bot response is the stop action with the correct output. If the bot response is not stop (e.g., it is click, type, or goto), it is considered a failure for information seeking tasks.
+# 2. Site navigation: The user wants to navigate to a specific page (which may also be specified in the intent as "find", "show me", "navigate to"). Carefully examine the agent's action history and the final state of the webpage (shown in the LAST IMAGE) to determine whether the agent successfully completes the task. It is VERY IMPORTANT that the agent actually navigates to the specified page (reflected by the final state of the webpage, in the LAST IMAGE) and NOT just output the name of the item or post. Make sure that the final url is compatible with the task. For example, if you are tasked to navigate to a comment or an item, the final page and url should be that of the specific comment/item and not the overall post or search page. If asked to navigate to a page with a similar image, make sure that an image on the page is semantically SIMILAR to the intent image. If asked to look for a particular post or item, make sure that the image on the page is EXACTLY the intent image. For this type of task to be considered successful, the LAST IMAGE and current URL should reflect the correct content. No need to consider the agent's response.
+# 3. Content modification: The user wants to modify the content of a webpage or configuration. Ensure that the agent actually commits to the modification. For example, if the agent writes a review or a comment but does not click post, the task is considered to be a failure. Carefully examine the agent's action history and the final state of the webpage to determine whether the agent successfully completes the task. No need to consider the agent's response.
+
+# *IMPORTANT*
+# Format your response into two lines as shown below:
+
+# Thoughts: <your thoughts and reasoning process>
+# Status: "success" or "failure"
+# On the right track to success: "yes" or "no"
+# """
+#     },
+#     {
+#         "role": "user",
+#         "content": content
+#     }
+# ]
     messages = [
-    {
-        "role": "system",
-        "content": f"""
+        {
+            "role": "system",
+            "content": f"""
 You are an expert in evaluating the performance of a web navigation agent. The agent is designed to help a human user navigate a website to complete a task. Given the user's intent, the agent's action history, the final state of the webpage, and the agent's response to the user, your goal is to decide whether the agent's execution is successful or not. If the current state is a failure but it looks like the agent is on the right track towards success, you should also output as such.
 
 There are three types of tasks:
@@ -176,14 +200,13 @@ Format your response into two lines as shown below:
 
 Thoughts: <your thoughts and reasoning process>
 Status: "success" or "failure"
-On the right track to success: "yes" or "no"
 """
-    },
-    {
-        "role": "user",
-        "content": content
-    }
-]
+        },
+        {
+            "role": "user",
+            "content": content
+        }
+    ]
     all_responses = []
     for model in models:
         response = full_generate_from_openai_chat_completion_with_key_pool(
@@ -193,7 +216,8 @@ On the right track to success: "yes" or "no"
             top_p=top_p,
             n=n // len(models)
         )
-        all_responses.extend(response.choices)
+        if response is not None:
+            all_responses.extend(response.choices)
 
     if should_log:
         print('=' * 30)
@@ -219,18 +243,18 @@ On the right track to success: "yes" or "no"
         
         all_scores.append(score)
     
-    score = np.mean(all_scores)
+    score = np.mean(all_scores) if len(all_scores) > 0 else 0.0
     if should_log:
         print(f"Final score: {score}")
         print('=' * 30)
     return score
 
-def select_best_sample(result_parent_dir: str, sample_ids: list[int], max_steps: int = 30) -> int:
+def select_best_sample(result_parent_dir: str, sample_ids: list[int], max_steps: int = 30, sampling_times: int = 20) -> int:
     scores = []
     for sample_id in sample_ids:
         task_traj_dir = os.path.join(result_parent_dir, str(sample_id))
         trajectory = get_trajectory_from_annotation(task_traj_dir)
         trajectory = proc_trajectory(trajectory)
-        scores.append(evaluate_success(trajectory))
+        scores.append(evaluate_success(trajectory=trajectory, n=sampling_times, models=["gpt-4o" for _ in range(5)]))
     best_sample_id = sample_ids[scores.index(max(scores))]
     return best_sample_id

@@ -62,26 +62,21 @@ def parse_args():
                         choices=["shopping", "shopping_admin", "gitlab", "reddit", "map"])
     parser.add_argument("--start_id", type=int, default=0, help="Starting task id")
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
-    parser.add_argument("--sample_ids", type=int, nargs='+', default=0, help="List of space-separated numbers")
-    parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
     parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
-    parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_{args.root_result_dir}/agentlab_baseline", help="Directory to save the {args.root_result_dir}")
+    parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_results/agentlab_baseline", help="Directory to save the results")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--max_exploration_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--result_dir_id", type=str, default="", help="ID of the result directory")
-    parser.add_argument("--learn_dynamics_from_failure", type=str2bool, default=False, help="Whether to learn dynamics from failure")
     parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
-    parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
-    parser.add_argument("--goal", type=str, default="", help="Goal of the skills to extract; will use default ones if not specified")
-    parser.add_argument("--root_result_dir", type=str, default="{args.root_result_dir}", help="Root directory to save the {args.root_result_dir}")
+    parser.add_argument("--root_result_dir", type=str, default="results", help="Root directory to save the results")
     return parser.parse_args()
 
 def main():
     args = parse_args()
 
     if args.result_dir_id == "":
-        result_dir_id = f"annotate_"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+        result_dir_id = f"search_{args.website}_"+time.strftime("%Y%m%d%H%M%S", time.localtime())
     else:
         result_dir_id = args.result_dir_id
 
@@ -94,39 +89,32 @@ def main():
     # filter the config files based on the website
     config_flags = [config["sites"][0] == args.website for config in config_list]
     task_ids = [config["task_id"] for config, flag in zip(config_list, config_flags) if flag]
-
-    # init the skill file
-    if not os.path.exists(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json"):
-        with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
-            json.dump([], f)
-
+    
+    # run random exploration for the start task
     start_task_id = get_start_task_id(args.website)
+    process = Popen([
+        "python", "src/agentlab/search_explore/explore_run.py",
+        "--task", f"webarena.{start_task_id}",
+        "--result_dir", f"{args.root_result_dir}/{result_dir_id}/webarena.{start_task_id}",
+        "--model_name", "azureopenai/"+args.model,
+        "--max_steps", str(args.max_exploration_steps),
+        "--use_screenshot", "1",
+    ])
+    process.wait()
     
-    # # run random exploration for the start task
+    # distill the skills from the random exploration
     # for i in range(args.num_samples):
-    #     process = Popen([
-    #         "python", "src/agentlab/explore.py",
-    #         "--task", f"webarena.{start_task_id}",
-    #         "--result_dir", f"{args.root_result_dir}/{result_dir_id}/webarena.{start_task_id}",
-    #         "--model_name", "azureopenai/"+args.model,
-    #         "--id", str(i),
-    #         "--max_steps", str(args.max_exploration_steps),
-    #         "--use_screenshot", "1"
-    #     ])
-    #     process.wait()
-    #     pass
+    #     task_dir = f"results/{result_dir_id}/webarena.{start_task_id}/{i}"
+    #     navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, no_goal=True)
+    #     print("*"*50, f"Extracted dynamics from task", "*"*50)
+    #     print(navi_skills)
+    #     save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
+    #     general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, no_goal=True)
+    #     print("*"*50, f"Extracted skills from task", "*"*50)
+    #     print(general_skills)
+    #     save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
     
-    # distill the skills from the annotations
-    for i in args.sample_ids:
-        task_dir = f"{args.root_result_dir}/{result_dir_id}/webarena.{start_task_id}/{i}"
-        navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal, max_steps=args.max_steps)
-        print("*"*50, f"Extracted dynamics from task", "*"*50)
-        print(navi_skills)
-        save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
-        general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal, max_steps=args.max_steps)
-        print("*"*50, f"Extracted skills from task", "*"*50)
-        print(general_skills)
-        save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
+    print(f"Result directory: {result_dir_id}")
 
 if __name__ == "__main__":
     main()

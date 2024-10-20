@@ -312,16 +312,20 @@ class StepInfo:
     def from_step(self, env: gym.Env, action: str):
         t = self.profiling
         t.env_start = time.time()
-        self.obs, self.reward, self.terminated, self.truncated, env_info = env.step(action)
+        try:
+            self.obs, self.reward, self.terminated, self.truncated, env_info = env.step(action)
+        except Exception as e:
+            print(f"Error {e} in step {self.step}")
+            env_info = {}
         t.env_stop = time.time()
 
         self.task_info = env_info.get("task_info", None)
 
         self.raw_reward = env_info.get("RAW_REWARD_GLOBAL", None)
 
-        t.action_exec_start = env_info["action_exec_start"]  # start
-        t.action_exect_after_timeout = env_info["action_exec_stop"]
-        t.action_exec_stop = env_info["action_exec_stop"] - env_info["action_exec_timeout"]
+        t.action_exec_start = env_info.get("action_exec_start", 0) # start
+        t.action_exect_after_timeout = env_info.get("action_exec_after_timeout", 0) # end
+        t.action_exec_stop = env_info.get("action_exec_stop", 0) - env_info.get("action_exec_timeout", 0)
 
     def from_action(self, agent: Agent):
         self.profiling.agent_start = time.time()

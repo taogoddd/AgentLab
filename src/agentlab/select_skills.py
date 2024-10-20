@@ -149,7 +149,7 @@ id: {{the id number (the number at the beginning) of skill 2}}; name: skill 2 na
 # Examples
 ## Example 1
 
-Task goal: Upvote the hottest post in r/books
+Task goal: Upvote the latest post in r/books
 Current website: {get_website_description("reddit")}
 Skills to choose from:
 Skill 1: Navigate to forums
@@ -172,15 +172,16 @@ Skill 3: Sort posts by {{sort criterion}}
 
 Output:
 <think>
-The goal is to upvote the hottest post in r/books. The user needs to navigate to the r/books page first or go to forums to find the r/books page. Then the user needs to find the hottest post in the r/books page. So the useful skills from the shortcuts are Navigate to forums, Sort posts by hotness
+The goal is to upvote the latest post in r/books. The user needs to navigate to the r/books page first or go to forums to find the r/books page. Then the user needs to find the latest post in the r/books page. So the useful skills from the shortcuts are Navigate to forums, Sort posts by {{sort criterion}}
 </think>
 <selected-skills>
 id: 1; name: Navigate to forums
-id: 3; name: Sort posts by hotness
+id: 3; name: Sort posts by {{sort criterion}}
 </selected-skills>
 
 Notes:
 1. Some skills might not be consistent with the current task but it is still useful to refer to, e.g. write a post to express happiness is useful in a task to write a post to express sadness.
+2. The task can be complex and if a skill can help in one of the steps needed to complete the task, it is still useful to select it. e.g. the task needs to find the latest post in r/books, the skill "sort posts by {{sort criterion}}" is useful even though the current task is not to sort posts.
 """
         human_prompt = f"""\
 Task goal: {intent}

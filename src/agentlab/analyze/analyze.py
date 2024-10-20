@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+# from agentlab.select_sample import select_best_sample
 
 def check_num_steps_eval_accuracy(path: str, upper_bound: int):
     subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
@@ -627,6 +628,101 @@ def calculate_token_cost(width, height):
 
     return total_cost
 
+# def select_sample(root_record_dir: str, task_ids: list, max_samples: int = 3):
+#     for task_id in task_ids:
+#         best_id = select_best_sample(result_parent_dir=f"{root_record_dir}/webarena.{task_id}", sample_ids=[1, 2, 3], sampling_times=10)
+#         correct_ids = []
+#         for i in range(max_samples):
+#             if (Path(root_record_dir) / str(i) / "summary_info.json").exists():
+#                     with open(root_record_dir / str(i) / "summary_info.json", "r") as f:
+#                         summary_info = json.load(f)
+#                     score = summary_info["cum_reward"]
+#                     if score == 1:
+#                         correct_ids.append(i)
+        
+#         print("*"*50, f"Task {task_id}: CORRECTNESS: {best_id in correct_ids} Best sample: {best_id}, Correct samples: {correct_ids}", "*"*50)
+EXCLUDED_URLS = {
+    "shopping_admin": [],
+    "shopping": [],
+    "reddit": [],
+    "gitlab": [],
+    "map": [],
+    "classifieds": [],
+}
+website_max_depth = {
+    "shopping_admin": 4,
+    "shopping": 3,
+    "reddit": 3,
+    "gitlab": 3,
+    "map": 3,
+    "classifieds": 4,
+}
+MAX_LENGTH = 60
+def eval_URL(url: str, website: str) -> bool:
+    if url is None:
+        return False
+    if url in EXCLUDED_URLS[website]:
+        return False
+    if "dashboard" in url:
+        return False
+    # check if the url has too many levels
+    # remove the first part
+    url = url.split("://")[-1]
+    # remove ending /
+    url = url.rstrip("/")
+    if len(url.split("/")) > website_max_depth[website]:
+        return False
+    # filter by length
+    if len(url) > MAX_LENGTH:
+        return False
+    return True
+
+def get_unique_urls(dir_path: str, website: str):
+    import re
+    import gzip
+    import pickle
+    import os
+    from tqdm import tqdm
+    step_files = [f for f in os.listdir(dir_path) if re.match(r'step_\d+.pkl.gz', f)]
+    num_steps = len(step_files)
+    urls = []
+
+    # read step info one by one
+    for i in tqdm(range(num_steps)):
+        file_path = os.path.join(dir_path, f"step_{i}.pkl.gz")
+        # check if the file exists
+        if not os.path.exists(file_path):
+            continue
+        with gzip.open(file_path, 'rb') as f:
+            step_info = pickle.load(f)
+            # step_info has one more than num of actions, for the last one, obs only, action is None and agent_info is an empty dict
+            
+            obs = step_info.obs
+            action = step_info.action # e.g. click('339')
+            think = step_info.agent_info.get("think", None)
+            reward = step_info.reward
+            url = obs.get("url", None) if obs is not None else None
+            if url not in urls:
+                urls.append(url)
+
+            # screenshot_array = processed_obs["screenshot"] if processed_obs is not None else None
+            # som_screenshot_array = processed_obs["screenshot_som"] if processed_obs is not None else None
+
+            # axtree_str = processed_obs["axtree_txt"]
+    print(f"Number of unique urls: {len(urls)}")
+    print(f"Unique urls: {urls}")
+
+    # filter out the urls
+    filtered_urls = [url for url in urls if eval_URL(url, website)]
+    print(f"Number of filtered urls: {len(filtered_urls)}")
+    print(f"Filtered urls: {filtered_urls}")
+    return filtered_urls
+        
+
+# /home2/ytliu/webarena/results/cer_results/search_shopping_admin_20241011194152/webarena.0/2024-10-11_19-41-54_SearchAgent_on_webarena.0_706_2d9abd
+
+# select_sample(root_record_dir="/home/ytliu/github/AgentLab/results/sampling_20241009223612", task_ids=[34])
+# get_unique_urls(dir_path="/home2/ytliu/webarena/results/cer_results/search_shopping_admin_20241012195207/webarena.0/2024-10-12_19-52-10_SearchAgent_on_webarena.0_789_02fed0", website="shopping_admin")
 # analyze_steps("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints20240921061824", 20)
 # get_avg_score("/home/ytliu/agentlab_results/agentlab_baseline")
 # print(len(get_sub_domain_ids("shopping", include_multi_sites=True)))
@@ -637,21 +733,36 @@ def calculate_token_cost(width, height):
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240923233407")
 # highlight_print("Map w/ vision")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
-# highlight_print("Reddit w/ vision")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171257")
+highlight_print("Reddit w/ vision")
+new_get_avg_score("/home2/ytliu/webarena/results/cer_results/offline_online20241020161720")
 # highlight_print("Shopping w/ vision")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171731")
 # highlight_print("Shopping_admin w/ vision")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
 # highlight_print("Reddit ablation")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
-highlight_print("Reddit samping 3 times w/ vision")
+# highlight_print("Reddit samping 3 times w/ vision")
 # new_get_avg_score("/home/ubuntu/github/AgentLab/results/rd_explore_20240928071949")
-new_get_avg_score("/home/ubuntu/github/AgentLab/results/sampling_baseline_20240930223713")
+# new_get_avg_score("/home/ubuntu/github/AgentLab/results/sampling_baseline_20240930223713")
 # highlight_print("Shopping admin sampling 3 times w/ vision")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930024415")
+
+
 # highlight_print("Gitlab sampling 3 times w/ vision")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20240930023625")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006160058")
+# get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006160058")
+# highlight_print("Shopping sampling 3 times w/ vision")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006175022")
+# get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241006175022")
+# highlight_print("Shopping admin sampling 3 times w/ vision")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241008161116")
+# get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241008161116")
+# highlight_print("Map sampling 3 times w/ vision")
+# new_get_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241009223612")
+# get_max_avg_score("/home/ytliu/github/AgentLab/results/sampling_20241009223612")
+
+
+
 # calculate_tokens("/home/ubuntu/github/AgentLab/results/offline_online_cer_rd_exploration_20240926223734")
 # get_sub_domain_avg_score("shopping_admin", "/home/ytliu/agentlab_results/agentlab_baseline")
 

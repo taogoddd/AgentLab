@@ -62,10 +62,10 @@ def parse_args():
                         choices=["shopping", "shopping_admin", "gitlab", "reddit", "map"])
     parser.add_argument("--start_id", type=int, default=0, help="Starting task id")
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
-    parser.add_argument("--num_samples", type=int, default=3, help="Number of times to run the same task")
+    parser.add_argument("--sample_ids", type=int, nargs='+', default=0, help="List of space-separated numbers")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
     parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
-    parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_results/agentlab_baseline", help="Directory to save the results")
+    parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_{args.root_result_dir}/agentlab_baseline", help="Directory to save the {args.root_result_dir}")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--max_exploration_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--result_dir_id", type=str, default="", help="ID of the result directory")
@@ -73,6 +73,7 @@ def parse_args():
     parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
+    parser.add_argument("--root_result_dir", type=str, default="results", help="Root directory to save the results")
     return parser.parse_args()
 
 def main():
@@ -100,11 +101,11 @@ def main():
     
     # run random exploration for the start task
     start_task_id = get_start_task_id(args.website)
-    for i in range(args.num_samples):
+    for i in args.sample_ids:
         process = Popen([
             "python", "src/agentlab/annotate/run.py",
             "--task", f"webarena.{start_task_id}",
-            "--result_dir", f"results/{result_dir_id}/webarena.{start_task_id}",
+            "--result_dir", f"{args.root_result_dir}/{result_dir_id}/webarena.{start_task_id}",
             "--model_name", "azureopenai/"+args.model,
             "--id", str(i),
             "--max_steps", str(args.max_exploration_steps),
@@ -114,16 +115,16 @@ def main():
         pass
     
     # distill the skills from the random exploration
-    for i in range(args.num_samples):
-        task_dir = f"results/{result_dir_id}/webarena.{start_task_id}/{i}"
-        navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, no_goal=True)
-        print("*"*50, f"Extracted dynamics from task", "*"*50)
-        print(navi_skills)
-        save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
-        general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, no_goal=True)
-        print("*"*50, f"Extracted skills from task", "*"*50)
-        print(general_skills)
-        save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
+    # for i in range(args.num_samples):
+    #     task_dir = f"{args.root_result_dir}/{result_dir_id}/webarena.{start_task_id}/{i}"
+    #     navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal)
+    #     print("*"*50, f"Extracted dynamics from task", "*"*50)
+    #     print(navi_skills)
+    #     save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
+    #     general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal)
+    #     print("*"*50, f"Extracted skills from task", "*"*50)
+    #     print(general_skills)
+    #     save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
 
     # # get task id between start_id and end_id
     # new_task_ids = [tid for tid in task_ids if args.start_id <= tid < args.end_id]
@@ -133,7 +134,7 @@ def main():
     #         process = Popen([
     #             "python", "src/agentlab/run.py", 
     #             "--task", f"webarena.{task_id}",
-    #             "--result_dir", f"results/{result_dir_id}/webarena.{task_id}",
+    #             "--result_dir", f"{args.root_result_dir}/{result_dir_id}/webarena.{task_id}",
     #             "--model_name", "azureopenai/"+args.model,
     #             "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
     #             "--id", "0",
@@ -143,7 +144,7 @@ def main():
     #         process.wait()
 
     #         # 0 here for later possible samplings
-    #         task_dir = f"results/{result_dir_id}/webarena.{task_id}/0"
+    #         task_dir = f"{args.root_result_dir}/{result_dir_id}/webarena.{task_id}/0"
 
     #         # run autoeval if args.eval_metric is auto
     #         if args.eval_metric == "auto":
