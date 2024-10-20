@@ -12,6 +12,7 @@ import subprocess
 from visualwebarena.evaluation_harness import image_utils
 from agentlab.new_run_v import run as run_v_run
 import requests
+from agentlab.select_sample import select_best_sample
 
 eval_captioning_model = "Salesforce/blip2-flan-t5-xl"
 eval_captioning_model_device = "cuda" if torch.cuda.is_available() else "cpu"
