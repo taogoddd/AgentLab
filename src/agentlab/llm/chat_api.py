@@ -92,7 +92,9 @@ class OpenAIChatModelArgs(ChatModelArgs):
     vision_support: bool = False
 
     def make_chat_model(self, api_key: str | None = None, endpoint: str | None = None, version: str | None = None):
-        model_name = self.model_name.split("/")[-1]
+        # model_name = self.model_name.split("/")[-1]
+        # only split from the first /
+        model_name = self.model_name.split("/", 1)[-1]
         params={
             "model_name": model_name,
             "temperature": self.temperature,

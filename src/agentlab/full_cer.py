@@ -48,7 +48,7 @@ def parse_args():
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
     parser.add_argument("--num_samples", type=int, default=3, help="Number of times to run the same task")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
-    parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
+    parser.add_argument("--model", type=str, default="NousResearch/Meta-Llama-3.1-8B-Instruct", help="Model name to use for inference")
     parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_{args.root_result_dir}/agentlab_baseline", help="Directory to save the {args.root_result_dir}")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--result_dir_id", type=str, default=None, help="ID of the result directory")
@@ -114,7 +114,8 @@ def main():
             offline_skills = json.load(f)
         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "r") as f:
             skills = json.load(f)
-        skills.extend(offline_skills)
+        if skills == []:
+            skills.extend(offline_skills)
         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
             json.dump(skills, f, indent=4)
 

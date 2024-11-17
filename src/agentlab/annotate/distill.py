@@ -64,7 +64,7 @@ def parse_args():
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
     parser.add_argument("--sample_ids", type=int, nargs='+', default=0, help="It is the id of the annotation task here")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
-    parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
+    parser.add_argument("--model", type=str, default="NousResearch/Meta-Llama-3.1-8B-Instruct", help="Model name to use for inference")
     parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_{args.root_result_dir}/agentlab_baseline", help="Directory to save the {args.root_result_dir}")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--max_exploration_steps", type=int, default=30, help="Maximum number of steps to take for each task.")

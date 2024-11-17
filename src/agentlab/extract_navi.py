@@ -2,6 +2,7 @@ from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectorySte
 from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
 import re
+from browsergym.experiments.utils import count_tokens
 import json
 
 EXCLUDED_URLS = {
@@ -46,9 +47,23 @@ def eval_URL(url: str, website: str) -> bool:
     #     return False
     return True
 
+def truncate_trajectory_by_tokens(trajectory: list, max_tokens: int = 128000-10000, model="llama") -> list:
+    truncated_trajectory = []
+    token_count = 0
+    # from back to front
+    for i, step in enumerate(trajectory[::-1]):
+        processed_obs = step["processed_obs"]
+        axtree_str = processed_obs["axtree_txt"]
+        token_count += count_tokens(axtree_str, model)
+        token_count += count_tokens(step["action"], model)
+        if token_count > max_tokens:
+            break
+        truncated_trajectory.append(step)
+    return truncated_trajectory[::-1]
+
 def parse_page_summary(page_summary: str):
     # Modified pattern to handle optional new lines and flexible spacing
-    pattern = r"Name:\s*(.*?)\s*Description:\s*(.*?)\s*Usages:\s*(.*?)\s*$"
+    pattern = r"Name:\s*(.*?)\s*(?:\n|\r)?\s*Description:\s*(.*?)\s*(?:\n|\r)?\s*Usages:\s*(.*?)\s*$"
 
     match = re.search(pattern, page_summary, re.DOTALL)  # re.DOTALL allows '.' to match newlines as well
     if match:
@@ -157,25 +172,26 @@ Human user trajectory:
             "text": prefix
         }
     ]
+    trajectory = truncate_trajectory_by_tokens(trajectory)
     for i, step in enumerate(trajectory):
         obs = step["obs"]
         url = obs["url"]
         processed_obs = step["processed_obs"]
         action = step["action"]
         reward = step["reward"]
-        screenshot_base64 = img_array_to_base64(processed_obs["screenshot"])
-        som_screenshot_base64 = img_array_to_base64(processed_obs["screenshot_som"])
+        # screenshot_base64 = img_array_to_base64(processed_obs["screenshot"])
+        # som_screenshot_base64 = img_array_to_base64(processed_obs["screenshot_som"])
         axtree_str = processed_obs["axtree_txt"]
         human_prompt.append({
             "type": "text",
-            "text": f"Step {i}:\nObservation: "
+            "text": f"Step {i}:\nObservation: {axtree_str}"
         })
-        human_prompt.append({
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{som_screenshot_base64}"
-            }
-        })
+        # human_prompt.append({
+        #     "type": "image_url",
+        #     "image_url": {
+        #         "url": f"data:image/jpeg;base64,{som_screenshot_base64}"
+        #     }
+        # })
         human_prompt.append({
             "type": "text",
             "text": f"URL: {url}"

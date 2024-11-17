@@ -2,6 +2,7 @@ from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectorySte
 import os
 from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
 from agentlab.utils.utils import reset_skills
+from browsergym.experiments.utils import count_tokens
 import json
 # def extract_skill(traj_path: str, skill_root_path: str, website: str):
 #     trajectory = get_trajectory_from_annotation(traj_path)
@@ -33,6 +34,20 @@ from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectorySte
 from agentlab.utils.utils import parse_html_tag_output, get_website_description
 
 # TODO: add website description str
+
+def truncate_trajectory_by_tokens(trajectory: list, max_tokens: int = 128000-10000, model="llama") -> list:
+    truncated_trajectory = []
+    token_count = 0
+    # from back to front
+    for i, step in enumerate(trajectory[::-1]):
+        processed_obs = step["processed_obs"]
+        axtree_str = processed_obs["axtree_txt"]
+        token_count += count_tokens(axtree_str, model)
+        token_count += count_tokens(step["action"], model)
+        if token_count > max_tokens:
+            break
+        truncated_trajectory.append(step)
+    return truncated_trajectory[::-1]
 
 # this desc str is for extracting skills from a trajectory only
 def get_skills_desc(skills_path: str):
@@ -212,25 +227,23 @@ Human user trajectory:
             "text": prefix
         }
     ]
+    trajectory = truncate_trajectory_by_tokens(trajectory)
     for i, step in enumerate(trajectory):
         obs = step["obs"]
         url = obs["url"]
         processed_obs = step["processed_obs"]
         action = step["action"]
-        reward = step["reward"]
-        screenshot_base64 = img_array_to_base64(processed_obs["screenshot"])
-        som_screenshot_base64 = img_array_to_base64(processed_obs["screenshot_som"])
         axtree_str = processed_obs["axtree_txt"]
         human_prompt.append({
             "type": "text",
-            "text": f"Step {i}:\nObservation: "
+            "text": f"Step {i}:\nObservation: {axtree_str}"
         })
-        human_prompt.append({
-            "type": "image_url",
-            "image_url": {
-                "url": f"data:image/jpeg;base64,{som_screenshot_base64}"
-            }
-        })
+        # human_prompt.append({
+        #     "type": "image_url",
+        #     "image_url": {
+        #         "url": f"data:image/jpeg;base64,{som_screenshot_base64}"
+        #     }
+        # })
         human_prompt.append({
             "type": "text",
             "text": f"URL: {url}"

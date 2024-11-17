@@ -202,7 +202,7 @@ def main():
     # get the skills
     skills = json.load(open(args.skill_path))
     if len(skills) > args.max_skills:
-        retrieved_skills = select_skills(intent, args.website, args.skill_path, args.model_name.split("/")[-1], (args.max_skills//2, args.max_skills-args.max_skills//2))
+        retrieved_skills = select_skills(intent, args.website, args.skill_path, args.model_name.split("/", 1)[-1], (args.max_skills//2, args.max_skills-args.max_skills//2))
     else:
         retrieved_skills = skills
     print("*"*50, "Retrieved skills", "*"*50)
@@ -225,7 +225,7 @@ def main():
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
-            vision_support=True,
+            vision_support=False,
         )
     elif args.model_name.startswith("azure"):
         chat_model_args = AzureOpenAIChatModelArgs(

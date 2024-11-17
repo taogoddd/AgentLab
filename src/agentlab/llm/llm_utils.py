@@ -84,17 +84,17 @@ def retry(
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
-            vision_support=True,
+            vision_support=False,
         )
         model_type = "azureopenai"
     elif os.getenv("OPENAI_API_CONFIGS"):
         chat_model_args = OpenAIChatModelArgs(
-            model_name="openai/gpt-4o-2024-05-13",
+            model_name="openai/NousResearch/Meta-Llama-3.1-8B-Instruct",
             max_total_tokens=128_000,
             max_input_tokens=126_000,
             max_new_tokens=2_000,
             temperature=0.1,
-            vision_support=True,
+            vision_support=False,
         )
     def reinit_chat_with_configs(current_config):
         # model_name = old_chat.get_model_name()
@@ -398,6 +398,8 @@ def get_tokenizer(model_name="openai/gpt-4"):
     if model_name == "cheat_miniwob_click_test":
         return tiktoken.encoding_for_model("gpt-4")
     if model_name.startswith("openai") or model_name.startswith("azureopenai"):
+        if "Llama" in model_name:
+            return AutoTokenizer.from_pretrained("NousResearch/Meta-Llama-3.1-8B-Instruct")
         return tiktoken.encoding_for_model(model_name.split("/")[-1])
     if model_name.startswith("reka"):
         logging.warning(

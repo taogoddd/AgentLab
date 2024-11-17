@@ -1,9 +1,15 @@
 import tiktoken
-
+from transformers import AutoTokenizer
 
 def count_tokens(text, model="gpt-4"):
     """Count the number of tokens in a text."""
-
+    if text == None:
+        return 0
+    if "Llama" in model:
+        tokenizer = AutoTokenizer.from_pretrained("NousResearch/Meta-Llama-3.1-8B-Instruct")
+        tokens = tokenizer.tokenize(text)
+        num_tokens = len(tokens)
+        return num_tokens
     return len(tiktoken.encoding_for_model(model).encode(text))
 
 
