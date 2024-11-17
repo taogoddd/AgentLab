@@ -125,7 +125,7 @@ def retry(
     tries = 0
     rate_limit_total_delay = 0
     api_configs = get_api_configs_from_env()
-    config_index = os.environ.get("API_CONFIG_START_INDEX", 0)
+    config_index = os.environ.get("API_CONFIG_START_INDEX", '0')
     if config_index.isdigit():
         config_index = int(config_index)
     else:
@@ -144,9 +144,8 @@ def retry(
             #     os.environ["OPENAI_API_KEY"] = current_config["api_key"]
             
             # modify the chat object to use the new configuration
-            if len(api_configs) > 1:
-                current_config = api_configs[config_index]
-                chat = reinit_chat_with_configs(current_config)
+            current_config = api_configs[config_index]
+            chat = reinit_chat_with_configs(current_config)
             # chat.openai_api_key = current_config["api_key"]
             # chat.azure_endpoint = current_config["endpoint"]
             # chat.openai_api_version = current_config["version"]
