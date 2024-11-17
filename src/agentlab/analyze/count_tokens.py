@@ -1,83 +1,74 @@
+import json
+import tiktoken
 from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url
 import os
-from webarena.llms.providers.openai_utils import generate_from_openai_chat_completion_with_key_pool
-from agentlab.utils.utils import reset_skills
-import json
-# def extract_skill(traj_path: str, skill_root_path: str, website: str):
-#     trajectory = get_trajectory_from_annotation(traj_path)
+from pathlib import Path
+from tqdm import tqdm
 
-#     skill_type = "sliced_skills"
-#     if not os.path.exists(f"{skill_root_path}/{website}/{skill_type}"):
-#         os.makedirs(f"{skill_root_path}/{website}/{skill_type}")
-#     slicer = Slicer()
-#     sliced_skills = slicer.slice(trajectory)
-#     slicer.save_as_readable_json(sliced_skills, f"{skill_root_path}/{website}/{skill_type}/skills.json")
-#     slicer.save(sliced_skills, f"{skill_root_path}/{website}/{skill_type}/skills.pkl")
+def count_multimodal_messages_tokens(messages, model="gpt-4o") -> int:
+    token_count = 0
+    for message in messages:
+        if "content" in message:
+            message = message["content"]
 
-#     skill_type = "instructed_skills"
-#     if not os.path.exists(f"{skill_root_path}/{website}/{skill_type}"):
-#         os.makedirs(f"{skill_root_path}/{website}/{skill_type}")
-#     instructor = Instructor()
-#     instructed_skills = instructor.instruct(sliced_skills)
-#     instructor.save_as_readable_json(instructed_skills, f"{skill_root_path}/{website}/{skill_type}/skills.json")
-#     instructor.save(instructed_skills, f"{skill_root_path}/{website}/{skill_type}/skills.pkl")
-
-# extract_skill(
-#     traj_path="/home/ytliu/agentlab_results/2024-09-11_02-01-51_baseline/2024-09-11_02-01-52_GenericAgent_on_webarena.13_2_ab01c0",
-#     skill_root_path="/home/ytliu/github/AgentLab/src/agentlab/skills",
-#     website="shopping_admin"
-# )
-
-
-from agentlab.autogen_policy.utils.utils import Obs, ProcessedObs, TrajectoryStep, img_array_to_base64, simplify_readable_trajectory, get_trajectory_from_annotation, get_website_name_from_url
-from agentlab.utils.utils import parse_html_tag_output, get_website_description
-
-# TODO: add website description str
-
-# this desc str is for extracting skills from a trajectory only
-def get_skills_desc(skills_path: str):
-    # load skills
-    with open(skills_path, "r") as f:
-        skills = json.load(f)
-    if not skills:
-        return ["No skills learned yet."]
-    skills_str = ""
-    for i, skill in enumerate(skills):
-        if skill["type"] == "navi":
-            skills_str += f"Skill {i+1}: navigate to {skill['name']}\n"
-            skills_str += f"Description: {skill['description']}\n"
-            skills_str += f"Usages: {skill['usages']}\n"
-            skills_str += f"1. ```goto('{skill['URL']}')```\n"
+        if isinstance(message, str):
+            token_count += count_tokens(message, model)
+        # handles messages with image content
+        elif isinstance(message, (list, tuple)):
+            for part in message:
+                if not isinstance(part, dict):
+                    raise ValueError(
+                        f"The message is expected to be a list of dicts, but got list of {type(message)}"
+                    )
+                if part["type"] == "text":
+                    token_count += count_tokens(part["text"], model)
+                elif part["type"] == "image_url":
+                    if part["image_url"].get("detail", None) == "high":
+                        token_count += 1500
+                    else:
+                        token_count += 85
         else:
-            skills_str += f"Skill {i+1}: {skill['skill']}\n"
-            skills_str += f"{skill['steps']}\n"
+            raise ValueError(
+                f"The message is expected to be a string or a list of dicts, but got {type(message)}"
+            )
+    return token_count
+
+def count_tokens(text, model="gpt-4o"):
+    """Count the number of tokens in a text."""
+    if text == None:
+        text = ""
+
+    return len(tiktoken.encoding_for_model(model).encode(text))
+
+def count_retrieve_tokens(skill_file_path: str):
+    with open(skill_file_path, "r") as f:
+        skill_data = json.load(f)
+    navi_skills = [skill for skill in skill_data if skill["type"] == "navi"]
+    general_skills = [skill for skill in skill_data if skill["type"] == "general"]
+
+    navi_token_count = 0
+    general_token_count = 0
+
+    # count tokens for skill1, skill1+skill2, skill1+skill2+skill3, ...
+    for i, skill in enumerate(navi_skills):
+        # count tokens for this skill and skills before this skill
+        for j in range(i+1):
+            navi_token_count += count_tokens(navi_skills[j]["page-summary"])
+            navi_token_count += count_tokens(navi_skills[j]["description"])
+            navi_token_count += count_tokens(navi_skills[j]["usages"])
     
-    return skills_str
-
-    # # format navi skills string
-    # navi_skills_str = f""
-    # for i, skill in enumerate(navi_skills):
-    #     navi_skills_str += f"{i+1}. {skill['name']}\n"
-    #     navi_skills_str += f"Description: {skill['description']}\n"
-    #     navi_skills_str += f"Usages: {skill['usages']}\n"
-    #     navi_skills_str += f"{skill['steps']}\n"
+    for i, skill in enumerate(general_skills):
+        # count tokens for this skill and skills before this skill
+        for j in range(i+1):
+            general_token_count += count_tokens(general_skills[j]["skill"])
+            general_token_count += count_tokens(general_skills[j]["steps"])
     
-    # # format general skills string
-    # general_skills_str = f"General skills:\n"
+    return navi_token_count, general_token_count
 
-    # for i, skill in enumerate(general_skills):
-    #     general_skills_str += f"Skill {i+1}: {skill['skill']}\n"
-    #     navi_skills_str += f"{skill['steps']}\n"
-
-def construct_prompt_messages(
-        website: str,
-        skills_file_path: str,
-        trajectory: list[TrajectoryStep],
-        goal: str = "",
-    ):
-    existing_skills_str = get_skills_desc(skills_path=skills_file_path)
+def construct_distill_messages(trajectory):
+    existing_skills_str = ""
     # goal = trajectory[0]["obs"]["goal"]
-    goal_str = f"Overall goal of the trajectory: {goal}" if goal else ""
+    goal_str = ""
     system_prompt = f"""\
 You will be given the state-action trajectory of a user interacting with a webpage and the overall goal of the trajectory.
 You need to summarize skills from the trajectory.
@@ -110,7 +101,7 @@ The steps of the skill2 here.
 # Examples
 ## Example 1
 Overall goal: I want to get the cheapest product in the Cabinets, Racks & Shelves category
-Current website: {get_website_description("shopping")}
+Current website:
 Existing skills:
 Skill 1: Sort products by {{sort criterion}}
 1. To sort the products by {{sort criterion}}, I need to click on the "Sort by" dropdown menu.
@@ -201,7 +192,7 @@ IMPORTANT NOTES you should absolutely follow:
 """
     prefix = f"""\
 {goal_str}
-Current website: {get_website_description(website)}
+Current website: 
 Exisiting skills: 
 {existing_skills_str}
 Human user trajectory:
@@ -218,8 +209,8 @@ Human user trajectory:
         processed_obs = step["processed_obs"]
         action = step["action"]
         reward = step["reward"]
-        screenshot_base64 = img_array_to_base64(processed_obs["screenshot"])
-        som_screenshot_base64 = img_array_to_base64(processed_obs["screenshot_som"])
+        # screenshot_base64 = img_array_to_base64(processed_obs["screenshot"])
+        # som_screenshot_base64 = img_array_to_base64(processed_obs["screenshot_som"])
         axtree_str = processed_obs["axtree_txt"]
         human_prompt.append({
             "type": "text",
@@ -228,7 +219,7 @@ Human user trajectory:
         human_prompt.append({
             "type": "image_url",
             "image_url": {
-                "url": f"data:image/jpeg;base64,{som_screenshot_base64}"
+                "url": f""
             }
         })
         human_prompt.append({
@@ -251,38 +242,63 @@ Human user trajectory:
     ]
     return messages
 
-def extract_skills(
-        website: str,
-        traj_path: str,
-        model: str = "gpt-4o",
-        skill_root_path: str = "src/agentlab/skills",
-        id: str = "",
-        goal: str = "",
-        max_steps: int = 30,
-        skills_file_path: str = "" # if not provided, will be saved in the default path
-    ):
-    try:
-        trajectory = get_trajectory_from_annotation(traj_path)[:max_steps]
-        skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json" if skills_file_path == "" else skills_file_path
-        messages = construct_prompt_messages(website, skills_file_path, trajectory, goal)
-        response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
-        print("*"*50, "Response during extracting general skills", "*"*50)
-        print(response)
-        parsed_res_list = parse_html_tag_output(input_string=response, tags=["think", "skill", "steps"])
+def count_distill_tokens(traj_dir_path: str):
+    # count the number of dirs in root_traj_dir_path
+    subdirs = [x for x in Path(traj_dir_path).iterdir() if x.is_dir()]
+    total_tokens = 0
+    num_tasks = len(os.listdir(traj_dir_path))
+    for subdir in tqdm(subdirs):
+        # get the string representation of the task id
+        task_dir = f"{str(subdir)}/0"
+        trajectory = get_trajectory_from_annotation(task_dir)
+        messages = construct_distill_messages(trajectory)
+        tokens = count_multimodal_messages_tokens(messages)
+        total_tokens += tokens
+    return total_tokens
 
-        # eliminate skills that have been summarized before
-        parsed_res_list = [res for res in parsed_res_list if "summarized before" not in res["steps"].lower()]
+def count_inference_tokens(path: str, model: str = "gpt-4o"):
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
 
-        # add traj_path to parsed_res_list
-        for i, res in enumerate(parsed_res_list):
-            res["traj_path"] = traj_path
-            res["type"] = "general"
-            res["website"] = website
-    except Exception as e:
-        print(e)
-        parsed_res_list = []
-    return parsed_res_list
+    total_tokens = 0
+    # parse out the id from the subdirectory name, e.g. get 0 from 2024-06-27_11-41-13_GenericAgent_on_webarena.0_51_14d4f1
+    for subdir in tqdm(subdirs):
+        subdir_name = subdir.name
+        id = int(subdir_name.split(".")[1])
+        # check whether file exists
+        if (subdir / "0" / "summary_info.json").exists():
+            with open(subdir / "0" / "summary_info.json", "r") as f:
+                summary_info = json.load(f)
+            tokens = summary_info.get("stats.cum_openai_prompt_tokens", 0) # prompt + completion
+            total_tokens += tokens
+    # if model == "gpt-4o":
+    #     # $5 per 1M tokens
+    #     cost = total_tokens / 1e6 * 5
+    # else:
+    #     raise ValueError("Model not supported")
+    print(f"Total tokens: {total_tokens}")
+    # average_tokens = total_tokens / len(subdirs)
+    # print(f"Average tokens per task: {average_tokens}")
+    # print(f"Total cost: ${cost}")
+    # print(f"Average cost per task: ${cost / len(subdirs)}")
+    return total_tokens
+    
 
-# reset_skills(f"src/agentlab/skills/reddit/skills.json")
-# traj_path = f"/home/ytliu/github/AgentLab/src/agentlab/autogen_policy/annotations/2024-09-01_17-02-43_annotate/2024-09-01_17-02-45_HumanAnnotator_on_webarena.27_51_22d7da"
-# print(extract_skills(website="reddit", traj_path=traj_path, model="gpt-4o", skill_root_path="src/agentlab/skills"))
+# we count input tokens only
+
+total_tokens = 0
+
+navi_token_count, general_token_count = count_retrieve_tokens("/home/ytliu/github/AgentLab/src/agentlab/skills/gitlab/skills_streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075014.json")
+total_retrieve_tokens = navi_token_count + general_token_count
+print(f"Total retrieve tokens: {total_retrieve_tokens}")
+
+total_distill_tokens = count_distill_tokens("/home2/ytliu/webarena/results/cer_results/cer_online_gitlab")
+print(f"Total distill tokens: {total_distill_tokens}")
+
+total_inference_tokens = count_inference_tokens("/home2/ytliu/webarena/results/cer_results/cer_online_gitlab")
+print(f"Total inference tokens: {total_inference_tokens}")
+
+total_tokens = total_retrieve_tokens + total_distill_tokens + total_inference_tokens
+print(f"Total tokens: {total_tokens}")
+num_tasks = 196
+average_tokens = total_tokens / num_tasks
+print(f"Average tokens per task: {average_tokens}")

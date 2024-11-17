@@ -62,7 +62,7 @@ def parse_args():
                         choices=["shopping", "shopping_admin", "gitlab", "reddit", "map"])
     parser.add_argument("--start_id", type=int, default=0, help="Starting task id")
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
-    parser.add_argument("--sample_ids", type=int, nargs='+', default=0, help="List of space-separated numbers")
+    parser.add_argument("--sample_ids", type=int, nargs='+', default=0, help="It is the id of the annotation task here")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
     parser.add_argument("--model", type=str, default="gpt-4o-2024-05-13", help="Model name to use for inference")
     parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_{args.root_result_dir}/agentlab_baseline", help="Directory to save the {args.root_result_dir}")
@@ -74,14 +74,14 @@ def parse_args():
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
     parser.add_argument("--goal", type=str, default="", help="Goal of the skills to extract; will use default ones if not specified")
-    parser.add_argument("--root_result_dir", type=str, default="{args.root_result_dir}", help="Root directory to save the {args.root_result_dir}")
+    parser.add_argument("--root_result_dir", type=str, default="", help="Root directory to save the results")
     return parser.parse_args()
 
 def main():
     args = parse_args()
 
     if args.result_dir_id == "":
-        result_dir_id = f"annotate_"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+        result_dir_id = f"annotations_{args.website}"
     else:
         result_dir_id = args.result_dir_id
 
@@ -95,10 +95,19 @@ def main():
     config_flags = [config["sites"][0] == args.website for config in config_list]
     task_ids = [config["task_id"] for config, flag in zip(config_list, config_flags) if flag]
 
-    # init the skill file
-    if not os.path.exists(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json"):
-        with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
-            json.dump([], f)
+    # init the annotation dir
+    if not os.path.exists(f"{args.skill_root_path}/{args.website}/annotations"):
+        os.makedirs(f"{args.skill_root_path}/{args.website}/annotations")
+
+    # init the skill file with the previous skill file
+    for i in args.sample_ids:
+      if not os.path.exists(f"{args.skill_root_path}/{args.website}/annotations/{i}.json"):
+            previous_skills = []
+            if i > 1:
+                with open(f"{args.skill_root_path}/{args.website}/annotations/{i-1}.json", "r") as f:
+                    previous_skills = json.load(f)
+            with open(f"{args.skill_root_path}/{args.website}/annotations/{i}.json", "w") as f:
+                json.dump(previous_skills, f)
 
     start_task_id = get_start_task_id(args.website)
     
@@ -119,14 +128,14 @@ def main():
     # distill the skills from the annotations
     for i in args.sample_ids:
         task_dir = f"{args.root_result_dir}/{result_dir_id}/webarena.{start_task_id}/{i}"
-        navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal, max_steps=args.max_steps)
+        navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal, max_steps=args.max_steps, skills_file_path=f"{args.skill_root_path}/{args.website}/annotations/{i}.json")
         print("*"*50, f"Extracted dynamics from task", "*"*50)
         print(navi_skills)
-        save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
-        general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal, max_steps=args.max_steps)
+        save_skills(f"{args.skill_root_path}/{args.website}/annotations/{i}.json", navi_skills)
+        general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id, goal=args.goal, max_steps=args.max_steps, skills_file_path=f"{args.skill_root_path}/{args.website}/annotations/{i}.json")
         print("*"*50, f"Extracted skills from task", "*"*50)
         print(general_skills)
-        save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
+        save_skills(f"{args.skill_root_path}/{args.website}/annotations/{i}.json", general_skills)
 
 if __name__ == "__main__":
     main()

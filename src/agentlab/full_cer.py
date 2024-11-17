@@ -57,14 +57,21 @@ def parse_args():
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
     parser.add_argument("--root_result_dir", type=str, default="results", help="Root directory to save the results")
-    parser.add_argument("--offline_skill_dir", type=str, default="", help="Skills learned offline")
+    parser.add_argument("--offline_skills_dir", type=str, default="", help="The root directory of the offline skills, each file in the directory is a skill file")
+    parser.add_argument("--offline_only", type=str2bool, default=False, help="Whether to run in offline only mode")
     return parser.parse_args()
 
 def main():
     args = parse_args()
 
     if args.result_dir_id is None:
-        result_dir_id = f"{'offline_online' if args.offline_skill_dir else 'online'}"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+        if args.offline_skills_dir:
+            if args.offline_only:
+                result_dir_id = f"offline"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+            else:
+                result_dir_id = f"offline_online"+time.strftime("%Y%m%d%H%M%S", time.localtime())
+        else:
+            result_dir_id = f"online"+time.strftime("%Y%m%d%H%M%S", time.localtime())
     else:
         result_dir_id = args.result_dir_id
     # args.skill_root_path /{args.website}/skills_{args.result_dir_id}= args.args.skill_root_path
@@ -87,8 +94,23 @@ def main():
             json.dump([], f)
     
     # if offline skill dir is provided, load the skills and write to the current skill file
-    if args.offline_skill_dir:
-        with open(args.offline_skill_dir, "r") as f:
+    # if args.offline_skills_dir:
+    #     for file in os.listdir(args.offline_skills_dir):
+    #         with open(f"{args.offline_skills_dir}/{file}", "r") as f:
+    #             offline_skills = json.load(f)
+    #         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "r") as f:
+    #             skills = json.load(f)
+    #         skills.extend(offline_skills)
+    #         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
+    #             json.dump(skills, f, indent=4)
+
+    # if offline skills dir is provided, load the last skill file and write to the current skill file
+    if args.offline_skills_dir:
+        # get the last skill file
+        skill_files = [f for f in os.listdir(args.offline_skills_dir) if f.endswith(".json")]
+        skill_files = sorted(skill_files, key=lambda x: int(x.split("_")[-1].split(".")[0]))
+        last_skill_file = skill_files[-1]
+        with open(f"{args.offline_skills_dir}/{last_skill_file}", "r") as f:
             offline_skills = json.load(f)
         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "r") as f:
             skills = json.load(f)
@@ -113,45 +135,46 @@ def main():
             ])
             process.wait()
             pass
-
-            # 0 here for later possible samplings
-            task_dir = f"{args.root_result_dir}/{result_dir_id}/webarena.{task_id}/0"
-
-            # run autoeval if args.eval_metric is auto
-            if args.eval_metric == "auto":
-                process = Popen([
-                    "python", "-m", "agentlab.autoeval.evaluate_trajectory",
-                    "--result_dir", task_dir,
-                    "--model", "gpt-4o",
-                ])
-                process.wait()
             
-            elif args.eval_metric == "num_steps":
-                with open(f"{task_dir}/summary_info.json", "r") as f:
-                    summary = json.load(f)
-                num_steps = summary["stats.cum_steps"]
-                if num_steps < 20:
-                    eval = True
+            if not args.offline_only:
+                # 0 here for later possible samplings
+                task_dir = f"{args.root_result_dir}/{result_dir_id}/webarena.{task_id}/0"
+
+                # run autoeval if args.eval_metric is auto
+                if args.eval_metric == "auto":
+                    process = Popen([
+                        "python", "-m", "agentlab.autoeval.evaluate_trajectory",
+                        "--result_dir", task_dir,
+                        "--model", "gpt-4o",
+                    ])
+                    process.wait()
+                
+                elif args.eval_metric == "num_steps":
+                    with open(f"{task_dir}/summary_info.json", "r") as f:
+                        summary = json.load(f)
+                    num_steps = summary["stats.cum_steps"]
+                    if num_steps < 20:
+                        eval = True
+                    else:
+                        eval = False
+                elif args.eval_metric == "gt":
+                    eval = gt_evaluate(f"{task_dir}/summary_info.json")
                 else:
-                    eval = False
-            elif args.eval_metric == "gt":
-                eval = gt_evaluate(f"{task_dir}/summary_info.json")
-            else:
-                eval = auto_evaluate(task_dir)
+                    eval = auto_evaluate(task_dir)
 
-            if args.use_dynamics and (args.learn_dynamics_from_failure or eval):
-                # extract dynamics from all the tasks
-                navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
-                print("*"*50, f"Extracted dynamics from task", "*"*50)
-                print(navi_skills)
-                save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
+                if args.use_dynamics and (args.learn_dynamics_from_failure or eval):
+                    # extract dynamics from all the tasks
+                    navi_skills = extract_navi_skill(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+                    print("*"*50, f"Extracted dynamics from task", "*"*50)
+                    print(navi_skills)
+                    save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", navi_skills)
 
-            # extract general skills from the tasks that are solved
-            if eval:
-                general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
-                print("*"*50, f"Extracted skills", "*"*50)
-                print(general_skills)
-                save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
+                # extract general skills from the tasks that are solved
+                if eval:
+                    general_skills = extract_skills(args.website, task_dir, args.model, args.skill_root_path, result_dir_id)
+                    print("*"*50, f"Extracted skills", "*"*50)
+                    print(general_skills)
+                    save_skills(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", general_skills)
 
         except Exception as e:
             print(e)

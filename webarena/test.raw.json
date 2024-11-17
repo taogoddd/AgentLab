@@ -14399,9 +14399,9 @@
     "geolocation": null,
     "intent_template": "Disable {{product}} from the site, they are facing some quality issues.",
     "instantiation_dict": {
-      "product": "lHelios Endurance Tank"
+      "product": "Helios Endurance Tank"
     },
-    "intent": "Disable lHelios Endurance Tank from the site, they are facing some quality issues.",
+    "intent": "Disable Helios Endurance Tank from the site, they are facing some quality issues.",
     "require_reset": false,
     "eval": {
       "eval_types": [

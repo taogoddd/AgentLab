@@ -21,7 +21,7 @@ def get_openai_client():
         )
     if not _client:
         if "OPENAI_API_KEY" in os.environ:
-            _client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"], organization=os.environ.get("OPENAI_ORGANIZATION", ""))
+            _client = openai.OpenAI()
         elif "AZURE_OPENAI_API_KEY" in os.environ:
             _client = openai.AzureOpenAI()
     return _client

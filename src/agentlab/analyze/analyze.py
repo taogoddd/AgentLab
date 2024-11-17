@@ -717,7 +717,44 @@ def get_unique_urls(dir_path: str, website: str):
     print(f"Number of filtered urls: {len(filtered_urls)}")
     print(f"Filtered urls: {filtered_urls}")
     return filtered_urls
-        
+
+def get_failed_templates(path: str):
+    task_template_id_mapping = get_task_template_id_mapping()
+    subdirs = [x for x in Path(path).iterdir() if x.is_dir()]
+
+    avg_score, records = new_get_avg_score(path)
+    successful_ids = records["successful_ids"]
+    all_ids = records["all_ids"]
+
+    # get the avg score accross all templates, i.e. num of templates solved / num of templates
+    successful_template_ids = []
+    all_template_ids = []
+    for id in successful_ids:
+        for template_id, ids in task_template_id_mapping.items():
+            # consider a template failed if it has more than half of the tasks failed
+            # check if the template has more than half of the tasks failed
+            num_failed = len([id for id in ids if id in records["failed_ids"]])
+            if id in ids and num_failed > len(ids) / 2 and template_id not in successful_template_ids:
+                successful_template_ids.append(template_id)
+    
+    # get the templates that have more than half of the tasks failed
+    # deduplicate the list
+    successful_template_ids = list(set(successful_template_ids))
+    successful_template_ids.sort()
+    print(successful_template_ids)
+
+    print("Successful templates: ")
+    successful_templates = []
+    with open("/home/ytliu/github/AgentLab/webarena/test.raw.json", "r") as f:
+        data = json.load(f)
+        for template_id in successful_template_ids:
+            for task in data:
+                if task["intent_template_id"] == template_id and task["intent_template"] not in successful_templates:
+                    successful_templates.append(task["intent_template"])
+    for template in successful_templates:
+        print(template)
+    
+    
 
 # /home2/ytliu/webarena/results/cer_results/search_shopping_admin_20241011194152/webarena.0/2024-10-11_19-41-54_SearchAgent_on_webarena.0_706_2d9abd
 
@@ -734,11 +771,17 @@ def get_unique_urls(dir_path: str, website: str):
 # highlight_print("Map w/ vision")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
 highlight_print("Reddit w/ vision")
-new_get_avg_score("/home2/ytliu/webarena/results/cer_results/offline_online20241020161720")
-# highlight_print("Shopping w/ vision")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924171731")
-# highlight_print("Shopping_admin w/ vision")
-# new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924073530")
+# new_get_avg_score("/home2/ytliu/webarena/results/cer_results/offline_online20241020161720")
+highlight_print("Shopping_admin w/ vision")
+new_get_avg_score("/home2/ytliu/webarena/results/cer_results/offline_online20241023175447")
+highlight_print("Gitlab w/ vision")
+new_get_avg_score("/home2/ytliu/webarena/results/cer_results/offline_online20241030180157")
+highlight_print("Shopping w/ vision")
+new_get_avg_score("/home2/ytliu/webarena/results/cer_results/offline_online20241114165935")
+highlight_print("Map w/ vision")
+new_get_avg_score("/home2/ytliu/webarena/results/cer_results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
+get_failed_templates("/home2/ytliu/webarena/results/cer_results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240924075451")
+
 # highlight_print("Reddit ablation")
 # new_get_avg_score("/home/ytliu/github/AgentLab/results/streaming_single_action_merged_skills_all_dynamics_temp_0.1_no_hints_not_ldff20240925002547")
 # highlight_print("Reddit samping 3 times w/ vision")

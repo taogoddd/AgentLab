@@ -76,7 +76,9 @@ def retry(
     --------
         value: the parsed value
     """
-    chat_model_args = AzureOpenAIChatModelArgs(
+    model_type = "openai"
+    if os.getenv("AZURE_OPENAI_API_CONFIGS"):
+        chat_model_args = AzureOpenAIChatModelArgs(
             model_name="azureopenai/gpt-4o-2024-05-13",
             max_total_tokens=128_000,
             max_input_tokens=126_000,
@@ -84,7 +86,17 @@ def retry(
             temperature=0.1,
             vision_support=True,
         )
-    def reinit_chat_with_configs(api_key, endpoint, version, old_chat):
+        model_type = "azureopenai"
+    elif os.getenv("OPENAI_API_CONFIGS"):
+        chat_model_args = OpenAIChatModelArgs(
+            model_name="openai/gpt-4o-2024-05-13",
+            max_total_tokens=128_000,
+            max_input_tokens=126_000,
+            max_new_tokens=2_000,
+            temperature=0.1,
+            vision_support=True,
+        )
+    def reinit_chat_with_configs(current_config):
         # model_name = old_chat.get_model_name()
         # max_tokens = old_chat.get_max_new_tokens()
         # temperature = old_chat.get_temperature()
@@ -104,7 +116,10 @@ def retry(
         #         azure_endpoint=endpoint,
         #         openai_api_version=version
         #     )
-        chat = chat_model_args.make_chat_model(api_key, endpoint, version)
+        if model_type == "azureopenai":
+            chat = chat_model_args.make_chat_model(current_config["api_key"], current_config["endpoint"], current_config["version"])
+        else:
+            chat = chat_model_args.make_chat_model(current_config["api_key"])
         return chat
 
     tries = 0
@@ -121,7 +136,6 @@ def retry(
 
     while tries < n_retry and rate_limit_total_delay < rate_limit_max_wait_time:
         try:
-            current_config = api_configs[config_index]
             # if "AZURE_OPENAI_API_CONFIGS" in os.environ:
             #     os.environ["AZURE_OPENAI_API_KEY"] = current_config["api_key"]
             #     os.environ["AZURE_OPENAI_ENDPOINT"] = current_config["endpoint"]
@@ -130,7 +144,9 @@ def retry(
             #     os.environ["OPENAI_API_KEY"] = current_config["api_key"]
             
             # modify the chat object to use the new configuration
-            chat = reinit_chat_with_configs(current_config["api_key"], current_config["endpoint"], current_config["version"], chat_class)
+            if len(api_configs) > 1:
+                current_config = api_configs[config_index]
+                chat = reinit_chat_with_configs(current_config)
             # chat.openai_api_key = current_config["api_key"]
             # chat.azure_endpoint = current_config["endpoint"]
             # chat.openai_api_version = current_config["version"]
@@ -138,7 +154,7 @@ def retry(
             answer = chat.invoke(messages)
         except RateLimitError as e:
             # Rotate to the next configuration
-            config_index = (config_index + 1) % len(api_configs)
+            config_index = (config_index + 1) % len(api_configs) if len(api_configs) > 1 else 0
 
             wait_time = _extract_wait_time(e.args[0], min_retry_wait_time)
             logging.warning(f"RateLimitError, waiting {wait_time}s before retrying.")
@@ -152,7 +168,7 @@ def retry(
             continue
         except Exception as e:
             # Rotate to the next configuration
-            config_index = (config_index + 1) % len(api_configs)
+            config_index = (config_index + 1) % len(api_configs) if len(api_configs) > 1 else 0
 
             logging.warning(f"Error {e}, waiting 5s before retrying.")
             time.sleep(5)
@@ -276,7 +292,7 @@ def retry_and_fit(
             answer = chat.invoke(messages)
         except RateLimitError as e:
             # Rotate to the next configuration
-            config_index = (config_index + 1) % len(api_configs)
+            config_index = (config_index + 1) % len(api_configs) if len(api_configs) > 1 else 0
 
             wait_time = _extract_wait_time(e.args[0], min_retry_wait_time)
             logging.warning(f"RateLimitError, waiting {wait_time}s before retrying.")

@@ -34,8 +34,8 @@ def eval_URL(url: str, website: str) -> bool:
         return False
     if "dashboard" in url:
         return False
-    # # check if the url has too many levels
-    # # remove the first part
+    # check if the url has too many levels
+    # remove the first part
     # url = url.split("://")[-1]
     # # remove ending /
     # url = url.rstrip("/")
@@ -203,11 +203,12 @@ def extract_navi_skill(
         skill_root_path: str = "src/agentlab/skills",
         id: str = "",
         goal: str = "",
-        max_steps: int = 30
+        max_steps: int = 30,
+        skills_file_path: str = "" # if not provided, will be saved in the default path
     ):
     try:
         trajectory = get_trajectory_from_annotation(traj_path)[:max_steps]
-        skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json"
+        skills_file_path = f"{skill_root_path}/{website}/skills_{id}.json" if skills_file_path == "" else skills_file_path
         messages = construct_prompt_messages(website, skills_file_path, trajectory, goal)
         response = generate_from_openai_chat_completion_with_key_pool(messages=messages, model=model, temperature=1.0, max_tokens=2048)
         print("*"*50, "Response during extracting dynamics", "*"*50)
@@ -215,7 +216,7 @@ def extract_navi_skill(
         parsed_res_list = parse_html_tag_output(input_string=response, tags=["URL", "think", "page-summary"])
         # check if the URL has been extracted
         # load skills
-        with open(f"{skill_root_path}/{website}/skills_{id}.json", "r") as f:
+        with open(skills_file_path, "r") as f:
             skills = json.load(f)
         parsed_res_list = [res for res in parsed_res_list if not any(skill["URL"] == res["URL"] for skill in skills if skill["type"] == "navi") and eval_URL(res["URL"], website)]
         # add traj_path to parsed_res_list

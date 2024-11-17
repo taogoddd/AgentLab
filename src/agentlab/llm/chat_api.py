@@ -98,8 +98,8 @@ class OpenAIChatModelArgs(ChatModelArgs):
             "temperature": self.temperature,
             "max_tokens": self.max_new_tokens,
         }
-        # if api_key:
-        #     params["api_key"] = api_key
+        if api_key:
+            params["api_key"] = api_key
         # if endpoint:
         #     params["endpoint"] = endpoint
         # if version:

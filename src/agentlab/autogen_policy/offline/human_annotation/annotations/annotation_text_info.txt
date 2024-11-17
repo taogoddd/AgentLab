@@ -10,13 +10,13 @@ possible next action to accomplish your goal. Your answer will be interpreted
 and executed by a program, make sure to follow the formatting instructions.
 
 ## Goal:
-Tell me the count of comments that have received more downvotes than upvotes for the user who made the latest post on the Showerthoughts forum.
+Tell me the full address of all international airports that are within a driving distance of 50 km to Carnegie Mellon University
 
 # Observation of current step:
 
 ## URL of the page:
-http://localhost:9999/f/gaming/126128/it-s-the-only-logical-explanation/comment/1
-Note: This is the subpage '/f/gaming/126128/it-s-the-only-logical-explanation/comment/1' of reddit website.
+http://localhost:3000/search?query=hospital%20near%20Princeton%20University#map=17/40.33981/-74.62332
+Note: This is the subpage '/search?query=hospital%20near%20Princeton%20University#map=17/40.33981/-74.62332' of map website.
 
 ## AXTree:
 Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for each element in the AXTree. Always use bid to refer to elements in your actions.
@@ -24,150 +24,124 @@ Note: [bid] is the unique alpha-numeric identifier at the beginning of lines for
 Note: You can only interact with visible elements. If the "visible" tag is not
 present, the element is not visible on the page.
 
-RootWebArea "It's the only logical explanation", focused
-	[19] navigation '', visible
-		[20] link 'Jump to main content', clickable
-		[21] link 'Jump to sidebar', clickable
-	[22] navigation '', visible
-		[24] HeaderAsNonLandmark '', visible
-			[25] link 'Home', clickable, visible
-				StaticText 'Postmill'
-		[35] list '', visible
-			[36] listitem '', visible
-				[37] link 'Forums', clickable, visible
-			[38] listitem '', visible
-				[39] link 'Wiki', clickable, visible
-		[40] Section '', visible
-			[49] searchbox 'Search query', clickable, visible
-		[50] list '', visible
-			[51] listitem '', visible
-				[52] link 'Notifications (0)', clickable, visible
-					[55] image '', visible
-			[56] listitem '', visible
-				[57] link 'Submit', clickable, visible
-					[60] image '', visible
-			[62] listitem '', visible
-				[63] button 'MarvelsGrantMan136', visible, hasPopup='menu', expanded=False
-					[66] image '', visible
-					[67] strong '', visible
-	[108] main '', visible
-		[109] navigation '', visible
-			[110] list '', visible
-				[111] listitem '', visible
-					[112] link '/f/gaming', clickable, visible
-						[114] image '', visible
-						[116] strong '', visible
-		[117] article '', visible
-			[120] HeaderAsNonLandmark '', visible
-				[122] heading "It's the only logical explanation", visible
-					[123] link "It's the only logical explanation", clickable, visible
-				[125] paragraph '', visible
-					StaticText 'Submitted by'
-					[127] link 'EeK09', clickable, visible, expanded=False
-						[128] strong '', visible
-					StaticText 't3_125q8o6'
-					[130] time 'March 29, 2023 at 10:43:03 AM EDT', visible
-						StaticText '2 years ago'
-					StaticText 'in'
-					[131] link 'gaming', clickable, visible
-						[132] strong '', visible
-			[133] navigation '', visible
-				[134] list '', visible
-					[135] listitem '', visible
-						[136] link '121 comments', clickable, visible
-							[137] strong '', visible
-						StaticText '(1 new)'
-			[140] Section '', visible
-				[142] button 'Upvote', clickable, visible
-				StaticText '6828'
-				[152] button 'Downvote', clickable, visible
-		[162] paragraph '', visible
-			StaticText 'Viewing a single comment thread.'
-			[163] link 'View all comments', clickable, visible
-		[164] article '', visible
-			[165] checkbox 'Hide −', clickable, visible, checked='true'
-			[168] HeaderAsNonLandmark '', visible
-				[169] heading 'MarvelsGrantMan136 wrote 1 second ago', visible
-					[171] link 'MarvelsGrantMan136', clickable, visible, expanded=False
-						[172] strong '', visible
-					[173] time 'October 15, 2024 at 12:11:36 PM EDT', visible
-						StaticText '1 second ago'
-				[174] list '', visible
-					[175] listitem '', visible
-						[176] LabelText '', clickable, visible
-							StaticText 'Hide −'
-			[181] image '', visible
-			[182] paragraph '', visible
-				StaticText 'Reply to comment by'
-				[183] link 'TheMCDemon0508', clickable, visible, expanded=False
-					[184] strong '', visible
-				[185] link "It's the only logical explanation", clickable, visible
-					[186] strong '', visible
-				StaticText 'by'
-				[187] link 'EeK09', clickable, visible, expanded=False
-					[188] strong '', visible
-			[190] paragraph '', visible
-				StaticText 'lol'
-			[191] navigation '', visible
-				[192] list '', visible
-					[193] listitem '', visible
-						[194] link 'Reply', clickable, visible
-							[195] strong '', visible
-					[196] listitem '', visible
-						[197] link 'Permalink', clickable, visible
-					[198] listitem '', visible
-						[199] link 'Parent', clickable, visible
-					[200] listitem '', visible
-						[201] Section '', visible
-							[203] button 'Delete', clickable, visible
-					[204] listitem '', visible
-						[205] link 'Edit', clickable, visible
-			[357] Section '', visible
-				[359] button 'Retract upvote', clickable, visible
-				StaticText '1'
-				[369] button 'Downvote', clickable, visible
-	[374] complementary '', visible
-		[375] Section '', visible
-			[376] paragraph '', visible
-				[377] strong '', visible
-					StaticText '0 points'
-				StaticText '(+0, −0)'
-			[380] heading 'Short URL:', visible
-			[381] paragraph '', visible
-				StaticText 'http://localhost:9999/126128'
-		[383] Section '', visible
-			[384] heading 'gaming', visible
-				[385] link 'gaming', clickable, visible
-			[386] Section '', visible
-				[389] button 'Subscribe No subscribers', clickable, visible
-					StaticText '0'
-			[396] paragraph '', visible
-				StaticText 't5_2qh03'
-			[397] separator '', visible, orientation='horizontal'
-			[398] list '', visible
-				[399] listitem '', visible
-					StaticText 'Created'
-					[400] time 'September 30, 2022 at 8:26:58 PM EDT', visible
-						StaticText '2 years ago'
-				[401] listitem '', visible
-					[402] link 'Subscribe via RSS', clickable, visible
-						[404] image '', visible
-		[406] Details '', visible
-			[407] DisclosureTriangle 'Hide this forum', clickable, visible, expanded=False
-		[413] Section '', visible
-			[414] heading 'Toolbox', visible
-			[415] list '', visible
-				[416] listitem '', visible
-					[417] link 'Bans', clickable, visible
-				[418] listitem '', visible
-					[419] link 'Moderation log', clickable, visible
-	[420] contentinfo '', visible
-		[421] paragraph '', visible
-			StaticText 'Running'
-			[423] link 'Postmill', clickable, visible
+RootWebArea 'hospital near Princeton University | OpenStreetMap', focused
+	[44] banner '', visible
+		[45] heading 'OpenStreetMap logo OpenStreetMap', visible
+			[46] link 'OpenStreetMap logo OpenStreetMap', clickable, visible
+				[49] image 'OpenStreetMap logo', visible
+		[51] navigation '', visible
+			[95] link 'Edit', clickable, visible
+			[96] button '', visible
+			[102] link 'History', clickable, visible
+			[103] link 'Export', clickable, visible
+		[104] navigation '', visible
+			[105] list '', visible
+				[106] listitem '', visible
+					[107] link 'GPS Traces', clickable, visible
+				[108] listitem '', visible
+					[109] link 'User Diaries', clickable, visible
+				[110] listitem '', visible
+					[111] link 'Communities', clickable, visible
+				[112] listitem '', visible
+					[113] link 'Copyright', clickable, visible
+				[114] listitem '', visible
+					[115] link 'Help', clickable, visible
+				[116] listitem '', visible
+					[117] link 'About', clickable, visible
+			[134] link 'Log In', clickable, visible
+			[135] link 'Sign Up', clickable, visible
+	[139] Section '', visible
+		[145] textbox 'Search' value='hospital near Princeton University', clickable, visible
+		[147] button 'Go', clickable, visible
+		[149] link 'Find directions between two points', clickable, visible
+			[150] image '', visible
+	[459] heading 'Search Results', visible
+	[461] button 'Close', visible
+	[462] heading 'Results from OpenStreetMap Nominatim', visible
+		[463] link 'OpenStreetMap Nominatim', clickable, visible
+	[474] list '', visible
+		[475] listitem '', visible
+			StaticText 'Hospital'
+			[476] link 'University Medical Center of Princeton at Plainsboro, 1, Plainsboro Road, Plainsboro Township, Middlesex County, New Jersey, 08537, United States', clickable, visible
+	[513] list '', visible
+		[514] listitem '', visible
+			StaticText 'Hospital'
+			[515] link "Children's Hospital of Philadelphia, 3401, Civic Center Boulevard, University City, Philadelphia, Philadelphia County, 19104, United States", clickable, visible
+		[516] listitem '', visible
+			[517] link 'Hahnemann University Hospital, 230, North Broad Street, Fashion District Philadelphia, Center City, Philadelphia, Philadelphia County, 19102, United States', clickable, visible
+		[518] listitem '', visible
+			[519] link 'Hospital of the University of Pennsylvania, 3400, Spruce Street, University City, Philadelphia, Philadelphia County, 19104, United States', clickable, visible
+		[520] listitem '', visible
+			[521] link 'Wills Eye Hospital, 840, Walnut Street, Gayborhood, Center City, Philadelphia, Philadelphia County, 19107, United States', clickable, visible
+		[522] listitem '', visible
+			[523] link 'Magee Rehabilitation Hospital, 1513, Race Street, Center City, Philadelphia, Philadelphia County, 19102, United States', clickable, visible
+		[524] listitem '', visible
+			[525] link 'Kirkbride Center, 111, North 49th Street, Mill Creek, Philadelphia, Philadelphia County, 19139, United States', clickable, visible
+		[526] listitem '', visible
+			StaticText 'Hospital'
+			[527] link 'Penn Presbyterian Medical Center, 51, North 39th Street, Mantua, Philadelphia, Philadelphia County, 19104, United States', clickable, visible
+		[528] listitem '', visible
+			[529] link 'Albany Medical Center, 43, New Scotland Avenue, Park South, City of Albany, Albany County, New York, 12208, United States', clickable, visible
+		[530] listitem '', visible
+			StaticText 'Hospital'
+			[531] link 'Thomas Jefferson University Hospital, 111, South 11th Street, Gayborhood, Center City, Philadelphia, Philadelphia County, 19107, United States', clickable, visible
+		[532] listitem '', visible
+			[533] link 'Penn Medicine Rittenhouse, 1800, Lombard Street, Rittenhouse Square, Center City, Philadelphia, Philadelphia County, 19146, United States', clickable, visible
+	[535] link 'More results', clickable
+	[483] image '', visible
+	[484] image '', visible
+	[485] image '', visible
+	[486] image '', visible
+	[487] image '', visible
+	[488] image '', visible
+	[489] image '', visible
+	[490] image '', visible
+	[491] image '', visible
+	[492] image '', visible
+	[493] image '', visible
+	[494] image '', visible
+	[495] image '', visible
+	[496] image '', visible
+	[497] image '', visible
+	[498] image '', visible
+	[499] image ''
+	[500] image '', visible
+	[501] image '', visible
+	[502] image '', visible
+	[503] image '', visible
+	[504] image '', visible
+	[505] image ''
+	[506] image ''
+	[507] image '', visible
+	[508] image '', visible
+	[509] image ''
+	[510] image ''
+	[511] image ''
+	[512] image ''
+	[539] image ''
+	[540] button 'Marker'
+	[412] link 'Zoom In', clickable, visible
+	[414] link 'Zoom Out', clickable, visible
+	[417] button 'Show My Location', clickable, visible
+	[420] link 'Layers', clickable, visible
+	[423] link '', clickable, visible
+	[426] link 'Share', clickable, visible
+	[429] link '', clickable, visible
+	[432] link '', clickable, visible
+	StaticText '50 m'
+	StaticText '200 ft'
+	StaticText '©'
+	[440] link 'OpenStreetMap contributors', clickable, visible
+	StaticText '♥'
+	[441] link 'Make a Donation', clickable, visible
+	StaticText '.'
+	[442] link 'Website and API terms', clickable, visible
 
 ## Focused element:
-bid='17'
+bid='43'
+
+## Error from previous action:
+ValueError: Received an empty action.
 
 
 # History of last 5 interaction with the task:
@@ -179,7 +153,7 @@ None
 </think>
 
 <action>
-click('142')
+fill('145', 'hospital near Princeton University')
 </action>
 
 ## step 1
@@ -189,7 +163,7 @@ None
 </think>
 
 <action>
-click('345')
+click('147')
 </action>
 
 ## step 2
@@ -199,7 +173,7 @@ None
 </think>
 
 <action>
-scroll(0, 500)
+
 </action>
 
 ## step 3
@@ -209,7 +183,7 @@ None
 </think>
 
 <action>
-fill('5757', 'lol')
+click('478')
 </action>
 
 ## step 4
@@ -219,7 +193,7 @@ None
 </think>
 
 <action>
-click('5897')
+
 </action>
 
 # Action space:

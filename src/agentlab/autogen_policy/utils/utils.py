@@ -75,25 +75,25 @@ def get_trajectory_from_annotation(dir_path: str):
 
     # read step info one by one
     for i in range(num_steps):
-        file_path = os.path.join(dir_path, f"step_{i}.pkl.gz")
-        with gzip.open(file_path, 'rb') as f:
-            step_info = pickle.load(f)
-            try: 
-                obs = step_info.obs
-                action = step_info.action # e.g. click('339')
-                reward = step_info.reward
-                agent_info = step_info.agent_info
+        try: 
+            file_path = os.path.join(dir_path, f"step_{i}.pkl.gz")
+            with gzip.open(file_path, 'rb') as f:
+                    step_info = pickle.load(f)
+                    obs = step_info.obs
+                    action = step_info.action # e.g. click('339')
+                    reward = step_info.reward
+                    agent_info = step_info.agent_info
 
-                processed_obs = obs_preprocessor(obs)
-                screenshot_array = processed_obs["screenshot"]
-                som_screenshot_array = processed_obs["screenshot_som"]
-                think = agent_info.get("think", "")
+                    processed_obs = obs_preprocessor(obs)
+                    screenshot_array = processed_obs["screenshot"]
+                    som_screenshot_array = processed_obs["screenshot_som"]
+                    think = agent_info.get("think", "")
 
-                axtree_str = processed_obs["axtree_txt"]
-            except Exception as e:
-                print(f"Error in reading step {i} in {dir_path}")
-                print(e)
-                continue
+                    axtree_str = processed_obs["axtree_txt"]
+        except Exception as e:
+            print(f"Error in reading step {i} in {dir_path}")
+            print(e)
+            continue
         trajectory.append({
             "obs": obs, # the original observation dict
             "processed_obs": processed_obs, # the processed observation dict
