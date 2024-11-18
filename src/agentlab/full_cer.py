@@ -48,7 +48,7 @@ def parse_args():
     parser.add_argument("--end_id", type=int, default=812, help="Ending task id")
     parser.add_argument("--num_samples", type=int, default=3, help="Number of times to run the same task")
     parser.add_argument("--skill_root_path", type=str, default="src/agentlab/skills", help="Root path to save the learned skills")
-    parser.add_argument("--model", type=str, default="NousResearch/Meta-Llama-3.1-8B-Instruct", help="Model name to use for inference")
+    parser.add_argument("--model", type=str, default="hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4", help="Model name to use for inference")
     parser.add_argument("--result_dir", type=str, default="/home/ytliu/agentlab_{args.root_result_dir}/agentlab_baseline", help="Directory to save the {args.root_result_dir}")
     parser.add_argument("--max_steps", type=int, default=30, help="Maximum number of steps to take for each task.")
     parser.add_argument("--result_dir_id", type=str, default=None, help="ID of the result directory")
