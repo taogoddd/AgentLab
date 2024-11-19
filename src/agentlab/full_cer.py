@@ -114,7 +114,8 @@ def main():
             offline_skills = json.load(f)
         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "r") as f:
             skills = json.load(f)
-        skills.extend(offline_skills)
+        if skills == []:
+            skills.extend(offline_skills)
         with open(f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json", "w") as f:
             json.dump(skills, f, indent=4)
 
