@@ -59,6 +59,7 @@ def parse_args():
     parser.add_argument("--root_result_dir", type=str, default="results", help="Root directory to save the results")
     parser.add_argument("--offline_skills_dir", type=str, default="", help="The root directory of the offline skills, each file in the directory is a skill file")
     parser.add_argument("--offline_only", type=str2bool, default=False, help="Whether to run in offline only mode")
+    parser.add_argument("--max_skills", type=int, default=10, help="Maximum number of skills to select")
     return parser.parse_args()
 
 def main():
@@ -132,7 +133,8 @@ def main():
                 "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
                 "--id", "0",
                 "--max_steps", str(args.max_steps),
-                "--use_screenshot", "1" if args.use_screenshot else "0"
+                "--use_screenshot", "1" if args.use_screenshot else "0",
+                "--max_skills", f"{args.max_skills}",
             ])
             process.wait()
             pass

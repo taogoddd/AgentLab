@@ -56,6 +56,7 @@ def parse_args():
     parser.add_argument("--eval_metric", type=str, choices=["gt", "auto", "num_steps"], default="gt", help="Evaluation metric to use for intermediate evaluation")
     parser.add_argument("--use_dynamics", type=str2bool, default=True, help="Whether to use dynamics")
     parser.add_argument("--use_screenshot", type=str2bool, default=False, help="Whether to use screenshot")
+    parser.add_argument("--max_skills", type=int, default=10, help="Maximum number of skills to extract")
     return parser.parse_args()
 
 def main():
@@ -94,7 +95,8 @@ def main():
                 "--skill_path", f"{args.skill_root_path}/{args.website}/skills_{result_dir_id}.json",
                 "--id", "0",
                 "--max_steps", str(args.max_steps),
-                "--use_screenshot", "1" if args.use_screenshot else "0"
+                "--use_screenshot", "1" if args.use_screenshot else "0",
+                "--max_skills", f"{args.max_skills}",
             ])
             process.wait()
 
